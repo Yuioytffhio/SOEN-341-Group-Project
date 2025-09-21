@@ -17,9 +17,9 @@ Our application will support 3 types of users:
 - **Administrators:** oversee events and moderate content
 
 ## Technologies
-- **Frontend** - React: For building an interactive and responsive user interface using JavaScript, HTML, and CSS.
-- **Backend** - Java : For handling business logic, server-side operations, and connecting the frontend with the database.
-- **Database** - Firebase : For real-time database management, authentication, and storage.
+- **Frontend** - React
+- **Backend** - Java
+- **Database** - Firebase
 
 ## Authors 
 | Name              | Student Number | GitHub username |
