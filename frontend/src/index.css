@@ -1,0 +1,68 @@
+/* Global page setup */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: url("./logo.png") no-repeat center center/cover;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: #fff;
+}
+
+/* Menu bar at the top */
+.menu-bar {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  font-weight: bold;
+}
+
+.menu-bar .logo {
+  height: 40px;
+}
+
+/* Container for the login form */
+.login-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Login form styling */
+.login-form {
+  background-color: rgba(0, 0, 0, 0.7); /* semi-transparent dark */
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 300px;
+}
+
+/* Inputs inside the form */
+.login-form input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Button styling */
+.login-form button {
+  border-radius: 8px;
+  border: none;
+  padding: 0.6rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #646cff;
+  color: white;
+  transition: background-color 0.25s;
+}
+
+.login-form button:hover {
+  background-color: #535bf2;
+}
