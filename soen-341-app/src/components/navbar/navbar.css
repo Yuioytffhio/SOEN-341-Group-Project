@@ -1,0 +1,64 @@
+.navbar{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 15px 7%;
+    
+}
+.logo{
+    width: 160px;
+    cursor: pointer;
+}
+ul{
+    flex: 1;
+    list-style: none;
+    text-align: right;
+    margin: 0;          /* reset default ul margin */
+    padding: 0;  
+}
+ul li{
+    display: inline-block;
+    margin: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* Reset default link style */
+ul li a {
+    display: inline-block;
+  text-decoration: none;
+  color: #666666;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 5px 0;
+  text-align: center; 
+}
+
+/* Lift the link slightly on hover */
+ul li a:hover {
+  transform: translateY(-3px);
+  color: #000000;
+}
+
+/* Gray bar that grows on hover */
+ul li a::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -3px;
+  right: 0;
+  height: 2px;
+  width: 130%;
+  background-color: #727272;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);  /* center it */
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+ul li a:hover::before {
+   transform: translateX(-50%) scaleX(1);
+  
+}
