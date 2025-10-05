@@ -35,5 +35,4 @@ build/
 ### Ignore to upload to Git
 src/main/resources/serviceAccount.json
 
-# Ignore IntelliJ IDEA project files
-.idea/
+
