@@ -1,0 +1,98 @@
+.homepagenavbar {
+  position: absolute;        /* sits on top of the background */
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #420000;
+  padding: 0%;
+  height: 15vh;
+  z-index: 10;               /* ensures it’s above background */
+  box-sizing: border-box;     /* ensures padding doesn’t add width */
+}
+
+/* Add this to align logo + title horizontally */
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.appName {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff2e2;
+    font-weight: 200;
+}
+
+.logo{
+    width: 100px;
+    cursor: pointer;
+}
+
+.navbar-content {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    align-content: right;
+}
+
+.navbar-div {
+    align-content: right;
+}
+
+ul{
+    flex: 1;
+    list-style: none;
+    text-align: right;
+    margin: 0;          /* reset default ul margin */
+    padding: 0;  
+}
+
+ul li{
+    display: inline-block;
+    margin: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Reset default link style */
+ul li a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff2e2;
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 5px 20px;
+    text-align: center; 
+}
+
+/* Lift the link slightly on hover */
+ul li a:hover {
+    transform: translateY(-3px);
+    color: #fff2e2;
+}
+
+/* Gray bar that grows on hover */
+ul li a::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    bottom: -3px;
+    right: 0;
+    height: 2px;
+    width: 90%;
+    background-color: #fff2e2;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);  /* center it */
+    transform-origin: center;
+    transition: transform 0.3s ease;
+}
+
+ul li a:hover::before {
+    transform: translateX(-50%) scaleX(1);
+  
+}

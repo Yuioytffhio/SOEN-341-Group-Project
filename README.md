@@ -33,3 +33,9 @@ Our application will support 3 types of users:
 | Siam Manwar Pranto|    40173669    | siampranto17    |
 | Patel Shyam       |    40318260    | shyampatel64    |
 
+## Running the environment 
+makke suer in the following directory SOEN-341-Group-Project
+cd frontend
+npm instal vite@latest
+npm install react-router-dom
+npm start or npm run dev

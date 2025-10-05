@@ -1,7 +1,7 @@
 /* Full page with background image */
 .login-page {
   height: 100vh;
-  background: url("../login_page_background.jpg") no-repeat center center/cover;
+  background: url("../assets/login_page_background1.jpeg") no-repeat center center/cover;
   display: flex;
   justify-content: center;  /* center horizontally */
   align-items: center;      /* center vertically */
