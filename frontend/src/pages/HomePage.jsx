@@ -3,7 +3,7 @@ import "../styles/HomePage.css";
 import HomePageNavBar from "./HomePageNavBar.jsx";
 import { useNavigate } from "react-router-dom";
 //import background from "../assets/people_happy_on_campus3.jpg";
-import background from "../assets/background.jpg";
+import background from "../assets/homepageBackground1.jpg";
 
 export default function HomePage() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import '../styles/HomePageNavBar.css';
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.webp";
 import { Link, useNavigate } from "react-router-dom";
 
 const HomePageNavBar = () => {
