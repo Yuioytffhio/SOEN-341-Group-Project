@@ -35,4 +35,5 @@ build/
 ### Ignore to upload to Git
 src/main/resources/serviceAccount.json
 
-
+### Ignore .idea  files
+backend/webAppBackend/.idea
