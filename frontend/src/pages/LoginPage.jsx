@@ -2,8 +2,21 @@ import React from "react";
 import "../styles/LoginPage.css";
 import logo from "../assets/logo.png";
 import login_background from "../assets/login_page_background1.jpeg";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault(); // prevent the form from reloading the page
+
+    // Simulate a successful login (temporary for development)
+    localStorage.setItem("loggedIn", "true");
+
+    // Redirect to student homepage
+    navigate("/home");
+  };
+
   return (
     <div
       className="login-page"
@@ -21,7 +34,7 @@ export default function LoginPage() {
         {/* Login Form */}
         <div className="form-container">
           <h1>Login</h1>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="form-group">
               <label>Email</label>
               <input type="email" placeholder="Enter your email" />

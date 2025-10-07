@@ -1,6 +1,6 @@
 
 .navbar {
-    width: 100%;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -10,12 +10,15 @@
     overflow-x: hidden; /* prevent horizontal scroll */
 }
 
+
 .logo{
     width: 160px;
     cursor: pointer;
 }
 ul{
     display: flex;
+        justify-content: flex-end; /* forces menu items to the right */
+
     list-style: none;
     text-align: right;
     margin: 0;          
