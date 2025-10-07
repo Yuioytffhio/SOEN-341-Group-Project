@@ -42,7 +42,7 @@ cd SOEN-341-Group-Project/frontend
 ### Install dependencies
 ```bash 
 npm install
-npm instal vite@latest
+npm install vite@latest
 npm install react-router-dom
 ```
 
