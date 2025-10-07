@@ -1,26 +1,24 @@
-
-import './Navbar.css'
-import profileIcon from '../../assets/profile_icon.png'
+import { Link } from "react-router-dom";
+import './Navbar.css';
+import profileIcon from '../../assets/profile_icon.png';
 
 const Navbar = () => {
   return (
     <div className='navbar'>
       <img src="" alt="" className="logo" />
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Discovery</a></li>
-        <li><a href="#">My events</a></li>
-        <li><a href="#">About us</a></li>
-        {/* Profile image (no hover effect) */}
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/discovery">Discovery</Link></li>
+        <li><Link to="/myevents">My Events</Link></li>
+        <li><Link to="/aboutus">About Us</Link></li>
         <li className="profile-icon">
-          <img src={profileIcon} alt="Profile" />
+          <Link to="/profile">
+            <img src={profileIcon} alt="Profile" />
+          </Link>
         </li>
       </ul>
     </div>
-  )
+  );
 }
 
-export default Navbar
-// git add .
-// git commit -m "blah blah blah"
-// git push origin navbar
+export default Navbar;
