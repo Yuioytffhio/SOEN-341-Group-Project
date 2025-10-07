@@ -1,0 +1,94 @@
+
+.navbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #420000;
+    padding: 15px 2%; /* reduced padding so it fits */
+    box-sizing: border-box; /* important to keep padding inside width */
+    overflow-x: hidden; /* prevent horizontal scroll */
+}
+
+.logo{
+    width: 160px;
+    cursor: pointer;
+}
+ul{
+    display: flex;
+    list-style: none;
+    text-align: right;
+    margin: 0;          
+    padding: 0;  
+}
+ul li{
+    display: inline-block;
+    align-items: center;
+    margin: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Reset default link style */
+ul li a {
+    display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 5px 0;
+  text-align: center; 
+}
+
+/* Lift the link slightly on hover */
+ul li a:hover {
+  transform: translateY(-3px);
+  color: #fff;
+}
+
+/* Gray bar that grows on hover */
+ul li a::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -3px;
+  right: 0;
+  height: 2px;
+  width: 130%;
+  background-color: #fff;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);  /* center it */
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+ul li:nth-last-child(2) {
+    margin-right: 40px; /* more space before the profile icon */
+}
+
+ul li a:hover::before {
+   transform: translateX(-50%) scaleX(1);
+  
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center; /* vertical centering */
+    margin: 0; /* keep it inline with other menu items */
+}
+.profile-icon img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: none;
+}
+
+/* Remove hover effects for the icon */
+.profile-icon a,
+.profile-icon img {
+  transform: none !important;
+}
+
+.profile-icon a::before {
+  display: none !important;
+}
