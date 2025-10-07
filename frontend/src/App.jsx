@@ -1,11 +1,20 @@
 import React from "react";
 import LoginPage from "./pages/LoginPage";
+import Navbar from "./components/navbar/Navbar";
 
-function App() {
-  return <LoginPage />;
+
+
+const App = () => {
+  return (
+    <div>
+        <div className='container'>
+            <Navbar/>
+        </div>
+    </div>
+  )
 }
 
-export default App;
+export default App
 /*
 import logo from './logo.svg';
 import './App.css';
