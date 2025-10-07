@@ -17,20 +17,17 @@ export default function ProfilePage() {
   const [profilePic, setProfilePic] = useState(profileIcon);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // Example userId — replace this with your real user ID (e.g., from Auth or localStorage)
+//must change this **
   const userId = "st_000001";
 
-  // Handle profile picture selection
   const handlePicChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setProfilePic(URL.createObjectURL(selectedFile)); // preview the image
+      setProfilePic(URL.createObjectURL(selectedFile)); 
     }
   };
 
-  // Handle save button click
   const handleSave = async (e) => {
     e.preventDefault();
 
@@ -49,14 +46,12 @@ export default function ProfilePage() {
     try {
       let imageUrl = profilePic;
 
-      // Upload profile picture if a new one was selected
       if (file) {
         const storageRef = ref(storage, `profilePictures/${userId}_${file.name}`);
         await uploadBytes(storageRef, file);
         imageUrl = await getDownloadURL(storageRef);
       }
 
-      // Save user profile info to Firestore
       await setDoc(doc(db, "users", userId), {
         firstName,
         lastName,
@@ -65,7 +60,7 @@ export default function ProfilePage() {
         profilePic: imageUrl,
       });
 
-      alert("✅ Profile saved successfully!");
+      alert(" Profile saved successfully!");
     } catch (error) {
       console.error("Error saving profile:", error.code, error.message, error);
       alert(`Error: ${error.code || "unknown"}`);
