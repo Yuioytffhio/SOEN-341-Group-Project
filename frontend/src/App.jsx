@@ -1,44 +1,25 @@
-import React from "react";
-import LoginPage from "./pages/LoginPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 
-
-
-const App = () => {
-  return (
-    <div>
-        <div className='container'>
-            <Navbar/>
-        </div>
-    </div>
-  )
-}
-
-export default App
-/*
-import logo from './logo.svg';
-import './App.css';
+import HomePage from "./pages/student/HomePage/HomePage";
+import EventDiscovery from "./pages/student/EventDiscovery/EventDiscovery";
+import MyEvents from "./pages/student/MyEvents/MyEvents";
+import AboutUs from "./pages/student/AboutUs/AboutUs";
+import ProfilePage from "./pages/student/ProfilePage/ProfilePage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/discovery" element={<EventDiscovery />} />
+        <Route path="/myevents" element={<MyEvents />} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
-*/
