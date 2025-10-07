@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/LoginPage.css";
-import logo from "../logo.png";
-import login_background from "../login_page_background1.jpeg";
+import logo from "../assets/logo.png";
+import login_background from "../assets/login_page_background1.jpeg";
 
 export default function LoginPage() {
   return (
@@ -33,7 +33,7 @@ export default function LoginPage() {
             <button type="submit" className="btn">Login</button>
           </form>
           <p className="extra-links">
-            <a href="#">Forgot password?</a> | <a href="#">Sign up</a>
+            <a href="#">Sign up</a>
           </p>
         </div>
       </div>
