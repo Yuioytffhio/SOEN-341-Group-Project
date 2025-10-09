@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,17 @@ public class ServiceHelper {
         //Get event by id (to be added later)
 
 
+    }
+
+    public String claimTicket(TicketRequest ticketRequest) throws ExecutionException, InterruptedException {
+
+    String ticketId = ticketRequest.getStudentId() + "_" + ticketRequest.getEventID();
+
+    ApiFuture<WriteResult> future = firestore.collection("tickets")
+            .document(ticketId)
+            .set(ticketRequest);
+
+    return future.get().getUpdateTime().toString();
     }
 }
 
