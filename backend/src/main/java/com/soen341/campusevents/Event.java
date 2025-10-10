@@ -1,15 +1,14 @@
-package com.example.demo;
+package com.soen341.campusevents;
 
 import java.util.Date;
 
 public class Event {
 
-    private String eventid;
+    private String eventId;
     private String eventTitle;
     private String eventLocation;
     private String eventOrganization;
     private String eventCategory;
-    private String eventDescription;
     private Date eventDate;
     private int eventCapacity;
 
@@ -19,8 +18,8 @@ public class Event {
 
 // Get and Set Functions
 
-    public String getId() {
-       return eventid;
+    public String getEventId() {
+       return eventId;
     }
 
     public String getEventTitle() {
@@ -47,8 +46,8 @@ public class Event {
         return eventCapacity;
     }
 
-    public void seteventId(String id) {
-        this.eventid = id;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public void setEventTitle(String eventTitle) {
@@ -75,12 +74,7 @@ public class Event {
         this.eventCapacity = eventCapacity;
     }
 
-    public String getEventDescription() {
-        return eventDescription;
-    }
 
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
     }
 }
 

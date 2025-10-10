@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.soen341.campusevents;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
@@ -25,7 +25,7 @@ public class ServiceHelper {
         List<Event> events = new ArrayList<>();
         for (QueryDocumentSnapshot doc : firestore.collection("events").get().get().getDocuments()) {
             Event event = doc.toObject(Event.class);
-            event.seteventId((doc.getId()));
+            event.setEventId((doc.getId()));
             events.add(event);
         }
 
