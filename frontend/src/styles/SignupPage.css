@@ -1,0 +1,115 @@
+/* Full page with background image */
+.signup-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;  /* center horizontally */
+  align-items: center;      /* center vertically */
+  flex-direction: column;
+}
+
+/* Container for logo + project name + form */
+.form-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* center children horizontally */
+}
+
+/* Logo and Project Name side by side */
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.logo-container .logo {
+  height: 80px; 
+  width: auto;
+}
+
+.logo-container .appName {
+  font-size: 1.8rem;
+  color: #ebdada; 
+  font-weight: bold;
+}
+
+/* Form styling (keep your existing styles) */
+.form-container {
+  background: rgba(52, 2, 2, 0.9);
+  padding: 40px;
+  width: 350px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(29, 3, 1, 0.7);
+}
+
+/* Ensures the input boxes and the login box have the same length*/
+.form-container * {
+  box-sizing: border-box;
+}
+
+.form-container h1 {
+  margin-bottom: 20px;
+  color: #ebdada;
+}
+
+/* Form fields */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #e3c9c6;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #693535;
+  outline: none;
+  background-color: rgba(52, 2, 2, 0.3); 
+  color: #f8f4f4; 
+}
+
+.form-group input:focus {
+  border-color: #e0aeaa;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: #630303;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #4e0101;
+}
+
+/* Extra links */
+.extra-links {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #e99797;
+}
+
+.extra-links a {
+  color: #eeb956;
+  text-decoration: none;
+}
+
+.extra-links a:hover {
+  text-decoration: underline;
+}

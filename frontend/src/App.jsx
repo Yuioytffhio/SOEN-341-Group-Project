@@ -5,6 +5,7 @@ import HomePageNavBar from "./pages/HomePageNavBar.jsx";
 // Public pages
 import HomePage from "./pages/HomePage.jsx"; // Landing page
 import LoginPage from "./pages/LoginPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
 
 import Navbar from "./components/navbar/Navbar";                 // for logged-in users
 // Student pages
@@ -38,6 +39,7 @@ function AppContent() {
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signuppage" element={<SignupPage />} />
 
         {/* Protected (requires login) */}
 
