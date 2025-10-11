@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/LoginPage.css";
 import logo from "../assets/logo.png";
-import login_background from "../assets/login_page_background1.jpeg";
+import login_background from "../assets/login_Background.jpg";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -27,8 +27,10 @@ export default function LoginPage() {
       <div className="form-container-wrapper">
         {/* Logo and Project Name side by side */}
         <div className="logo-container">
+          {/*
           <img src={logo} alt="Logo" className="logo" />
           <h2 className="appName">SOEN 341</h2>
+          */}
         </div>
 
         {/* Login Form */}
@@ -46,7 +48,7 @@ export default function LoginPage() {
             <button type="submit" className="btn">Login</button>
           </form>
           <p className="extra-links">
-            <a href="#">Sign up</a>
+            <p>Don't have an account? <a href="#">Sign up</a></p>
           </p>
         </div>
       </div>

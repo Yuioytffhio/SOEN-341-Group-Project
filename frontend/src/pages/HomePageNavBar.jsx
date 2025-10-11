@@ -12,7 +12,9 @@ const HomePageNavBar = () => {
   return (
     <div className='homepagenavbar'>
       <div className='left-section'>
+        {/*
         <img src={logo} alt="Logo" className='logo' />
+        */}
         <h2 className='appName'>SOEN 341</h2>
       </div>
 
