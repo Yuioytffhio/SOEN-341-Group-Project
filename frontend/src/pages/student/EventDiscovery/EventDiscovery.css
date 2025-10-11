@@ -79,3 +79,9 @@
   color: #777;
   font-size: 14px;
 }
+
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
