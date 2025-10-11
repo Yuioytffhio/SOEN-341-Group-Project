@@ -1,4 +1,4 @@
-package com.soen341.campusevents;
+package com.example.demo;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
