@@ -7,6 +7,9 @@ node_modules/
 /frontend/.cache
 /.pnp
 .pnp.js
+assets/* 2.*
+.cache/
+dist/
 
 .lsp/
 .clj-kondo/
@@ -15,7 +18,7 @@ node_modules/
 /coveragenpm
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
