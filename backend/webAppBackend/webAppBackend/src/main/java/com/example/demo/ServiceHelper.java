@@ -25,7 +25,7 @@ public class ServiceHelper {
         List<Event> events = new ArrayList<>();
         for (QueryDocumentSnapshot doc : firestore.collection("events").get().get().getDocuments()) {
             Event event = doc.toObject(Event.class);
-            event.setEventId((doc.getId()));
+            event.seteventId((doc.getId()));
             events.add(event);
         }
 

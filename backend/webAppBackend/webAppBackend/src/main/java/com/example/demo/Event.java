@@ -4,11 +4,12 @@ import java.util.Date;
 
 public class Event {
 
-    private String eventId;
+    private String eventid;
     private String eventTitle;
     private String eventLocation;
     private String eventOrganization;
     private String eventCategory;
+    private String eventDescription;
     private Date eventDate;
     private int eventCapacity;
 
@@ -18,8 +19,8 @@ public class Event {
 
 // Get and Set Functions
 
-    public String getEventId() {
-       return eventId;
+    public String getId() {
+       return eventid;
     }
 
     public String getEventTitle() {
@@ -46,8 +47,8 @@ public class Event {
         return eventCapacity;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void seteventId(String id) {
+        this.eventid = id;
     }
 
     public void setEventTitle(String eventTitle) {
@@ -72,6 +73,14 @@ public class Event {
 
     public void setEventCapacity(int eventCapacity) {
         this.eventCapacity = eventCapacity;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 }
 
