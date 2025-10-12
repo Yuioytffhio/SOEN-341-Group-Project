@@ -7,8 +7,8 @@ export default function ProfilePage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState(""); 
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
 
@@ -20,29 +20,35 @@ export default function ProfilePage() {
       try {
         const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
+
         if (docSnap.exists()) {
           const data = docSnap.data();
+          console.log("Fetched user data:", data);
+
           setFirstName(data.firstName || "");
           setLastName(data.lastName || "");
           setEmail(data.email || "");
-          setPhone(data.phone || "");
+          setPhoneNumber(data.phoneNumber ? String(data.phoneNumber) : "");
+        } else {
+          console.log("No such document for ID:", userId);
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
     };
+
     fetchProfile();
   }, [userId]);
 
-  const isValidPhone = (phone) => {
+  const isValidPhone = (value) => {
     const phoneRegex =
       /^(\+?\d{1,2}\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/;
-    return phoneRegex.test(phone);
+    return phoneRegex.test(value);
   };
 
   const handlePhoneChange = (e) => {
     const value = e.target.value;
-    setPhone(value);
+    setPhoneNumber(value);
 
     if (value && !isValidPhone(value)) {
       setPhoneError("Invalid phone number format.");
@@ -62,12 +68,23 @@ export default function ProfilePage() {
     setLoading(true);
 
     try {
-      await setDoc(doc(db, "users", userId), {
-        firstName,
-        lastName,
-        email, // cannot be edited
-        phone,
-      });
+      const userRef = doc(db, "users", userId);
+      const docSnap = await getDoc(userRef);
+      const existingData = docSnap.exists() ? docSnap.data() : {};
+
+      console.log("Saving data:", { firstName, lastName, email, phoneNumber });
+
+      await setDoc(
+        userRef,
+        {
+          ...existingData,
+          firstName,
+          lastName,
+          email, 
+          phoneNumber, 
+        },
+        { merge: true }
+      );
 
       alert("Profile saved successfully!");
       setEditing(false);
@@ -118,13 +135,12 @@ export default function ProfilePage() {
           </label>
 
           <label>
-            Phone:
+            Phone Number:
             <input
               type="tel"
-              value={phone}
+              value={phoneNumber}
               onChange={handlePhoneChange}
               disabled={!editing}
-              placeholder="123-456-7890"
             />
           </label>
 
@@ -133,12 +149,6 @@ export default function ProfilePage() {
           )}
 
           <div className="button-container">
-            {editing && (
-              <button type="submit" className="save-btn" disabled={loading}>
-                {loading ? "Saving..." : "Save"}
-              </button>
-            )}
-
             {!editing && (
               <button
                 type="button"
@@ -146,6 +156,16 @@ export default function ProfilePage() {
                 onClick={() => setEditing(true)}
               >
                 Edit
+              </button>
+            )}
+
+            {editing && (
+              <button
+                type="submit"
+                className="save-btn"
+                disabled={loading || phoneError}
+              >
+                {loading ? "Saving..." : "Save"}
               </button>
             )}
           </div>
