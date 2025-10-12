@@ -14,71 +14,45 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    const auth = getAuth();
+  const auth = getAuth();
 
-    try {
-      // 1️⃣ Try Firebase Auth login first
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-      // 2️⃣ Fetch Firestore profile by UID
-      const docSnap = await getDoc(doc(db, "users", user.uid));
-      if (!docSnap.exists()) throw new Error("No profile found for this user.");
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
-      const userData = docSnap.data();
-
-      // Save login state
-      localStorage.setItem("loggedIn", "true");
-      localStorage.setItem("email", userData.email);
-      localStorage.setItem("userName", userData.firstName || "");
-      localStorage.setItem("role", userData.role || "");
-
-      // Navigate depending on role
-      if (userData.role === "student") navigate("/studentHome");
-      else if (userData.role === "organizer") navigate("/orgHome");
-      else if (userData.role === "administrator") navigate("/adminHome");
-
-    } catch (authError) {
-      console.log("Firebase Auth login failed:", authError.message);
-
-      // 3️⃣ Fallback to Firestore login for old users
-      try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          const userData = querySnapshot.docs[0].data();
-
-          // Optionally: check password field in Firestore if you had one
-          // (temporary for old users; Firebase Auth is preferred)
-          // if (userData.password !== password) throw new Error("Invalid password");
-
-          localStorage.setItem("loggedIn", "true");
-          localStorage.setItem("email", userData.email);
-          localStorage.setItem("userName", userData.firstName || "");
-          localStorage.setItem("role", userData.role || "");
-
-          // Navigate depending on role
-          if (userData.role === "student") navigate("/studentHome");
-          else if (userData.role === "organizer") navigate("/orgHome");
-          else if (userData.role === "administrator") navigate("/adminHome");
-
-        } else {
-          setError("User not found. Please sign up first.");
-        }
-      } catch (firestoreError) {
-        console.error("Firestore fallback login failed:", firestoreError.message);
-        setError("Login failed. Please try again.");
-      }
-    } finally {
-      setLoading(false);
+    if (querySnapshot.empty) {
+      throw new Error("No profile found for this email.");
     }
-  };
+
+    const userDoc = querySnapshot.docs[0];
+    const userData = userDoc.data();
+
+  
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("email", userData.email);
+    localStorage.setItem("userName", userData.firstName || "");
+    localStorage.setItem("role", userData.role || "");
+    localStorage.setItem("customID", userDoc.id); // ✅ e.g., st_000001
+
+    if (userData.role === "student") navigate("/studentHome");
+    else if (userData.role === "organizer") navigate("/orgHome");
+    else if (userData.role === "administrator") navigate("/adminHome");
+
+  } catch (error) {
+    console.error("Login failed:", error.message);
+    setError("Invalid email or password.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div

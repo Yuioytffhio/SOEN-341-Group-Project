@@ -58,6 +58,7 @@ export default function SignUpPage() {
         role,
         phoneNumber,
         profilePic: null,
+        uid: auth.currentUser.uid,
       });
 
       localStorage.setItem("loggedIn", "true");
