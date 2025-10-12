@@ -105,11 +105,11 @@
   color: #e99797;
 }
 
-.extra-links a {
+.extra-links span {
   color: #eeb956;
   text-decoration: none;
 }
 
-.extra-links a:hover {
+.extra-links span:hover {
   text-decoration: underline;
 }

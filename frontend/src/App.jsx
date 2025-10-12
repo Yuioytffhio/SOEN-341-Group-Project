@@ -5,7 +5,7 @@ import HomePageNavBar from "./pages/HomePageNavBar.jsx";
 // Public pages
 import HomePage from "./pages/HomePage.jsx"; // Landing page
 import LoginPage from "./pages/LoginPage.jsx";
-import SignupPage from "./pages/SignupPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
 
 import Navbar from "./components/navbar/Navbar";                 // for logged-in users
 // Student pages
@@ -28,7 +28,7 @@ function AppContent() {
 
   // Public pages use HomePageNavBar
   const isPublicPage =
-    location.pathname === "/" || location.pathname === "/login";
+    location.pathname === "/" || location.pathname === "/login" || location.pathname == "/signuppage";
 
   return (
     <>
@@ -39,7 +39,7 @@ function AppContent() {
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signuppage" element={<SignupPage />} />
+        <Route path="/signuppage" element={<SignUpPage />} />
 
         {/* Protected (requires login) */}
 

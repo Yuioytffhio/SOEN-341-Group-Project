@@ -1,5 +1,5 @@
 .homepagenavbar {
-    position: absolute;        /* sits on top of the background */
+    position: fixed;        /* sits on top of the background */
     top: 0;
     left: 0;
     width: 100vw;
