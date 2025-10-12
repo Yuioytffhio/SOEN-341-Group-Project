@@ -16,7 +16,10 @@ export default function Navbar() {
     <div className="navbar">
       <ul>
         <li>
-          <a onClick={() => navigate("/discovery")}>Events</a>
+          <a onClick={() => navigate("/HomePage")}>Home</a>
+        </li>
+        <li>
+          <a onClick={() => navigate("/discovery")}>Dicovery</a>
         </li>
         <li>
           <a onClick={() => navigate("/myevents")}>My Events</a>
