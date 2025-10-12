@@ -80,8 +80,8 @@ export default function ProfilePage() {
           ...existingData,
           firstName,
           lastName,
-          email, // cannot be edited directly
-          phoneNumber, // ✅ updates correctly
+          email, 
+          phoneNumber, 
         },
         { merge: true }
       );
@@ -149,7 +149,6 @@ export default function ProfilePage() {
           )}
 
           <div className="button-container">
-            {/* ✅ Edit button - only toggles edit mode */}
             {!editing && (
               <button
                 type="button"
@@ -160,7 +159,6 @@ export default function ProfilePage() {
               </button>
             )}
 
-            {/* ✅ Save button - only appears during edit mode */}
             {editing && (
               <button
                 type="submit"
