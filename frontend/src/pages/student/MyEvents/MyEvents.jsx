@@ -1,6 +1,8 @@
 import React from "react";
 import "./MyEvents.css";
 import headerImage from "../../../assets/MyEventsHeader.png";
+import { db } from "../../../firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 import TedTalk from "../../../assets/TedTalk.png";
 import GetTogether from "../../../assets/getTogether.jpg";
 import DownloadIcon from "../../../assets/download_button.png";
