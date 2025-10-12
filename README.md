@@ -33,3 +33,28 @@ Our application will support 3 types of users:
 | Siam Manwar Pranto|    40173669    | siampranto17    |
 | Patel Shyam       |    40318260    | shyampatel64    |
 
+## Running the environment 
+Make sure you are in the project directory: 
+```bash
+cd SOEN-341-Group-Project/frontend
+```
+
+### Install dependencies
+```bash 
+npm install
+npm install vite@latest
+npm install react-router-dom
+```
+
+### Start the development server:
+```bash 
+npm start 
+```
+or 
+```bash
+npm run dev
+```
+
+### Opening the project on your browser:
+Once the server is running, Open your browser and go to:
+    http://localhost:3000/SOEN-341-Group-Project
