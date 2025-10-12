@@ -1,4 +1,4 @@
-package com.soen341.campusevents;
+package com.example.demo;
 
 public class Ticket {
     private Long id;
