@@ -4,6 +4,8 @@ import headerImage from "../../../assets/MyEventsHeader.png";
 import TedTalk from "../../../assets/TedTalk.png";
 import GetTogether from "../../../assets/getTogether.jpg";
 import DownloadIcon from "../../../assets/download_button.png";
+import QRCode from "qrcode";
+
 
 const MyEvents = () => {
   const events = [
@@ -25,14 +27,34 @@ const MyEvents = () => {
     }
   ];
 
-  const handleDownloadTicket = (eventName) => {
-    const ticketContent = `Ticket for ${eventName}\nDate: ${new Date().toLocaleDateString()}`;
-    const blob = new Blob([ticketContent], { type: "text/plain" });
+  const handleDownloadTicket = async (event) => {
+  try {
+    // Generate unique data for this ticket
+    const ticketData = {
+      id: event.id,
+      name: event.name,
+      date: event.date,
+      location: event.location,
+      issuedAt: new Date().toISOString(),
+    };
+
+    // Convert the ticket info into a string for QR
+    const qrString = JSON.stringify(ticketData);
+
+    // Generate QR code as a data URL
+    const qrUrl = await QRCode.toDataURL(qrString);
+
+    // Create a download link for the QR image
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `${eventName}-Ticket.txt`;
+    link.href = qrUrl;
+    link.download = `${event.name}-TicketQR.png`;
     link.click();
-  };
+
+  } catch (err) {
+    console.error("Error generating QR code:", err);
+  }
+};
+
 
   return (
     <div className="my-events-container">
@@ -70,7 +92,8 @@ const MyEvents = () => {
                   </div>
                   <button 
                     className="download-ticket-btn"
-                    onClick={() => handleDownloadTicket(event.name)}
+                    onClick={() => handleDownloadTicket(event)}
+
                   >
                     Download Ticket
                     <img 
