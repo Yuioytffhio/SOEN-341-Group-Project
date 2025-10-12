@@ -1,20 +1,19 @@
 .events-calendar-container {
   display: flex;
   gap: 20px;
-  padding: 30px; /* right padding for the events list */
+  padding: 30px;
   box-sizing: border-box;
-  align-items: stretch;
+  align-items: flex-start;
 }
 
 .calendar-view {
   flex: 0.8;
   background: #f5f5f5;
   border-radius: 10px;
-  padding: 20px; /* internal padding for calendar content */
+  padding: 20px;
   min-width: 250px;
 }
 
-/* Placeholder inside the calendar section */
 .calendar-placeholder {
   padding: 20px;
   background: white;
@@ -30,16 +29,16 @@
 
 .header-image {
   width: 100%;
-  height: 250px; /* keep fixed height */
+  height: 250px;
   position: relative;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.0) 60%, white 100%),
-              url("../../../assets/MyEventsHeader.png") no-repeat center center;
+    url("../../../assets/MyEventsHeader.png") no-repeat center center;
   background-size: cover;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* left align */
-  padding-left: 30px; /* spacing from left edge */
-  box-sizing: border-box; /* avoid overflow */
+  justify-content: flex-start;
+  padding-left: 30px;
+  box-sizing: border-box;
 }
 
 @keyframes slideInFromLeft {
@@ -58,10 +57,9 @@
   font-size: 55px;
   font-weight: bold;
   padding-left: 50px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   animation: slideInFromLeft 1s ease-out;
 }
-
 
 .events-list-section {
   flex: 2;
@@ -85,15 +83,15 @@
 
 .event-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start; 
   justify-content: space-between;
   background: #ffffff;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 25px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
-  height: 150px; 
+  min-height: 160px; 
 }
 
 .event-item:hover {
@@ -105,57 +103,64 @@
   height: 160px;
   border-radius: 10px;
   object-fit: cover;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .event-details {
   text-align: left;
   padding-left: 20px;
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  gap: 4px; 
+  overflow: hidden;
 }
 
 .event-details h3 {
   margin: 0;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: bold;
   color: #222;
 }
 
 .event-description {
   color: #555;
-  font-size: 16px;
-  margin: 8px 0;
+  font-size: 15px;
+  margin: 4px 0;
   line-height: 1.4;
+  overflow-wrap: break-word;
 }
 
-.event-date{
+.event-date,
+.event-location,
+.event-organization,
+.event-category,
+.event-status {
+  font-size: 14px;
+  margin: 2px 0;
+  color: #555;
+}
+
+.event-date {
   font-weight: bold;
   color: #cc1515;
-  font-size: 15px;
-  margin: 4px 0;
-}
-.event-location {
-  color: #777;
-  font-size: 15px;
-  margin: 4px 0;
 }
 
 .download-ticket-btn {
   background-color: #660707;
   color: white;
-  padding: 8px 12px; /* smaller button size */
+  padding: 10px 14px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.8rem; /* smaller font */
+  font-size: 0.85rem;
   height: fit-content;
-  margin-left: auto; /* pushes button to the right */
-  align-self: flex-end; /* push to bottom right */
+  margin-left: 15px;
+  align-self: flex-end;
   margin-top: auto;
   transition: background-color 0.2s ease;
+  white-space: nowrap;
 }
 
 .download-ticket-btn:hover {
@@ -165,6 +170,22 @@
 .download-icon {
   width: 14px;
   height: 14px;
-  margin-left: 10px;
+  margin-left: 8px;
 }
 
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .events-calendar-container {
+    flex-direction: column;
+  }
+
+  .event-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .download-ticket-btn {
+    align-self: flex-start;
+    margin-top: 10px;
+  }
+}
