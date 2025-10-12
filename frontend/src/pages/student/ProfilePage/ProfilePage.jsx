@@ -1,73 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ProfilePage.css";
-import profileIcon from "../../../assets/profile_icon.png";
-
-// Firebase imports
-import { db, storage } from "../../../firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-console.log("Firestore instance:", db);
+import { db } from "../../../firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function ProfilePage() {
-  // State variables
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [profilePic, setProfilePic] = useState(profileIcon);
-  const [file, setFile] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
 
-  // Example userId — replace this with your real user ID (e.g., from Auth or localStorage)
-  const userId = "st_000001";
+  const userId = localStorage.getItem("customID");
 
-  // Handle profile picture selection
-  const handlePicChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      setProfilePic(URL.createObjectURL(selectedFile)); // preview the image
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!userId) return;
+      try {
+        const docRef = doc(db, "users", userId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          console.log("Fetched user data:", data);
+
+          setFirstName(data.firstName || "");
+          setLastName(data.lastName || "");
+          setEmail(data.email || "");
+          setPhoneNumber(data.phoneNumber ? String(data.phoneNumber) : "");
+        } else {
+          console.log("No such document for ID:", userId);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [userId]);
+
+  const isValidPhone = (value) => {
+    const phoneRegex =
+      /^(\+?\d{1,2}\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/;
+    return phoneRegex.test(value);
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    setPhoneNumber(value);
+
+    if (value && !isValidPhone(value)) {
+      setPhoneError("Invalid phone number format.");
+    } else {
+      setPhoneError("");
     }
   };
 
-  // Handle save button click
   const handleSave = async (e) => {
     e.preventDefault();
 
     if (!userId) {
-      alert("User not logged in or userId missing!");
-      return;
-    }
-
-    if (!email || !email.includes("@")) {
-      alert("Please enter a valid email before saving!");
+      alert("User not logged in or missing userId!");
       return;
     }
 
     setLoading(true);
 
     try {
-      let imageUrl = profilePic;
+      const userRef = doc(db, "users", userId);
+      const docSnap = await getDoc(userRef);
+      const existingData = docSnap.exists() ? docSnap.data() : {};
 
-      // Upload profile picture if a new one was selected
-      if (file) {
-        const storageRef = ref(storage, `profilePictures/${userId}_${file.name}`);
-        await uploadBytes(storageRef, file);
-        imageUrl = await getDownloadURL(storageRef);
-      }
+      console.log("Saving data:", { firstName, lastName, email, phoneNumber });
 
-      // Save user profile info to Firestore
-      await setDoc(doc(db, "users", userId), {
-        firstName,
-        lastName,
-        email,
-        phone,
-        profilePic: imageUrl,
-      });
+      await setDoc(
+        userRef,
+        {
+          ...existingData,
+          firstName,
+          lastName,
+          email, 
+          phoneNumber, 
+        },
+        { merge: true }
+      );
 
-      alert("✅ Profile saved successfully!");
+      alert("Profile saved successfully!");
+      setEditing(false);
     } catch (error) {
-      console.error("Error saving profile:", error.code, error.message, error);
+      console.error("Error saving profile:", error);
       alert(`Error: ${error.code || "unknown"}`);
     } finally {
       setLoading(false);
@@ -76,13 +98,9 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-      <div className="profile-header">
-        <img src={profilePic} alt="Profile" className="profile-pic" />
-        <input type="file" onChange={handlePicChange} />
-      </div>
-
       <div className="information-section">
         <h2>Information</h2>
+
         <form className="profile-form" onSubmit={handleSave}>
           <div className="name-row">
             <label>
@@ -91,6 +109,7 @@ export default function ProfilePage() {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                disabled={!editing}
               />
             </label>
 
@@ -100,31 +119,56 @@ export default function ProfilePage() {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                disabled={!editing}
               />
             </label>
           </div>
 
           <label>
-            Email:
+            Email (cannot be changed):
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              disabled
+              className="disabled-input"
             />
           </label>
 
           <label>
-            Phone:
+            Phone Number:
             <input
               type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={phoneNumber}
+              onChange={handlePhoneChange}
+              disabled={!editing}
             />
           </label>
 
-          <button type="submit" className="save-btn" disabled={loading}>
-            {loading ? "Saving..." : "Save"}
-          </button>
+          {editing && phoneError && (
+            <p className="warning-text">{phoneError}</p>
+          )}
+
+          <div className="button-container">
+            {!editing && (
+              <button
+                type="button"
+                className="edit-btn"
+                onClick={() => setEditing(true)}
+              >
+                Edit
+              </button>
+            )}
+
+            {editing && (
+              <button
+                type="submit"
+                className="save-btn"
+                disabled={loading || phoneError}
+              >
+                {loading ? "Saving..." : "Save"}
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>
