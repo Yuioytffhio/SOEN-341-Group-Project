@@ -9,16 +9,16 @@ import SignUpPage from "./pages/SignUpPage.jsx";
 
 import Navbar from "./components/navbar/Navbar";                 // for logged-in users
 // Student pages
-import StudentHomePage from "./pages/student/HomePageStudent/HomePage";
+import StudentHomePage from "./pages/student/HomePageStudent/HomePageStudent";
 import EventDiscovery from "./pages/student/EventDiscovery/EventDiscovery";
 import MyEvents from "./pages/student/MyEvents/MyEvents";
 import AboutUs from "./pages/student/AboutUs/AboutUs";
 import ProfilePage from "./pages/student/ProfilePage/ProfilePage";
 // Organizer Pages 
-import OrgrHomePage from "./pages/organizer/HomePageOrg/HomePage.jsx";
+import OrgrHomePage from "./pages/organizer/HomePageOrg/HomePageOrg.jsx";
 import OrgProfilePage from "./pages/organizer/ProfilePage/ProfilePage.jsx";
 // Administrator Pages
-import AdminHomePage from "./pages/administrator/HomePageAdmin/HomePage.jsx";
+import AdminHomePage from "./pages/administrator/HomePageAdmin/HomePageAdmin.jsx";
 
 
 

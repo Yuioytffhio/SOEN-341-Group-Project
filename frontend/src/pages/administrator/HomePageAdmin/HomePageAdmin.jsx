@@ -1,9 +1,9 @@
-import "./HomePage.css";
+import "./HomePageAdmin.css";
 
 const HomePage = () => {
   return (
     <div className="home-page">
-      <h1>Welcome to the Student Home Page</h1>
+      <h1>Welcome to the Admin Home Page</h1>
       <p>This is your landing page content.</p>
     </div>
   );

@@ -15,10 +15,9 @@
     width: 160px;
     cursor: pointer;
 }
-ul{
+ul {
     display: flex;
-        justify-content: flex-end; /* forces menu items to the right */
-
+    justify-content: flex-end; /* forces menu items to the right */
     list-style: none;
     text-align: right;
     margin: 0;          
@@ -34,7 +33,7 @@ ul li{
 
 /* Reset default link style */
 ul li a {
-    display: inline-block;
+  display: inline-block;
   text-decoration: none;
   color: #fff;
   position: relative;

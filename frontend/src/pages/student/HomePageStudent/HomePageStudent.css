@@ -1,0 +1,83 @@
+.student-home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #ffffff, #faf2ea);
+  color: #270202;
+  overflow: hidden;
+}
+
+.student-header {
+  text-align: left;
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.student-main-content {
+  flex: 1;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2rem 4rem;
+  gap: 3rem;
+}
+
+.top-section {
+
+}
+
+.discover-btn {
+  background-color: #ffffff;
+  color: #007bff;
+  padding: 0.9rem 2.2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.discover-btn:hover {
+  background-color: #0056b3;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.bottom-section {
+  flex: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-slide {
+  padding: 0 10px;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 300px;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .student-main-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .right-section {
+    width: 90%;
+  }
+
+  .carousel-slide img {
+    height: 220px;
+  }
+}
