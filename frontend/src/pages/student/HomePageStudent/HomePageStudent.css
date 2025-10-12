@@ -10,12 +10,34 @@
 .student-header {
   text-align: left;
   padding: 1.5rem 3rem;
+  padding-bottom: 0%;
   font-size: 1.5rem;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
+
+.greetings {
+  color: rgb(36, 0, 0);
+  font-size: 55px;
+  font-weight: bold;
+  padding-left: 50px;
+  text-shadow: 2px 2px 4px rgba(100, 4, 4, 0.7);
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 
 .student-main-content {
   flex: 1;
@@ -26,12 +48,16 @@
 }
 
 .top-section {
-
+  text-align: left;
+  padding-left: 3rem;
+  padding-bottom: 0%;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .discover-btn {
-  background-color: #ffffff;
-  color: #007bff;
+  background-color: #520000;
+  color: #fff1e5;
   padding: 0.9rem 2.2rem;
   border: none;
   border-radius: 50px;
@@ -42,17 +68,19 @@
 }
 
 .discover-btn:hover {
-  background-color: #0056b3;
+  background-color: #8a0707;
   color: #fff;
   transform: scale(1.05);
 }
-
 .bottom-section {
+  width: 80%;
+  margin: 0 auto;
   flex: 1.2;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 
 .carousel-slide {
   padding: 0 10px;

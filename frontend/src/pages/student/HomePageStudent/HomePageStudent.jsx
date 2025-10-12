@@ -10,10 +10,9 @@ export default function StudentHomePage() {
   const userName = localStorage.getItem("userName") || "Student";
 
   const eventImages = [
-    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
-    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
-    "https://images.unsplash.com/photo-1515169067865-5387ec356754",
-    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
   ];
 
   const settings = {
@@ -30,12 +29,11 @@ export default function StudentHomePage() {
   return (
     <div className="student-home-container">
       <header className="student-header">
-        <h2>Welcome back, {userName}!</h2>
+        <h2 className="greetings">Welcome back, {userName}!</h2>
       </header>
 
       <div className="student-main-content">
         <div className="top-section">
-          <h1>Welcome to your page</h1>
           <p>You can start browsing exciting campus events right away.</p>
           <button className="discover-btn" onClick={() => navigate("/discovery")}>
             Discover Events
@@ -43,14 +41,18 @@ export default function StudentHomePage() {
         </div>
 
         <div className="bottom-section">
-          <Slider {...settings}>
-            {eventImages.map((src, index) => (
-              <div key={index} className="carousel-slide">
-                <img src={src} alt={`Event ${index + 1}`} />
-              </div>
-            ))}
-          </Slider>
+          <div style={{ width: "100vh", maxWidth: "100vh" }}>
+            <Slider {...settings}>
+              {eventImages.map((src, index) => (
+                <div key={index} className="carousel-slide">
+                  <img src={src} alt={`Event ${index + 1}`} />
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
+
+
       </div>
     </div>
   );
