@@ -1,10 +1,13 @@
 /* Full page with background image */
-.login-page {
-  height: 100vh;
+.signup-page {
+  min-height: 100vh;
   display: flex;
   justify-content: center;  /* center horizontally */
   align-items: center;      /* center vertically */
   flex-direction: column;
+  padding-top: 100px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
 }
 
 /* Container for logo + project name + form */
@@ -79,6 +82,43 @@
 
 .form-group input:focus {
   border-color: #e0aeaa;
+}
+
+/* Style the select dropdown */
+.form-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #693535;
+  border-radius: 8px;
+  background-color: #420d0d;
+  font-size: 16px;
+  color: #ffffff;
+  appearance: none; /* Remove default arrow for most browsers */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+/* Add a hover effect */
+.form-group select:hover {
+  border-color: #cf8b8b;
+  box-shadow: 0 0 5px rgba(44, 1, 1, 0.5);
+}
+
+/* Add a focus effect */
+.form-group select:focus {
+  border-color: #f3bdbd;
+  box-shadow: 0 0 5px rgba(133, 78, 78, 0.5);
+  outline: none;
+}
+
+/*  add arrow */
+.form-group select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 20,0 10,10'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
 }
 
 /* Button */
