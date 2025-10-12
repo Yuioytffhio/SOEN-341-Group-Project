@@ -1,37 +1,50 @@
 import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
 
-  // ADDED FOR FILTERS - filter state
   const [filters, setFilters] = useState({
     category: "",
     organization: "",
     date: ""
   });
 
-  /* To fetch data from backend */
   useEffect(() => {
-    fetch("http://localhost:8080/events")
-      .then(response => {
-        if (!response.ok) throw new Error("Failed to fetch events");
-        return response.json();
-      })
-      .then(data => setEvents(data))
-      .catch(error => console.error("Error fetching events:", error));
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "events"));
+        const eventsList = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            eventDate: data.eventDate
+              ? (data.eventDate.seconds !== undefined
+                  ? new Date(data.eventDate.seconds * 1000)
+                  : new Date(data.eventDate))
+              : null
+          };
+        });
+        setEvents(eventsList);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents();
   }, []);
 
-  // Apply filters
   const filteredEvents = events.filter(event => {
     const matchCategory =
       !filters.category || event.eventCategory === filters.category;
     const matchOrg =
       !filters.organization || event.eventOrganization === filters.organization;
     const matchDate =
-      !filters.date || event.eventDate?.slice(0, 10) === filters.date;
-
+      !filters.date || (event.eventDate && event.eventDate.toISOString().slice(0,10) === filters.date);
     return matchCategory && matchOrg && matchDate;
   });
 
@@ -39,7 +52,7 @@ function EventDiscovery() {
     <div className="event-discovery p-6">
       <h1 className="event-Title">Event Discovery</h1>
 
-      {/* Added filters */}
+      {/* Filter bar */}
       <div className="filter-bar">
         <select
           value={filters.category}
@@ -49,7 +62,6 @@ function EventDiscovery() {
           <option value="Computer Science">Computer Science</option>
           <option value="Sports">Sports</option>
           <option value="Arts">Arts</option>
-          <option value="Sports">Sports</option>
           <option value="Anthropology">Anthropology</option>
         </select>
 
@@ -78,21 +90,27 @@ function EventDiscovery() {
         {filteredEvents.length === 0 ? (
           <p>No events available.</p>
         ) : (
-          filteredEvents.map(event => (
-            <div key={event.eventId} className="event-card">
-              <img
-                src={event.imageUrl ? event.imageUrl : GetTogether}
-                alt={event.eventTitle}
-                className="event-card-image"
-              />
-              <div className="event-card-info">
-                <h2>{event.eventTitle}</h2>
-                <p className="event-card-desc">{event.eventDescription}</p>
-                <p className="event-card-date">{event.eventDate}</p>
-                <p className="event-card-location">{event.eventLocation}</p>
+          filteredEvents.map(event => {
+            const formattedDate = event.eventDate
+              ? event.eventDate.toISOString().slice(0,10)
+              : "Date TBD";
+
+            return (
+              <div key={event.id} className="event-card">
+                <img
+                  src={event.imageUrl ? event.imageUrl : GetTogether}
+                  alt={event.eventTitle}
+                  className="event-card-image"
+                />
+                <div className="event-card-info">
+                  <h2>{event.eventTitle}</h2>
+                  <p className="event-card-desc">{event.eventDescription}</p>
+                  <p className="event-card-date">{formattedDate}</p>
+                  <p className="event-card-location">{event.eventLocation}</p>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
