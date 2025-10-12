@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./MyEvents.css";
 import headerImage from "../../../assets/MyEventsHeader.png";
 import DownloadIcon from "../../../assets/download_button.png";
+import QRCode from "qrcode";
 import { db } from "../../../firebaseConfig";
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 
@@ -21,7 +22,6 @@ export default function MyEvents() {
           return;
         }
 
-        // 🔹 Get tickets belonging to the logged-in student
         const ticketsRef = collection(db, "tickets");
         const q = query(ticketsRef, where("studentID", "==", studentID));
         const ticketsSnapshot = await getDocs(q);
@@ -36,17 +36,12 @@ export default function MyEvents() {
 
         const formatDate = (dateValue) => {
           if (!dateValue) return "N/A";
-          if (dateValue.toDate) {
-            return dateValue.toDate().toLocaleString();
-          } else if (dateValue.seconds) {
-            return new Date(dateValue.seconds * 1000).toLocaleString();
-          } else if (typeof dateValue === "string") {
-            return dateValue;
-          }
+          if (dateValue.toDate) return dateValue.toDate().toLocaleString();
+          if (dateValue.seconds) return new Date(dateValue.seconds * 1000).toLocaleString();
+          if (typeof dateValue === "string") return dateValue;
           return "Invalid date";
         };
 
-        // 🔹 For each ticket, get event details
         for (const ticketDoc of ticketsSnapshot.docs) {
           const ticketData = ticketDoc.data();
           const eventRef = doc(db, "events", ticketData.eventId);
@@ -79,20 +74,27 @@ export default function MyEvents() {
     fetchStudentEvents();
   }, [studentID]);
 
-  const handleDownloadTicket = (event) => {
-    const ticketContent = `
-    Ticket for: ${event.eventTitle}
-    Event Date: ${event.eventDate}
-    Location: ${event.eventLocation}
-    Organization: ${event.eventOrganization}
-    Student ID: ${studentID}
-    Issued on: ${event.ticketDate}
-    `;
-    const blob = new Blob([ticketContent], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `${event.eventTitle}-Ticket.txt`;
-    link.click();
+  const handleDownloadTicket = async (event) => {
+    try {
+      const ticketData = {
+        title: event.eventTitle,
+        date: event.eventDate,
+        location: event.eventLocation,
+        organization: event.eventOrganization,
+        studentID,
+        issuedAt: event.ticketDate,
+      };
+
+      const qrString = JSON.stringify(ticketData);
+      const qrUrl = await QRCode.toDataURL(qrString);
+
+      const link = document.createElement("a");
+      link.href = qrUrl;
+      link.download = `${event.eventTitle}-TicketQR.png`;
+      link.click();
+    } catch (err) {
+      console.error("Error generating QR code:", err);
+    }
   };
 
   if (loading) return <p className="loading">Loading your booked events...</p>;
@@ -122,9 +124,7 @@ export default function MyEvents() {
                     <p className="event-description">{event.eventDescription}</p>
                     <p className="event-date">{event.eventDate}</p>
                     <p className="event-location">{event.eventLocation}</p>
-                    <p className="event-organization">
-                    {event.eventOrganization}
-                    </p>
+                    <p className="event-organization">{event.eventOrganization}</p>
                   </div>
 
                   <button
