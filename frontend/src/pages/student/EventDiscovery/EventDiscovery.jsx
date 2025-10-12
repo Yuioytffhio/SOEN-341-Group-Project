@@ -1,12 +1,72 @@
 import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
+import { limit, collection, query, where, getDocs, getFirestore, doc, setDoc } from "firebase/firestore";
+
+const GENERATION_OFFSET = new Date('5000-01-01').getTime();
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+//ID Generator//
+const generateId = () => {
+    let autoId = '';
+    for (let i = 0; i < 10; i++) {
+        autoId += CHARS.charAt(Math.floor(Math.random() * CHARS.length));
+    }
+    return (GENERATION_OFFSET - Date.now()).toString(32) + autoId;
+};
+
+//Trigram Generator//
+export const triGram = txt => {
+    const map = {};
+    const s1 = (txt || '').toLowerCase();
+    const n = 3;
+    for (let k = 0; k <= s1.length - n; k++) map[s1.substring(k, k + n)] = true;
+    return map;
+};
+
+//Add Event to Firestore with Trigram Search
+export const addPost = async (docData) => {
+    const db = getFirestore();
+    const id = generateId();
+    const payload = {
+        ...docData,
+        ...triGram([docData.title || '', docData.desc || ''].join(' ').slice(0, 500))
+    };
+
+    const postRef = doc(db, 'posts', id);
+    await setDoc(postRef, payload);
+};
+
+//Firestore Search//
+const searchEvents = async (searchTxt) => {
+    const db = getFirestore();
+    const searchConstraints = [];
+
+    triGram(searchTxt).forEach(name =>
+        searchConstraints.push(where(`_smeta.${name}`, '==', true))
+    );
+    let constraints = [
+        collection(db, 'posts'),
+        where('postType', '==', 'event'),
+        where('visibility', '==', 'public'),
+        ...searchConstraints,
+        limit(5)
+    ];
+
+    const q = query(...constraints);
+    const querySnapshot = await getDocs(q);
+    const results = [];
+
+    querySnapshot.forEach(doc => results.push({ _id: doc.id, ...doc.data() }));
+    return results;
+};
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
 
-  // ADDED FOR FILTERS - filter state
+  // Filter & Search
   const [filters, setFilters] = useState({
+    searchKeyword: "",
     category: "",
     organization: "",
     date: ""
@@ -24,6 +84,15 @@ function EventDiscovery() {
   }, []);
 
   // Apply filters
+  useEffect(() => {
+     const { searchKeyword } = filters;
+      if (searchKeyword) {
+          searchEvents(searchKeyword).then(results => {
+              setEvents(results); // Update the events based on search result
+          }).catch(err => console.error("Search error:", err));
+      }
+  }, [filters]);
+
   const filteredEvents = events.filter(event => {
     const matchCategory =
       !filters.category || event.eventCategory === filters.category;
@@ -32,16 +101,32 @@ function EventDiscovery() {
     const matchDate =
       !filters.date || event.eventDate?.slice(0, 10) === filters.date;
 
-    return matchCategory && matchOrg && matchDate;
+  // Keyword search filtering
+  const matchSearchKeyword =
+      !filters.searchKeyword ||
+      event.eventTitle.toLowerCase().includes(filters.searchKeyword.toLowerCase()) ||
+      event.eventDescription.toLowerCase().includes(filters.searchKeyword.toLowerCase()) ||
+      event.eventLocation.toLowerCase().includes(filters.searchKeyword.toLowerCase());
+
+    return matchCategory && matchOrg && matchDate && matchSearchKeyword;
   });
 
   return (
     <div className="event-discovery p-6">
       <h1 className="event-Title">Event Discovery</h1>
-
       {/* Added filters */}
       <div className="filter-bar">
-        <select
+      {/* Search bar */}
+      <input
+         type="text"
+         placeholder="Search events"
+         value={filters.searchKeyword}
+         onChange={e => setFilters({ ...filters, searchKeyword: e.target.value })}
+         className="search-input"
+      />
+
+
+          <select
           value={filters.category}
           onChange={e => setFilters({ ...filters, category: e.target.value })}
         >
@@ -71,6 +156,7 @@ function EventDiscovery() {
           value={filters.date}
           onChange={e => setFilters({ ...filters, date: e.target.value })}
         />
+
       </div>
 
       {/* Events list */}
@@ -79,7 +165,7 @@ function EventDiscovery() {
           <p>No events available.</p>
         ) : (
           filteredEvents.map(event => (
-            <div key={event.eventId} className="event-card">
+            <div key={event._id || event.eventId} className="event-card">
               <img
                 src={event.imageUrl ? event.imageUrl : GetTogether}
                 alt={event.eventTitle}

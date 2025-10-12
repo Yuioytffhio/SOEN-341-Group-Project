@@ -84,4 +84,29 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.search-input {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    font-size: 14px;
+    background-color: #fff;
+    width: 200px;
+    max-width: 100%;
+    text-align: center;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #00ff00;
+}
+
+.no-events-message {
+    font-size: 18px;
+    color: #888;
+    text-align: center;
+    margin-top: 30px;
 }
