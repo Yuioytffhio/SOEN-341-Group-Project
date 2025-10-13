@@ -44,6 +44,8 @@ cd SOEN-341-Group-Project/frontend
 npm install
 npm install vite@latest
 npm install react-router-dom
+npm install react-slick slick-carousel
+npm install qrcode
 ```
 
 ### Start the development server:
