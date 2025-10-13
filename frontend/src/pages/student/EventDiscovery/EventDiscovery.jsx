@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
 import { auth, db } from "../../../firebaseConfig";
-import { doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
-
   const [filters, setFilters] = useState({
     category: "",
     organization: "",
-    date: ""
+    date: "",
   });
 
   useEffect(() => {
@@ -22,10 +21,10 @@ function EventDiscovery() {
           return {
             id: d.id,
             ...data,
-            eventDate: data.eventDate
-              ? data.eventDate.seconds !== undefined
-                ? new Date(data.eventDate.seconds * 1000)
-                : new Date(data.eventDate)
+            eventDate: data.eventDate?.seconds
+              ? new Date(data.eventDate.seconds * 1000)
+              : data.eventDate
+              ? new Date(data.eventDate)
               : null,
           };
         });
@@ -34,11 +33,9 @@ function EventDiscovery() {
         console.error("Error fetching events:", error);
       }
     };
-
     fetchEvents();
   }, []);
 
-  // Save event to Firestore
   const handleBook = async (event) => {
     const user = auth.currentUser;
     if (!user) {
@@ -46,21 +43,31 @@ function EventDiscovery() {
       return;
     }
 
-    const eventId = event.eventId || event.id || crypto.randomUUID();
-
     try {
-      await setDoc(
-        doc(db, "users", user.uid, "savedEvents", eventId.toString()),
-        {
-          eventId: eventId,
-          eventTitle: event.eventTitle,
-          eventDescription: event.eventDescription,
-          eventDate: event.eventDate,
-          eventLocation: event.eventLocation,
-          imageUrl: event.imageUrl || "",
-          savedAt: new Date().toISOString(),
-        }
+      const savedRef = collection(db, "users", user.uid, "savedEvents");
+      const savedSnapshot = await getDocs(savedRef);
+
+      // Check if this event is already saved
+      const alreadySaved = savedSnapshot.docs.some(
+        (doc) => doc.data().eventId === event.id
       );
+
+      if (alreadySaved) {
+        alert("✅ You already saved this event!");
+        return;
+      }
+
+      // Save event if not already saved
+      await addDoc(savedRef, {
+        eventId: event.id,
+        eventTitle: event.eventTitle,
+        eventDescription: event.eventDescription,
+        eventDate: event.eventDate || null,
+        eventLocation: event.eventLocation,
+        imageUrl: event.imageUrl || "",
+        savedAt: new Date(),
+      });
+
       alert("✅ Event saved to My Events!");
     } catch (error) {
       console.error("Error saving event:", error);
@@ -69,15 +76,11 @@ function EventDiscovery() {
   };
 
   const filteredEvents = events.filter((event) => {
-    const matchCategory =
-      !filters.category || event.eventCategory === filters.category;
-    const matchOrg =
-      !filters.organization ||
-      event.eventOrganization === filters.organization;
+    const matchCategory = !filters.category || event.eventCategory === filters.category;
+    const matchOrg = !filters.organization || event.eventOrganization === filters.organization;
     const matchDate =
       !filters.date ||
-      (event.eventDate &&
-        event.eventDate.toISOString().slice(0, 10) === filters.date);
+      (event.eventDate && event.eventDate.toISOString().slice(0, 10) === filters.date);
     return matchCategory && matchOrg && matchDate;
   });
 
@@ -100,14 +103,10 @@ function EventDiscovery() {
 
         <select
           value={filters.organization}
-          onChange={(e) =>
-            setFilters({ ...filters, organization: e.target.value })
-          }
+          onChange={(e) => setFilters({ ...filters, organization: e.target.value })}
         >
           <option value="">All Organizations</option>
-          <option value="Computer Science Department">
-            Computer Science Department
-          </option>
+          <option value="Computer Science Department">Computer Science Department</option>
           <option value="Space Concordia">Space Concordia</option>
           <option value="Concordia Rugby">Concordia Rugby</option>
           <option value="Fine Arts Department">Fine Arts Department</option>
@@ -135,7 +134,7 @@ function EventDiscovery() {
             return (
               <div key={event.id} className="event-card">
                 <img
-                  src={event.imageUrl ? event.imageUrl : GetTogether}
+                  src={event.imageUrl || GetTogether}
                   alt={event.eventTitle}
                   className="event-card-image"
                 />
@@ -143,15 +142,10 @@ function EventDiscovery() {
                   <h2>{event.eventTitle}</h2>
                   <p className="event-card-desc">{event.eventDescription}</p>
                   <p className="event-card-date">{formattedDate}</p>
-                  <p className="event-card-location">
-                    {event.eventLocation}
-                  </p>
+                  <p className="event-card-location">{event.eventLocation}</p>
                 </div>
 
-                <button
-                  className="save-btn"
-                  onClick={() => handleBook(event)}
-                >
+                <button className="save-btn" onClick={() => handleBook(event)}>
                   Save Event
                 </button>
               </div>
