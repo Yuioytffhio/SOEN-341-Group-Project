@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
+import { auth, db } from "../../../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
@@ -22,6 +25,35 @@ function EventDiscovery() {
       .then(data => setEvents(data))
       .catch(error => console.error("Error fetching events:", error));
   }, []);
+// To save event to Firestore
+const handleBook = async (event) => {
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Please log in to save events.");
+    return;
+  }
+
+  const eventId = event.eventId || event.id || crypto.randomUUID();
+
+  try {
+    await setDoc(
+      doc(db, "users", user.uid, "savedEvents", eventId.toString()),
+      {
+        eventId: eventId,
+        eventTitle: event.eventTitle,
+        eventDescription: event.eventDescription,
+        eventDate: event.eventDate,
+        eventLocation: event.eventLocation,
+        imageUrl: event.imageUrl || "",
+        savedAt: new Date().toISOString(),
+      }
+    );
+    alert("✅ Event saved to My Events!");
+  } catch (error) {
+    console.error("Error saving event:", error);
+    alert("❌ Could not save event. Try again.");
+  }
+};
 
   // Apply filters
   const filteredEvents = events.filter(event => {
@@ -91,6 +123,10 @@ function EventDiscovery() {
                 <p className="event-card-date">{event.eventDate}</p>
                 <p className="event-card-location">{event.eventLocation}</p>
               </div>
+              <button className="save-btn" onClick={() => handleBook(event)}>
+                Save Event
+              </button>
+
             </div>
           ))
         )}
