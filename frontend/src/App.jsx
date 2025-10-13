@@ -5,7 +5,8 @@ import HomePageNavBar from "./pages/HomePageNavBar.jsx";
 // Public pages
 import HomePage from "./pages/HomePage.jsx"; // Landing page
 import LoginPage from "./pages/LoginPage.jsx";
-import SignUpPage from "./pages/SignupPage.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import AboutUs from "./pages/AboutUs";
 
 import Navbar from "./components/navbarstudent/NavbarStudent";    
 import NavbarOrg from "./components/navbarorg/NavBarOrg";
@@ -14,7 +15,6 @@ import NavbarAdmin from "./components/navbaradmin/NavBarAdmin";             // f
 import StudentHomePage from "./pages/student/HomePageStudent/HomePageStudent";
 import EventDiscovery from "./pages/student/EventDiscovery/EventDiscovery";
 import MyEvents from "./pages/student/MyEvents/MyEvents";
-import AboutUs from "./pages/student/AboutUs/AboutUs";
 import ProfilePage from "./pages/student/ProfilePage/ProfilePage";
 // Organizer Pages 
 import OrgHomePage from "./pages/organizer/HomePageOrg/HomePageOrg.jsx";
