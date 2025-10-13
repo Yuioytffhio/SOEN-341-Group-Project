@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Navbar.css";
+import { useNavigate , Link} from "react-router-dom";
+import "./NavbarStudent.css";
 import profileIcon from "../../assets/profile_icon.png";
 
 export default function Navbar() {
@@ -15,16 +15,10 @@ export default function Navbar() {
   return (
     <div className="navbar">
       <ul>
-        <li>
-          <a onClick={() => navigate("/discovery")}>Events</a>
-        </li>
-        <li>
-          <a onClick={() => navigate("/myevents")}>My Events</a>
-        </li>
-        <li>
-          <a onClick={() => navigate("/aboutus")}>About</a>
-        </li>
-
+        <li><Link to="/studentHome">Home</Link></li>
+        <li><Link to="/discovery">Discovery</Link></li>
+        <li><Link to="/myevents">My Events</Link></li>
+        <li><Link to="/aboutus">About Us</Link></li>
         {/* Profile Icon with Dropdown */}
         <li
           className="profile-icon"

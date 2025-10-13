@@ -2,68 +2,82 @@ import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
 import { auth, db } from "../../../firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
-
+import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
 
-  // ADDED FOR FILTERS - filter state
   const [filters, setFilters] = useState({
     category: "",
     organization: "",
     date: ""
   });
 
-  /* To fetch data from backend */
   useEffect(() => {
-    fetch("http://localhost:8080/events")
-      .then(response => {
-        if (!response.ok) throw new Error("Failed to fetch events");
-        return response.json();
-      })
-      .then(data => setEvents(data))
-      .catch(error => console.error("Error fetching events:", error));
-  }, []);
-// To save event to Firestore
-const handleBook = async (event) => {
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Please log in to save events.");
-    return;
-  }
-
-  const eventId = event.eventId || event.id || crypto.randomUUID();
-
-  try {
-    await setDoc(
-      doc(db, "users", user.uid, "savedEvents", eventId.toString()),
-      {
-        eventId: eventId,
-        eventTitle: event.eventTitle,
-        eventDescription: event.eventDescription,
-        eventDate: event.eventDate,
-        eventLocation: event.eventLocation,
-        imageUrl: event.imageUrl || "",
-        savedAt: new Date().toISOString(),
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "events"));
+        const eventsList = querySnapshot.docs.map((d) => {
+          const data = d.data();
+          return {
+            id: d.id,
+            ...data,
+            eventDate: data.eventDate
+              ? data.eventDate.seconds !== undefined
+                ? new Date(data.eventDate.seconds * 1000)
+                : new Date(data.eventDate)
+              : null,
+          };
+        });
+        setEvents(eventsList);
+      } catch (error) {
+        console.error("Error fetching events:", error);
       }
-    );
-    alert("✅ Event saved to My Events!");
-  } catch (error) {
-    console.error("Error saving event:", error);
-    alert("❌ Could not save event. Try again.");
-  }
-};
+    };
 
-  // Apply filters
-  const filteredEvents = events.filter(event => {
+    fetchEvents();
+  }, []);
+
+  // Save event to Firestore
+  const handleBook = async (event) => {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please log in to save events.");
+      return;
+    }
+
+    const eventId = event.eventId || event.id || crypto.randomUUID();
+
+    try {
+      await setDoc(
+        doc(db, "users", user.uid, "savedEvents", eventId.toString()),
+        {
+          eventId: eventId,
+          eventTitle: event.eventTitle,
+          eventDescription: event.eventDescription,
+          eventDate: event.eventDate,
+          eventLocation: event.eventLocation,
+          imageUrl: event.imageUrl || "",
+          savedAt: new Date().toISOString(),
+        }
+      );
+      alert("✅ Event saved to My Events!");
+    } catch (error) {
+      console.error("Error saving event:", error);
+      alert("❌ Could not save event. Try again.");
+    }
+  };
+
+  const filteredEvents = events.filter((event) => {
     const matchCategory =
       !filters.category || event.eventCategory === filters.category;
     const matchOrg =
-      !filters.organization || event.eventOrganization === filters.organization;
+      !filters.organization ||
+      event.eventOrganization === filters.organization;
     const matchDate =
-      !filters.date || event.eventDate?.slice(0, 10) === filters.date;
-
+      !filters.date ||
+      (event.eventDate &&
+        event.eventDate.toISOString().slice(0, 10) === filters.date);
     return matchCategory && matchOrg && matchDate;
   });
 
@@ -71,26 +85,29 @@ const handleBook = async (event) => {
     <div className="event-discovery p-6">
       <h1 className="event-Title">Event Discovery</h1>
 
-      {/* Added filters */}
+      {/* Filter bar */}
       <div className="filter-bar">
         <select
           value={filters.category}
-          onChange={e => setFilters({ ...filters, category: e.target.value })}
+          onChange={(e) => setFilters({ ...filters, category: e.target.value })}
         >
           <option value="">All Categories</option>
           <option value="Computer Science">Computer Science</option>
           <option value="Sports">Sports</option>
           <option value="Arts">Arts</option>
-          <option value="Sports">Sports</option>
           <option value="Anthropology">Anthropology</option>
         </select>
 
         <select
           value={filters.organization}
-          onChange={e => setFilters({ ...filters, organization: e.target.value })}
+          onChange={(e) =>
+            setFilters({ ...filters, organization: e.target.value })
+          }
         >
           <option value="">All Organizations</option>
-          <option value="Computer Science Department">Computer Science Department</option>
+          <option value="Computer Science Department">
+            Computer Science Department
+          </option>
           <option value="Space Concordia">Space Concordia</option>
           <option value="Concordia Rugby">Concordia Rugby</option>
           <option value="Fine Arts Department">Fine Arts Department</option>
@@ -101,7 +118,7 @@ const handleBook = async (event) => {
         <input
           type="date"
           value={filters.date}
-          onChange={e => setFilters({ ...filters, date: e.target.value })}
+          onChange={(e) => setFilters({ ...filters, date: e.target.value })}
         />
       </div>
 
@@ -110,25 +127,36 @@ const handleBook = async (event) => {
         {filteredEvents.length === 0 ? (
           <p>No events available.</p>
         ) : (
-          filteredEvents.map(event => (
-            <div key={event.eventId} className="event-card">
-              <img
-                src={event.imageUrl ? event.imageUrl : GetTogether}
-                alt={event.eventTitle}
-                className="event-card-image"
-              />
-              <div className="event-card-info">
-                <h2>{event.eventTitle}</h2>
-                <p className="event-card-desc">{event.eventDescription}</p>
-                <p className="event-card-date">{event.eventDate}</p>
-                <p className="event-card-location">{event.eventLocation}</p>
-              </div>
-              <button className="save-btn" onClick={() => handleBook(event)}>
-                Save Event
-              </button>
+          filteredEvents.map((event) => {
+            const formattedDate = event.eventDate
+              ? event.eventDate.toISOString().slice(0, 10)
+              : "Date TBD";
 
-            </div>
-          ))
+            return (
+              <div key={event.id} className="event-card">
+                <img
+                  src={event.imageUrl ? event.imageUrl : GetTogether}
+                  alt={event.eventTitle}
+                  className="event-card-image"
+                />
+                <div className="event-card-info">
+                  <h2>{event.eventTitle}</h2>
+                  <p className="event-card-desc">{event.eventDescription}</p>
+                  <p className="event-card-date">{formattedDate}</p>
+                  <p className="event-card-location">
+                    {event.eventLocation}
+                  </p>
+                </div>
+
+                <button
+                  className="save-btn"
+                  onClick={() => handleBook(event)}
+                >
+                  Save Event
+                </button>
+              </div>
+            );
+          })
         )}
       </div>
     </div>
