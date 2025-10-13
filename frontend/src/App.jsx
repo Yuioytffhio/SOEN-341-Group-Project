@@ -5,7 +5,7 @@ import HomePageNavBar from "./pages/HomePageNavBar.jsx";
 // Public pages
 import HomePage from "./pages/HomePage.jsx"; // Landing page
 import LoginPage from "./pages/LoginPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
+import SignUpPage from "./pages/SignupPage.jsx";
 
 import Navbar from "./components/navbar/Navbar";                 // for logged-in users
 // Student pages

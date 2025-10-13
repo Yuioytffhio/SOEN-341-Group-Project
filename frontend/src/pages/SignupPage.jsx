@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/SignUpPage.css"; 
+import "../styles/SignupPage.css";
 import login_background from "../assets/login_Background.jpg";
 import { useNavigate } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
