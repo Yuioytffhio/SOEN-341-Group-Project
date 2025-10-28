@@ -68,10 +68,10 @@ function EventDiscovery() {
         savedAt: new Date(),
       });
 
-      alert("✅ Event saved to My Events!");
+      alert("Event is saved to My Events!");
     } catch (error) {
       console.error("Error saving event:", error);
-      alert("❌ Could not save event. Try again.");
+      alert("Could not save the event. Please try again.");
     }
   };
 
