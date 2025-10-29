@@ -80,7 +80,7 @@
   transform: translateY(-1px);
 }
 
-/* Small screen responsiveness */
+
 @media (max-width: 600px) {
   .eventcreation-page {
     padding: 1.5rem;
