@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./EventCreation.css";
 
 import { auth, db } from "../../../firebaseConfig";
-import { collection, addDoc, serverTimestamp, Timestamp } from "firebase/firestore";
+import { collection, setDoc, doc, getDocs, serverTimestamp, Timestamp } from "firebase/firestore";
 
 const EventCreation = () => {
   const [formData, setFormData] = useState({
@@ -25,25 +25,33 @@ const EventCreation = () => {
     submitEvent.preventDefault();
 
     try {
-      const eventsRef = collection(db, "events");
+      const eventsCollection = collection(db, "events");
+      const eventsSnapshot = await getDocs(eventsCollection);
 
-      await addDoc(eventsRef, {
-        eventTitle: formData.eventTitle,
-        eventDescription: formData.eventDescription,
+      let maxEventIndex = 0;
+      eventsSnapshot.forEach((eventDocument) => {
+        const id = eventDocument.id;
+        if (id.startsWith("eventId_")) {
+          const eventIndex = parseInt(id.replace("eventId_", ""));
+          if (!isNaN(eventIndex) && eventIndex > maxEventIndex) {
+            maxEventIndex = eventIndex;
+          }
+        }
+      });
+
+      const nextEventIndex = maxEventIndex + 1;
+      const newEventId = `eventId_${String(nextEventIndex).padStart(3, "0")}`;
+
+      const eventDoc = doc(eventsCollection, newEventId);
+      await setDoc(eventDoc, {
+        ...formData,
         eventDate: Timestamp.fromDate(new Date(formData.eventDate)),
-        eventLocation: formData.eventLocation,
         eventCapacity: Number(formData.eventCapacity),
-        eventCategory: formData.eventCategory,
-        eventOrganization: formData.eventOrganization,
-        ticketType: formData.ticketType,
         createdAt: serverTimestamp(),
         createdBy: auth.currentUser ? auth.currentUser.uid : null,
       });
 
-      alert("The event was successfully created!");
-      console.log("Event created:", formData);
-
-
+      alert("Event successfully created!");
       setFormData({
         eventTitle: "",
         eventDescription: "",
@@ -54,6 +62,7 @@ const EventCreation = () => {
         eventOrganization: "",
         ticketType: "free",
       });
+
     } catch (error) {
       console.error("Error adding event:", error);
       alert("There was an error creating the event. Please try again.");
@@ -61,102 +70,95 @@ const EventCreation = () => {
   };
 
   return (
-    <div className="eventcreation-page">
-      <h1>Create an Event</h1>
+<div className="eventcreation-page">
+  <h1>Create an Event</h1>
 
-      <form className="eventcreation-form" onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            name="eventTitle"
-            value={formData.eventTitle}
-            onChange={handleChange}
-            required
-          />
-        </label>
+  <form className="eventcreation-form" onSubmit={handleSubmit}>
 
-        <label>
-          Description:
-          <textarea
-            name="eventDescription"
-            value={formData.eventDescription}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <label htmlFor="eventTitle">Title:</label>
+    <input
+      type="text"
+      id="eventTitle"
+      name="eventTitle"
+      value={formData.eventTitle}
+      onChange={handleChange}
+      required
+    />
 
-        <label>
-          Date & Time:
-          <input
-            type="datetime-local"
-            name="eventDate"
-            value={formData.eventDate}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <label htmlFor="eventDescription">Description:</label>
+    <textarea
+      id="eventDescription"
+      name="eventDescription"
+      value={formData.eventDescription}
+      onChange={handleChange}
+      required
+    />
 
-        <label>
-          Location:
-          <input
-            type="text"
-            name="eventLocation"
-            value={formData.eventLocation}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <label htmlFor="eventDate">Date & Time:</label>
+    <input
+      type="datetime-local"
+      id="eventDate"
+      name="eventDate"
+      value={formData.eventDate}
+      onChange={handleChange}
+      required
+    />
 
-        <label>
-          Organization:
-          <input
-            type="text"
-            name="eventOrganization"
-            value={formData.eventOrganization}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <label htmlFor="eventLocation">Location:</label>
+    <input
+      type="text"
+      id="eventLocation"
+      name="eventLocation"
+      value={formData.eventLocation}
+      onChange={handleChange}
+      required
+    />
 
-        <label>
-          Capacity:
-          <input
-            type="number"
-            name="eventCapacity"
-            value={formData.eventCapacity}
-            onChange={handleChange}
-            min="1"
-            required
-          />
-        </label>
+    <label htmlFor="eventOrganization">Organization:</label>
+    <input
+      type="text"
+      id="eventOrganization"
+      name="eventOrganization"
+      value={formData.eventOrganization}
+      onChange={handleChange}
+      required
+    />
 
-        <label>
-          Category:
-          <input
-            type="text"
-            name="eventCategory"
-            value={formData.eventCategory}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <label htmlFor="eventCapacity">Capacity:</label>
+    <input
+      type="number"
+      id="eventCapacity"
+      name="eventCapacity"
+      value={formData.eventCapacity}
+      onChange={handleChange}
+      min="1"
+      required
+    />
 
-        <label>
-          Ticket Type:
-          <select
-            name="ticketType"
-            value={formData.ticketType}
-            onChange={handleChange}
-          >
-            <option value="free">Free</option>
-            <option value="paid">Paid</option>
-          </select>
-        </label>
+    <label htmlFor="eventCategory">Category:</label>
+    <input
+      type="text"
+      id="eventCategory"
+      name="eventCategory"
+      value={formData.eventCategory}
+      onChange={handleChange}
+      required
+    />
 
-        <button type="submit">Create Event</button>
-      </form>
-    </div>
+    <label htmlFor="ticketType">Ticket Type:</label>
+    <select
+      id="ticketType"
+      name="ticketType"
+      value={formData.ticketType}
+      onChange={handleChange}
+    >
+      <option value="free">Free</option>
+      <option value="paid">Paid</option>
+    </select>
+
+    <button type="submit">Create Event</button>
+  </form>
+</div>
   );
 };
 
