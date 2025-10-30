@@ -10,6 +10,7 @@ function EventDiscovery() {
     category: "",
     organization: "",
     date: "",
+    ticketType: "",
   });
 
   useEffect(() => {
@@ -81,7 +82,12 @@ function EventDiscovery() {
     const matchDate =
       !filters.date ||
       (event.eventDate && event.eventDate.toISOString().slice(0, 10) === filters.date);
-    return matchCategory && matchOrg && matchDate;
+
+      const matchTicket = !filters.ticketType || (filters.ticketType === "free" &&
+        (!event.ticketType || event.ticketType.toLowerCase() === "free")) ||
+        (filters.ticketType === "paid" && event.ticketType && event.ticketType.toLowerCase() === "paid");
+
+    return matchCategory && matchOrg && matchDate && matchTicket;
   });
 
   return (
@@ -119,6 +125,16 @@ function EventDiscovery() {
           value={filters.date}
           onChange={(e) => setFilters({ ...filters, date: e.target.value })}
         />
+
+        <select
+          value={filters.ticketType}
+          onChange={(e) => setFilters({ ...filters, ticketType: e.target.value })}
+        >
+          <option value="">All Ticket Types</option>
+          <option value="free">Free</option>
+          <option value="paid">Paid</option>
+        </select>
+
       </div>
 
       {/* Events list */}
@@ -143,6 +159,8 @@ function EventDiscovery() {
                   <p className="event-card-desc">{event.eventDescription}</p>
                   <p className="event-card-date">{formattedDate}</p>
                   <p className="event-card-location">{event.eventLocation}</p>
+                  <p className="event-card-ticketType" data-type={event.ticketType?.toLowerCase() || "free"} >
+              {event.ticketType ? event.ticketType.charAt(0).toUpperCase() + event.ticketType.slice(1): "Free"} </p>
                 </div>
 
                 <button className="save-btn" onClick={() => handleBook(event)}>
