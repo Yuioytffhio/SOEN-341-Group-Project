@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
 import { auth, db } from "../../../firebaseConfig";
-import { collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp, doc, getDoc, updateDoc, increment } from "firebase/firestore";
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
@@ -57,6 +57,29 @@ function EventDiscovery() {
         alert("✅ You already saved this event!");
         return;
       }
+
+      //Check event capacity before saving
+      const eventRef = doc(db, "events", event.id);
+      const eventSnap = await getDoc(eventRef);
+
+      if (!eventSnap.exists()) {
+      alert("Event not found.");
+      return;
+      }
+
+      const currentCapacity = eventSnap.data().eventCapacity;
+
+      if (currentCapacity <= 0) {
+      alert("❌ Sorry, this event is full!");
+      return;
+      }
+
+      //Decrease event capacity by 1
+      await updateDoc(eventRef, {eventCapacity: increment(-1) } );
+
+      //Update local state to reflect new capacity immediately without page refresh
+      setEvents((prevEvents) => prevEvents.map((e) => e.id === event.id
+      ? { ...e, eventCapacity: e.eventCapacity - 1 } : e ) );
 
       // Save event if not already saved
       await addDoc(savedRef, {
