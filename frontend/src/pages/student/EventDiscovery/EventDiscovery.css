@@ -80,6 +80,27 @@
   font-size: 14px;
 }
 
+.event-card-ticketType {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  align-self: flex-start;
+}
+
+.event-card-ticketType[data-type="free"] {
+  background-color: #d1fae5; /* light green */
+  color: #065f46; /* dark green text */
+}
+
+.event-card-ticketType[data-type="paid"] {
+  background-color: #fef3c7; /* light yellow */
+  color: #92400e; /* brown text */
+}
+
 .filter-bar {
   display: flex;
   gap: 1rem;
