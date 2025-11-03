@@ -183,12 +183,14 @@ function EventDiscovery() {
                   <p className="event-card-date">{formattedDate}</p>
                   <p className="event-card-location">{event.eventLocation}</p>
                   <p className="event-card-ticketType" data-type={event.ticketType?.toLowerCase() || "free"} >
-              {event.ticketType ? event.ticketType.charAt(0).toUpperCase() + event.ticketType.slice(1): "Free"} </p>
+              {event.ticketType ? event.ticketType.charAt(0).toUpperCase() + event.ticketType.slice(1): "Free"} 
+                  </p>
+                  <p className={`event-capacity ${ event.eventCapacity <= 0 ? "sold-out" : ""}`} >
+                {`${Math.max(event.eventCapacity, 0)} spot${ event.eventCapacity === 1 ? "" : "s" } left`}
+                  </p>
                 </div>
-
-                <button className="save-btn" onClick={() => handleBook(event)}>
-                  Save Event
-                </button>
+                  {event.eventCapacity > 0 ? (<button className="save-btn" onClick={() => handleBook(event)}> Save Event
+                  </button>) : ( <button className="save-btn soldout-btn" disabled> Sold Out </button>)}
               </div>
             );
           })
