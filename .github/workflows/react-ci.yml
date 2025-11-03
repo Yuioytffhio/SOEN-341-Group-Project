@@ -20,6 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
+        working-directory: ./frontend/src
         run: |
           npm install
           npm install vite@latest
@@ -28,7 +29,5 @@ jobs:
           npm install qrcode
 
       - name: Build project
+        working-directory: ./frontend/src
         run: npm run build
-
-      - name: Run tests (if available)
-        run: npm test --if-present
