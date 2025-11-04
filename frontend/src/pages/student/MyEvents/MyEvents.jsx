@@ -3,8 +3,9 @@ import "./MyEvents.css";
 import headerImage from "../../../assets/MyEventsHeader.png";
 import DownloadIcon from "../../../assets/download_button.png";
 import QRCode from "qrcode";
-import { db } from "../../../firebaseConfig";
-import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import { db, storage } from "../../../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 export default function MyEvents() {
   const [events, setEvents] = useState([]);
