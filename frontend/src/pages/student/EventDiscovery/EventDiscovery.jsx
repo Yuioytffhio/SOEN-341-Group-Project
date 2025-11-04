@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
 import { auth, db } from "../../../firebaseConfig";
-import { collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp, doc, getDoc, updateDoc, increment } from "firebase/firestore";
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
@@ -57,6 +57,29 @@ function EventDiscovery() {
         alert("✅ You already saved this event!");
         return;
       }
+
+      //Check event capacity before saving
+      const eventRef = doc(db, "events", event.id);
+      const eventSnap = await getDoc(eventRef);
+
+      if (!eventSnap.exists()) {
+      alert("Event not found.");
+      return;
+      }
+
+      const currentCapacity = eventSnap.data().eventCapacity;
+
+      if (currentCapacity <= 0) {
+      alert("❌ Sorry, this event is full!");
+      return;
+      }
+
+      //Decrease event capacity by 1
+      await updateDoc(eventRef, {eventCapacity: increment(-1) } );
+
+      //Update local state to reflect new capacity immediately without page refresh
+      setEvents((prevEvents) => prevEvents.map((e) => e.id === event.id
+      ? { ...e, eventCapacity: e.eventCapacity - 1 } : e ) );
 
       // Save event if not already saved
       await addDoc(savedRef, {
@@ -160,12 +183,14 @@ function EventDiscovery() {
                   <p className="event-card-date">{formattedDate}</p>
                   <p className="event-card-location">{event.eventLocation}</p>
                   <p className="event-card-ticketType" data-type={event.ticketType?.toLowerCase() || "free"} >
-              {event.ticketType ? event.ticketType.charAt(0).toUpperCase() + event.ticketType.slice(1): "Free"} </p>
+              {event.ticketType ? event.ticketType.charAt(0).toUpperCase() + event.ticketType.slice(1): "Free"} 
+                  </p>
+                  <p className={`event-capacity ${ event.eventCapacity <= 0 ? "sold-out" : ""}`} >
+                {`${Math.max(event.eventCapacity, 0)} spot${ event.eventCapacity === 1 ? "" : "s" } left`}
+                  </p>
                 </div>
-
-                <button className="save-btn" onClick={() => handleBook(event)}>
-                  Save Event
-                </button>
+                  {event.eventCapacity > 0 ? (<button className="save-btn" onClick={() => handleBook(event)}> Save Event
+                  </button>) : ( <button className="save-btn soldout-btn" disabled> Sold Out </button>)}
               </div>
             );
           })
