@@ -4,10 +4,8 @@ import "react-calendar/dist/Calendar.css";
 import "./MyEvents.css";
 import DownloadIcon from "../../../assets/download_button.png";
 import QRCode from "qrcode";
-import { db, auth, storage } from "../../../firebaseConfig";
+import { db, auth } from "../../../firebaseConfig";
 import { doc, setDoc, collection, getDocs, getDoc } from "firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
-
 
 export default function MyEvents() {
   const [events, setEvents] = useState([]);
@@ -69,41 +67,57 @@ export default function MyEvents() {
     fetchSavedEvents();
   }, [user]);
 
+  // ✅ Helper: check if two dates are the same day
   const isSameDay = (d1, d2) =>
+    d1 &&
+    d2 &&
     d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
+  // ✅ Filter events for selected date
   const eventsForSelectedDate = selectedDate
     ? events.filter((e) => e.eventDate && isSameDay(e.eventDate, selectedDate))
     : events;
 
+  // ✅ Updated QR saving logic
   const handleDownloadTicket = async (event) => {
     try {
       const ticketData = {
-        title: event.eventTitle,
-        date: event.eventDate?.toLocaleString() || "TBD",
+        id: event.id,
+        name: event.eventTitle,
+        date: event.eventDate?.toISOString?.() || "TBD",
         location: event.eventLocation,
-        organization: event.eventOrganization,
-        studentID: user.uid,
-        issuedAt: event.ticketDate?.toLocaleString() || new Date().toLocaleString(),
+        issuedAt: new Date().toISOString(),
       };
 
-      const qrString = JSON.stringify(ticketData);
-      const qrUrl = await QRCode.toDataURL(qrString);
+      // Generate the QR code as a Base64 string
+      const qrDataUrl = await QRCode.toDataURL(JSON.stringify(ticketData));
 
+      // Save to Firestore (no Firebase Storage required)
+      await setDoc(doc(db, "tickets", `${event.id}-${Date.now()}`), {
+        ...ticketData,
+        qrDataUrl, // Stored directly in Firestore
+      });
+
+      // Download locally (optional)
       const link = document.createElement("a");
-      link.href = qrUrl;
-      link.download = `${event.eventTitle}-SavedEventQR.png`;
+      link.href = qrDataUrl;
+      link.download = `${event.eventTitle}-TicketQR.png`;
       link.click();
+
+      alert("✅ QR code saved to Firestore and downloaded locally!");
     } catch (err) {
       console.error("Error generating QR code:", err);
+      alert("⚠️ Failed to generate or save QR code.");
     }
   };
 
+  // ✅ Loading / error states
   if (loading) return <p className="loading">Loading your saved events...</p>;
   if (error) return <p className="error">{error}</p>;
 
+  // ✅ Main render
   return (
     <div className="my-events-container">
       <div className="header-image">
