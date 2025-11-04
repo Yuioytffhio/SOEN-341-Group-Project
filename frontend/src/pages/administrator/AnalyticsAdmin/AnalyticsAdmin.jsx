@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../../firebaseConfig"; // adjust path if needed
+import { db } from "../../../firebaseConfig"; 
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from "recharts";
@@ -15,21 +15,37 @@ const Analytics = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
+        // fetching all events 
         const eventsRef = collection(db, "events");
         const eventsSnapshot = await getDocs(eventsRef);
+        const eventsData = eventsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
         let totalEvents = eventsSnapshot.size;
-        let totalTickets = 0;
-        let trendList = [];
 
-        eventsSnapshot.forEach((doc) => {
-          const data = doc.data();
-          totalTickets += data.ticketsIssued || 0;
-          trendList.push({
-            name: data.name || "Unnamed Event",
-            participants: data.participants || 0,
-          });
+        // fetching all tickets
+        let totalTickets = 0;
+        const ticketsRef = collection(db, "tickets");
+        const ticketsSnapshot = await getDocs(ticketsRef);
+        const ticketsData = ticketsSnapshot.docs.map((doc) => doc.data());
+
+        totalTickets = ticketsSnapshot.size;
+
+        // Count how many tickets per event
+        const participantsCount = {};
+        ticketsData.forEach((ticket) => {
+          if (ticket.eventId) {
+            participantsCount[ticket.eventId] = (participantsCount[ticket.eventId] || 0) + 1;
+          }
         });
+
+        // Prepare trend data for chart
+        const trendList = eventsData.map((event) => ({
+          name: event.eventTitle || "Unnamed Event",
+          participants: participantsCount[event.id] || 0,
+        }));
 
         setEventCount(totalEvents);
         setTicketCount(totalTickets);
@@ -48,7 +64,10 @@ const Analytics = () => {
 
   return (
     <div className="analytics-page">
-      <h2 className="analytics-title">Global Statistics</h2>
+
+      <header className="analytics-header">
+        <h2 className="greetings">Global Statistics</h2>
+      </header>
 
       <div className="analytics-cards">
         <div className="analytics-card">
@@ -64,13 +83,20 @@ const Analytics = () => {
       <div className="analytics-chart">
         <h3>Participation Trends</h3>
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={trendData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+          <BarChart data={trendData} margin={{ top: 20, right: 30, left: 70, bottom: 50 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis
+              dataKey="name"
+              interval={0}
+              angle={-20}
+              textAnchor="end"
+              height={60}
+            />
+
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="participants" fill="#82ca9d" />
+            <Bar dataKey="participants" fill="#df6c6cff" />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -5,12 +5,13 @@
   min-height: 100vh;
 }
 
-.analytics-title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+.analytics-header {
   text-align: center;
-  color: #2c003e;
+  padding-left: 3rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
 }
 
 .analytics-cards {
@@ -24,21 +25,21 @@
   background: white;
   border-radius: 1rem;
   padding: 1.5rem 2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(40, 2, 2, 0.2);
   text-align: center;
   width: 250px;
 }
 
 .analytics-card h3 {
-  color: #4b0082;
-  font-size: 1.3rem;
+  color: #270202;
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
 .analytics-card p {
   font-size: 2rem;
   font-weight: bold;
-  color: #000;
+  color: #510a0a;
 }
 
 .analytics-chart {
