@@ -1,43 +1,81 @@
 import React, { useState, useEffect } from "react";
 import "./ToolsOrg.css";
+import { db } from "../../../firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function ToolsOrg() {
-  const events = [
-    { id: 1, name: "TED Talk" },
-    { id: 2, name: "Software Engineering Conference" },
-    { id: 3, name: "AI Evolving Technology" },
-  ];
-
-  const attendeeData = {
-    1: [
-      { name: "Alice Johnson", email: "alice@ted.com", ticketID: "TED001" },
-      { name: "Bob Smith", email: "bob@ted.com", ticketID: "TED002" },
-    ],
-    2: [
-      { name: "Catherine Lee", email: "catherine@sec.com", ticketID: "SEC001" },
-      { name: "Daniel Brown", email: "daniel@sec.com", ticketID: "SEC002" },
-      { name: "Emma White", email: "emma@sec.com", ticketID: "SEC003" },
-    ],
-    3: [
-      { name: "Frank Green", email: "frank@ai.com", ticketID: "AI001" },
-      { name: "Grace Kim", email: "grace@ai.com", ticketID: "AI002" },
-    ],
-  };
-
+  const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState("");
+  const [attendees, setAttendees] = useState([]);
   const [qrResult, setQrResult] = useState("");
   const [titleVisible, setTitleVisible] = useState(false);
 
+  // Animate title
   useEffect(() => {
-    // triggers animation after mount
     setTimeout(() => setTitleVisible(true), 200);
   }, []);
 
-  const handleEventChange = (e) => setSelectedEvent(e.target.value);
+  // Fetch all events from Firestore
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "events"));
+        const eventList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setEvents(eventList);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+    fetchEvents();
+  }, []);
 
+  // When event is selected → fetch attendees
+  const handleEventChange = async (e) => {
+    const eventId = e.target.value;
+    setSelectedEvent(eventId);
+    setAttendees([]);
+
+    if (!eventId) return;
+
+    try {
+      // Get tickets for this event
+      const ticketsRef = collection(db, "tickets");
+      const q = query(ticketsRef, where("eventId", "==", eventId));
+      const ticketSnap = await getDocs(q);
+
+      const attendeePromises = ticketSnap.docs.map(async (ticketDoc) => {
+        const ticketData = ticketDoc.data();
+        const userId = ticketData.studentID;
+
+        // Fetch student info from users collection
+        const userSnap = await getDocs(
+          query(collection(db, "users"), where("__name__", "==", userId))
+        );
+
+        const userData =
+          !userSnap.empty ? userSnap.docs[0].data() : { firstName: "", lastName: "", email: "" };
+
+        return {
+          name: `${userData.firstName} ${userData.lastName}`,
+          email: userData.email,
+          ticketID: ticketDoc.id,
+        };
+      });
+
+      const attendeesList = await Promise.all(attendeePromises);
+      setAttendees(attendeesList);
+    } catch (error) {
+      console.error("Error fetching attendees:", error);
+    }
+  };
+
+  // Export attendees to CSV
   const handleExportCSV = () => {
-    if (!selectedEvent) return;
-    const attendees = attendeeData[selectedEvent];
+    if (!selectedEvent || attendees.length === 0) return;
+
     const csvRows = [
       ["Name", "Email", "Ticket ID"],
       ...attendees.map((a) => [a.name, a.email, a.ticketID]),
@@ -47,12 +85,12 @@ export default function ToolsOrg() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${
-      events.find((ev) => ev.id === parseInt(selectedEvent)).name
-    }_Attendees.csv`;
+    const selected = events.find((ev) => ev.id === selectedEvent);
+    link.download = `${selected.eventTitle}_Attendees.csv`;
     link.click();
   };
 
+  // QR upload simulation
   const handleQRUpload = (event) => {
     const file = event.target.files[0];
     if (file) setQrResult(`✅ Ticket validated from: ${file.name}`);
@@ -69,21 +107,34 @@ export default function ToolsOrg() {
         <p>Select an event to export its attendee list in CSV format.</p>
 
         <select onChange={handleEventChange} value={selectedEvent}>
-          <option value=""> Select an event </option>
+          <option value="">Select an event</option>
           {events.map((event) => (
             <option key={event.id} value={event.id}>
-              {event.name}
+              {event.eventTitle}
             </option>
           ))}
         </select>
 
         <button
           onClick={handleExportCSV}
-          disabled={!selectedEvent}
-          className={selectedEvent ? "active-btn" : "disabled-btn"}
+          disabled={!selectedEvent || attendees.length === 0}
+          className={selectedEvent && attendees.length > 0 ? "active-btn" : "disabled-btn"}
         >
           Export CSV
         </button>
+
+        {attendees.length > 0 && (
+          <div className="attendee-list">
+            <h3>Attendees</h3>
+            <ul>
+              {attendees.map((a, index) => (
+                <li key={index}>
+                  <strong>{a.name}</strong> — {a.email} ({a.ticketID})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
 
       <section className="tool-section">
