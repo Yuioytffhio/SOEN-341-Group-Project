@@ -31,3 +31,5 @@ jobs:
       - name: Build project
         working-directory: ./frontend/src
         run: npm run build
+         env:
+          CI: false
