@@ -1,0 +1,102 @@
+/* Container */
+.eventcreation-page {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Heading */
+.eventcreation-page h1 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+/* Form layout */
+.eventcreation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Label + inputs */
+.eventcreation-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs, textarea, and select elements */
+.eventcreation-form input,
+.eventcreation-form textarea,
+.eventcreation-form select {
+  margin-top: 0.3rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus effect for inputs */
+.eventcreation-form input:focus,
+.eventcreation-form textarea:focus,
+.eventcreation-form select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* Textarea styling */
+.eventcreation-form textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.4;
+}
+
+/* Button styling */
+.eventcreation-form button {
+  margin-top: 0.5rem;
+  padding: 0.8rem;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.eventcreation-form button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+
+@media (max-width: 600px) {
+  .eventcreation-page {
+    padding: 1.5rem;
+  }
+
+  .eventcreation-page h1 {
+    font-size: 1.5rem;
+  }
+
+  .eventcreation-form input,
+  .eventcreation-form textarea,
+  .eventcreation-form select {
+    font-size: 0.95rem;
+  }
+
+  .eventcreation-form button {
+    font-size: 0.95rem;
+  }
+}
