@@ -5,7 +5,16 @@ import "./MyEvents.css";
 import DownloadIcon from "../../../assets/download_button.png";
 import QRCode from "qrcode";
 import { db, auth } from "../../../firebaseConfig";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  getDoc,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 
 export default function MyEvents() {
   const [events, setEvents] = useState([]);
@@ -45,12 +54,12 @@ export default function MyEvents() {
             const eventData = eventSnap.data();
             fetchedEvents.push({
               id: eventSnap.id,
-              eventTitle: eventData.eventTitle,
+              eventId: savedData.eventId,
+              eventTitle: eventData.eventTitle || eventData.name,
               eventDescription: eventData.eventDescription,
               eventDate: formatDate(eventData.eventDate),
               eventLocation: eventData.eventLocation,
               eventOrganization: eventData.eventOrganization,
-              ticketDate: formatDate(savedData.savedAt),
             });
           }
         }
@@ -72,35 +81,72 @@ export default function MyEvents() {
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
-  const eventsForSelectedDate = selectedDate
-    ? events.filter((e) => e.eventDate && isSameDay(e.eventDate, selectedDate))
-    : events;
-
   const handleDownloadTicket = async (event) => {
     try {
-      const ticketData = {
-        title: event.eventTitle,
-        date: event.eventDate?.toLocaleString() || "TBD",
-        location: event.eventLocation,
-        organization: event.eventOrganization,
-        studentID: user.uid,
-        issuedAt: event.ticketDate?.toLocaleString() || new Date().toLocaleString(),
-      };
+      if (!auth.currentUser) {
+        alert("⚠️ Please log in before downloading a ticket.");
+        return;
+      }
 
-      const qrString = JSON.stringify(ticketData);
-      const qrUrl = await QRCode.toDataURL(qrString);
+      // 1️⃣ Identify current user dynamically
+      const studentID = auth.currentUser.uid || "unknown_student";
 
+      // 2️⃣ Generate the QR code
+      const qrDataUrl = await QRCode.toDataURL(
+        JSON.stringify({
+          eventId: event.eventId,
+          eventTitle: event.eventTitle,
+          studentID: studentID,
+          issuedAt: new Date().toISOString(),
+        })
+      );
+
+      // 3️⃣ Find the latest ticket ID
+      const ticketsRef = collection(db, "tickets");
+      const latestQuery = query(ticketsRef, orderBy("createdAt", "desc"), limit(1));
+      const latestSnapshot = await getDocs(latestQuery);
+
+      let nextId = "tk_000001";
+      if (!latestSnapshot.empty) {
+        const lastDocId = latestSnapshot.docs[0].id; // e.g. "tk_000002"
+        const lastNum = parseInt(lastDocId.split("_")[1]);
+        const newNum = (lastNum + 1).toString().padStart(6, "0");
+        nextId = `tk_${newNum}`;
+      }
+
+      // 4️⃣ Create new ticket document
+      await setDoc(doc(db, "tickets", nextId), {
+        eventId: event.eventId,
+        eventTitle: event.eventTitle,
+        status: "confirmed",
+        studentID: studentID,
+        ticketdate: new Date().toISOString(),
+        qrDataUrl: qrDataUrl,
+        createdAt: new Date().toISOString(),
+      });
+
+      // 5️⃣ Download QR locally
       const link = document.createElement("a");
-      link.href = qrUrl;
-      link.download = `${event.eventTitle}-SavedEventQR.png`;
+      link.href = qrDataUrl;
+      link.download = `${event.eventTitle}-TicketQR.png`;
       link.click();
+
+      alert(`✅ Ticket ${nextId} created for ${studentID} and QR downloaded!`);
     } catch (err) {
       console.error("Error generating QR code:", err);
+      alert("⚠️ Failed to generate or save QR code.");
     }
   };
 
   if (loading) return <p className="loading">Loading your saved events...</p>;
   if (error) return <p className="error">{error}</p>;
+
+  const eventsForSelectedDate =
+    selectedDate && events.length > 0
+      ? events.filter(
+          (e) => e.eventDate && isSameDay(e.eventDate, selectedDate)
+        )
+      : events;
 
   return (
     <div className="my-events-container">
@@ -135,12 +181,16 @@ export default function MyEvents() {
                 <div key={event.id} className="event-item">
                   <div className="event-details">
                     <h3>{event.eventTitle}</h3>
-                    <p className="event-description">{event.eventDescription}</p>
+                    <p className="event-description">
+                      {event.eventDescription}
+                    </p>
                     <p className="event-date">
                       {event.eventDate?.toLocaleString() || "Date TBD"}
                     </p>
                     <p className="event-location">{event.eventLocation}</p>
-                    <p className="event-organization">{event.eventOrganization}</p>
+                    <p className="event-organization">
+                      {event.eventOrganization}
+                    </p>
                   </div>
 
                   <button
@@ -148,7 +198,11 @@ export default function MyEvents() {
                     onClick={() => handleDownloadTicket(event)}
                   >
                     Download QR
-                    <img src={DownloadIcon} alt="Download" className="download-icon" />
+                    <img
+                      src={DownloadIcon}
+                      alt="Download"
+                      className="download-icon"
+                    />
                   </button>
                 </div>
               ))}
@@ -159,3 +213,4 @@ export default function MyEvents() {
     </div>
   );
 }
+
