@@ -1,5 +1,5 @@
 .homepagenavbar {
-    position: fixed;        /* sits on top of the background */
+    position: absolute;        /* sits on top of the background */
     top: 0;
     left: 0;
     width: 100vw;
@@ -19,9 +19,8 @@
     gap: 5px;
 }
 
-
 .appName {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
     color: #fff;
     font-weight: 200;
