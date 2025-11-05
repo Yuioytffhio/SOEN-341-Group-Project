@@ -24,6 +24,11 @@ function EventDiscovery() {
     ticketType: "",
   });
 
+  const [categories, setCategories] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
+  const [ticketTypes, setTicketTypes] = useState([]);
+
+  // 🔹 Fetch events and populate filter lists dynamically
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -40,7 +45,24 @@ function EventDiscovery() {
               : null,
           };
         });
+
         setEvents(eventsList);
+
+        const uniqueCategories = [
+          ...new Set(eventsList.map((e) => e.eventCategory).filter(Boolean)),
+        ];
+        const uniqueOrganizations = [
+          ...new Set(
+            eventsList.map((e) => e.eventOrganization).filter(Boolean)
+          ),
+        ];
+        const uniqueTicketTypes = [
+          ...new Set(eventsList.map((e) => e.ticketType).filter(Boolean)),
+        ];
+
+        setCategories(uniqueCategories);
+        setOrganizations(uniqueOrganizations);
+        setTicketTypes(uniqueTicketTypes);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -48,35 +70,25 @@ function EventDiscovery() {
     fetchEvents();
   }, []);
 
-  const getNextTicketId = async () => {
-    const ticketsRef = collection(db, "tickets");
-    const ticketsSnap = await getDocs(ticketsRef);
-    const count = ticketsSnap.size + 1;
-    return `tk_${String(count).padStart(6, "0")}`;
+  // Generate new ticket ID every time
+  const getNextTicketId = () => {
+    const now = Date.now(); // current timestamp in ms
+    const uniquePart = (now % 1000000).toString().padStart(6, "0");
+    return `tk_${uniquePart}`;
   };
 
-  const getStudentId = async (user) => {
-    if (!user || !user.uid) {
-      console.error("No logged-in user found");
-      return null;
-    }
 
+  const getStudentId = async (user) => {
+    if (!user || !user.uid) return null;
     try {
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("uid", "==", user.uid));
       const querySnap = await getDocs(q);
-
-      if (!querySnap.empty) {
-        const userDoc = querySnap.docs[0];
-        console.log("Found existing student →", userDoc.id);
-        return userDoc.id; // e.g. st_000015
-      } else {
-        console.error("No Firestore user found for UID:", user.uid);
-        alert("User not found in database. Please contact support.");
-        return null;
-      }
+      if (!querySnap.empty) return querySnap.docs[0].id;
+      alert("User not found in database. Please contact support.");
+      return null;
     } catch (err) {
-      console.error("🔥 Error fetching student:", err);
+      console.error("Error fetching student:", err);
       return null;
     }
   };
@@ -92,25 +104,13 @@ function EventDiscovery() {
       const studentID = await getStudentId(user);
       if (!studentID) return;
 
-      const ticketsRef = collection(db, "tickets");
-      console.log("Debug before query → event.id:", event.id, "studentID:", studentID);
-      const q = query(
-        ticketsRef,
-        where("eventId", "==", event.id),
-        where("studentID", "==", studentID)
-      );
-      const existingTickets = await getDocs(q);
-      if (!existingTickets.empty) {
-        alert("You already saved this event!");
-        return;
-      }
-
       const eventRef = doc(db, "events", event.id);
       const eventSnap = await getDoc(eventRef);
       if (!eventSnap.exists()) {
         alert("Event not found.");
         return;
       }
+
       const currentCapacity = eventSnap.data().eventCapacity;
       if (currentCapacity <= 0) {
         alert("Sorry, this event is full!");
@@ -125,6 +125,7 @@ function EventDiscovery() {
       const newTicketId = await getNextTicketId();
 
       await setDoc(doc(db, "tickets", newTicketId), {
+        ticketId: newTicketId,
         eventId: event.id,
         eventTitle: event.eventTitle,
         studentID,
@@ -133,16 +134,17 @@ function EventDiscovery() {
         qrCode: qrCodeDataURL,
       });
 
-      setEvents((prevEvents) =>
-        prevEvents.map((e) =>
-          e.id === event.id ? { ...e, eventCapacity: e.eventCapacity - 1 } : e
+      setEvents((prev) =>
+        prev.map((e) =>
+          e.id === event.id
+            ? { ...e, eventCapacity: e.eventCapacity - 1 }
+            : e
         )
       );
 
-      alert(`Ticket created successfully for ${studentID}!`);
+      alert(`New ticket created successfully: ${newTicketId}`);
     } catch (error) {
-      console.error("Detailed error creating ticket:", error);
-      console.error("Error message:", error.message);
+      console.error("Error creating ticket:", error);
       alert(`Error: ${error.message}`);
     }
   };
@@ -159,11 +161,8 @@ function EventDiscovery() {
         event.eventDate.toISOString().slice(0, 10) === filters.date);
     const matchTicket =
       !filters.ticketType ||
-      (filters.ticketType === "free" &&
-        (!event.ticketType || event.ticketType.toLowerCase() === "free")) ||
-      (filters.ticketType === "paid" &&
-        event.ticketType &&
-        event.ticketType.toLowerCase() === "paid");
+      (event.ticketType &&
+        event.ticketType.toLowerCase() === filters.ticketType.toLowerCase());
 
     return matchCategory && matchOrg && matchDate && matchTicket;
   });
@@ -172,19 +171,22 @@ function EventDiscovery() {
     <div className="event-discovery p-6">
       <h1 className="event-Title">Event Discovery</h1>
 
-      {/* Filter bar */}
+      {/* 🔹 Dynamic Filter Bar */}
       <div className="filter-bar">
+        {/* Category */}
         <select
           value={filters.category}
           onChange={(e) => setFilters({ ...filters, category: e.target.value })}
         >
           <option value="">All Categories</option>
-          <option value="Computer Science">Computer Science</option>
-          <option value="Sports">Sports</option>
-          <option value="Arts">Arts</option>
-          <option value="Anthropology">Anthropology</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
         </select>
 
+        {/* Organization */}
         <select
           value={filters.organization}
           onChange={(e) =>
@@ -192,22 +194,21 @@ function EventDiscovery() {
           }
         >
           <option value="">All Organizations</option>
-          <option value="Computer Science Department">
-            Computer Science Department
-          </option>
-          <option value="Space Concordia">Space Concordia</option>
-          <option value="Concordia Rugby">Concordia Rugby</option>
-          <option value="Fine Arts Department">Fine Arts Department</option>
-          <option value="F1 Club">F1 Club</option>
-          <option value="Anthropology Club">Anthropology Club</option>
+          {organizations.map((org) => (
+            <option key={org} value={org}>
+              {org}
+            </option>
+          ))}
         </select>
 
+        {/* Date */}
         <input
           type="date"
           value={filters.date}
           onChange={(e) => setFilters({ ...filters, date: e.target.value })}
         />
 
+        {/* Ticket Type */}
         <select
           value={filters.ticketType}
           onChange={(e) =>
@@ -215,12 +216,15 @@ function EventDiscovery() {
           }
         >
           <option value="">All Ticket Types</option>
-          <option value="free">Free</option>
-          <option value="paid">Paid</option>
+          {ticketTypes.map((type) => (
+            <option key={type} value={type.toLowerCase()}>
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </option>
+          ))}
         </select>
       </div>
 
-      {/* Events list */}
+      {/* Events List */}
       <div className="events-row">
         {filteredEvents.length === 0 ? (
           <p>No events available.</p>
