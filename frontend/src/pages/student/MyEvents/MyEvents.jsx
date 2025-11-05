@@ -3,17 +3,14 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./MyEvents.css";
 import DownloadIcon from "../../../assets/download_button.png";
-import QRCode from "qrcode";
 import { db, auth } from "../../../firebaseConfig";
 import {
-  doc,
-  setDoc,
   collection,
   getDocs,
-  getDoc,
   query,
-  orderBy,
-  limit,
+  where,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 
 export default function MyEvents() {
@@ -25,7 +22,7 @@ export default function MyEvents() {
   const user = auth.currentUser;
 
   useEffect(() => {
-    const fetchSavedEvents = async () => {
+    const fetchMyTickets = async () => {
       try {
         if (!user) {
           setError("Please log in to view your saved events.");
@@ -33,47 +30,60 @@ export default function MyEvents() {
           return;
         }
 
-        const savedRef = collection(db, "users", user.uid, "savedEvents");
-        const savedSnapshot = await getDocs(savedRef);
+        const usersRef = collection(db, "users");
+        const userQuery = query(usersRef, where("uid", "==", user.uid));
+        const userSnapshot = await getDocs(userQuery);
+
+        if (userSnapshot.empty) {
+          setError("User not found in the database.");
+          setLoading(false);
+          return;
+        }
+
+        const studentID = userSnapshot.docs[0].id; 
+
+        const ticketsRef = collection(db, "tickets");
+        const qTickets = query(ticketsRef, where("studentID", "==", studentID));
+        const ticketsSnapshot = await getDocs(qTickets);
+
         const fetchedEvents = [];
 
-        const formatDate = (dateValue) => {
-          if (!dateValue) return null;
-          if (dateValue.toDate) return dateValue.toDate();
-          if (dateValue.seconds) return new Date(dateValue.seconds * 1000);
-          if (typeof dateValue === "string") return new Date(dateValue);
-          return null;
-        };
-
-        for (const savedDoc of savedSnapshot.docs) {
-          const savedData = savedDoc.data();
-          const eventRef = doc(db, "events", savedData.eventId);
+        for (const ticketDoc of ticketsSnapshot.docs) {
+          const ticketData = ticketDoc.data();
+          const eventRef = doc(db, "events", ticketData.eventId);
           const eventSnap = await getDoc(eventRef);
 
           if (eventSnap.exists()) {
             const eventData = eventSnap.data();
+            const eventDate = eventData.eventDate?.seconds
+              ? new Date(eventData.eventDate.seconds * 1000)
+              : eventData.eventDate
+              ? new Date(eventData.eventDate)
+              : null;
+
             fetchedEvents.push({
-              id: eventSnap.id,
-              eventId: savedData.eventId,
-              eventTitle: eventData.eventTitle || eventData.name,
-              eventDescription: eventData.eventDescription,
-              eventDate: formatDate(eventData.eventDate),
-              eventLocation: eventData.eventLocation,
-              eventOrganization: eventData.eventOrganization,
+              id: ticketDoc.id,
+              eventId: ticketData.eventId,
+              eventTitle: eventData.eventTitle || "Untitled Event",
+              eventDescription: eventData.eventDescription || "",
+              eventDate: eventDate,
+              eventLocation: eventData.eventLocation || "",
+              eventOrganization: eventData.eventOrganization || "",
+              qrCode: ticketData.qrCode,
             });
           }
         }
 
         setEvents(fetchedEvents);
       } catch (err) {
-        console.error("Error fetching saved events:", err);
-        setError("Failed to load your saved events.");
+        console.error("Error fetching tickets:", err);
+        setError("Failed to load your tickets.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSavedEvents();
+    fetchMyTickets();
   }, [user]);
 
   const isSameDay = (d1, d2) =>
@@ -81,72 +91,26 @@ export default function MyEvents() {
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
-  const handleDownloadTicket = async (event) => {
-    try {
-      if (!auth.currentUser) {
-        alert("⚠️ Please log in before downloading a ticket.");
-        return;
-      }
-
-      // 1️⃣ Identify current user dynamically
-      const studentID = auth.currentUser.uid || "unknown_student";
-
-      // 2️⃣ Generate the QR code
-      const qrDataUrl = await QRCode.toDataURL(
-        JSON.stringify({
-          eventId: event.eventId,
-          eventTitle: event.eventTitle,
-          studentID: studentID,
-          issuedAt: new Date().toISOString(),
-        })
-      );
-
-      // 3️⃣ Find the latest ticket ID
-      const ticketsRef = collection(db, "tickets");
-      const latestQuery = query(ticketsRef, orderBy("createdAt", "desc"), limit(1));
-      const latestSnapshot = await getDocs(latestQuery);
-
-      let nextId = "tk_000001";
-      if (!latestSnapshot.empty) {
-        const lastDocId = latestSnapshot.docs[0].id; // e.g. "tk_000002"
-        const lastNum = parseInt(lastDocId.split("_")[1]);
-        const newNum = (lastNum + 1).toString().padStart(6, "0");
-        nextId = `tk_${newNum}`;
-      }
-
-      // 4️⃣ Create new ticket document
-      await setDoc(doc(db, "tickets", nextId), {
-        eventId: event.eventId,
-        eventTitle: event.eventTitle,
-        status: "confirmed",
-        studentID: studentID,
-        ticketdate: new Date().toISOString(),
-        qrDataUrl: qrDataUrl,
-        createdAt: new Date().toISOString(),
-      });
-
-      // 5️⃣ Download QR locally
-      const link = document.createElement("a");
-      link.href = qrDataUrl;
-      link.download = `${event.eventTitle}-TicketQR.png`;
-      link.click();
-
-      alert(`✅ Ticket ${nextId} created for ${studentID} and QR downloaded!`);
-    } catch (err) {
-      console.error("Error generating QR code:", err);
-      alert("⚠️ Failed to generate or save QR code.");
-    }
-  };
-
-  if (loading) return <p className="loading">Loading your saved events...</p>;
-  if (error) return <p className="error">{error}</p>;
-
   const eventsForSelectedDate =
     selectedDate && events.length > 0
       ? events.filter(
           (e) => e.eventDate && isSameDay(e.eventDate, selectedDate)
         )
       : events;
+
+  const handleDownloadQR = (event) => {
+    if (!event.qrCode) {
+      alert("No QR code found for this ticket.");
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = event.qrCode;
+    link.download = `${event.eventTitle}-QR.png`;
+    link.click();
+  };
+
+  if (loading) return <p className="loading">Loading your events...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="my-events-container">
@@ -173,7 +137,7 @@ export default function MyEvents() {
             <p className="no-events">
               {selectedDate
                 ? "No events for this date."
-                : "You haven’t saved any events yet."}
+                : "You haven't purchased any tickets yet."}
             </p>
           ) : (
             <div className="event-list">
@@ -195,7 +159,7 @@ export default function MyEvents() {
 
                   <button
                     className="download-ticket-btn"
-                    onClick={() => handleDownloadTicket(event)}
+                    onClick={() => handleDownloadQR(event)}
                   >
                     Download QR
                     <img
@@ -213,4 +177,3 @@ export default function MyEvents() {
     </div>
   );
 }
-
