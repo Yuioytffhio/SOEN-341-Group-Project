@@ -2,20 +2,21 @@ import React, { useState, useEffect } from "react";
 import "./ToolsOrg.css";
 import { db } from "../../../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import QrScanner from "qr-scanner";
 
 export default function ToolsOrg() {
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState("");
+  const [exportEvent, setExportEvent] = useState(""); 
+  const [validationEvent, setValidationEvent] = useState(""); 
   const [attendees, setAttendees] = useState([]);
+  const [qrFile, setQrFile] = useState(null); 
   const [qrResult, setQrResult] = useState("");
   const [titleVisible, setTitleVisible] = useState(false);
 
-  // Animate title
   useEffect(() => {
     setTimeout(() => setTitleVisible(true), 200);
   }, []);
 
-  // Fetch all events from Firestore
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -32,16 +33,14 @@ export default function ToolsOrg() {
     fetchEvents();
   }, []);
 
-  // When event is selected → fetch attendees
-  const handleEventChange = async (e) => {
+  const handleExportChange = async (e) => {
     const eventId = e.target.value;
-    setSelectedEvent(eventId);
+    setExportEvent(eventId);
     setAttendees([]);
 
     if (!eventId) return;
 
     try {
-      // Get tickets for this event
       const ticketsRef = collection(db, "tickets");
       const q = query(ticketsRef, where("eventId", "==", eventId));
       const ticketSnap = await getDocs(q);
@@ -50,13 +49,14 @@ export default function ToolsOrg() {
         const ticketData = ticketDoc.data();
         const userId = ticketData.studentID;
 
-        // Fetch student info from users collection
         const userSnap = await getDocs(
           query(collection(db, "users"), where("__name__", "==", userId))
         );
 
         const userData =
-          !userSnap.empty ? userSnap.docs[0].data() : { firstName: "", lastName: "", email: "" };
+          !userSnap.empty
+            ? userSnap.docs[0].data()
+            : { firstName: "", lastName: "", email: "" };
 
         return {
           name: `${userData.firstName} ${userData.lastName}`,
@@ -72,9 +72,8 @@ export default function ToolsOrg() {
     }
   };
 
-  // Export attendees to CSV
   const handleExportCSV = () => {
-    if (!selectedEvent || attendees.length === 0) return;
+    if (!exportEvent || attendees.length === 0) return;
 
     const csvRows = [
       ["Name", "Email", "Ticket ID"],
@@ -85,15 +84,53 @@ export default function ToolsOrg() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    const selected = events.find((ev) => ev.id === selectedEvent);
-    link.download = `${selected.eventTitle}_Attendees.csv`;
+    const selected = events.find((ev) => ev.id === exportEvent);
+    link.download = `${selected?.eventTitle || "event"}_Attendees.csv`;
     link.click();
   };
 
-  // QR upload simulation
   const handleQRUpload = (event) => {
     const file = event.target.files[0];
-    if (file) setQrResult(`✅ Ticket validated from: ${file.name}`);
+    setQrFile(file);
+    setQrResult(""); 
+  };
+
+  const handleValidate = async () => {
+    if (!qrFile) {
+      setQrResult("Please upload a QR code image first.");
+      return;
+    }
+
+    if (!validationEvent) {
+      setQrResult("Please select an event before validating.");
+      return;
+    }
+
+    try {
+      const imageUrl = URL.createObjectURL(qrFile);
+      const decoded = await QrScanner.scanImage(imageUrl);
+      const scannedText = decoded.trim();
+
+      const ticketsRef = collection(db, "tickets");
+      const q = query(ticketsRef, where("qrCodeValue", "==", scannedText));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        setQrResult("Invalid QR code — no matching ticket found.");
+        return;
+      }
+
+      const ticket = snapshot.docs[0].data();
+
+      if (ticket.eventId === validationEvent) {
+        setQrResult(`Valid ticket for ${ticket.eventTitle}`);
+      } else {
+        setQrResult("QR code does not match this event.");
+      }
+    } catch (error) {
+      console.error("Error validating QR:", error);
+      setQrResult("Could not decode or validate QR image.");
+    }
   };
 
   return (
@@ -106,7 +143,7 @@ export default function ToolsOrg() {
         <h2>Export Attendee List</h2>
         <p>Select an event to export its attendee list in CSV format.</p>
 
-        <select onChange={handleEventChange} value={selectedEvent}>
+        <select onChange={handleExportChange} value={exportEvent}>
           <option value="">Select an event</option>
           {events.map((event) => (
             <option key={event.id} value={event.id}>
@@ -117,8 +154,10 @@ export default function ToolsOrg() {
 
         <button
           onClick={handleExportCSV}
-          disabled={!selectedEvent || attendees.length === 0}
-          className={selectedEvent && attendees.length > 0 ? "active-btn" : "disabled-btn"}
+          disabled={!exportEvent || attendees.length === 0}
+          className={
+            exportEvent && attendees.length > 0 ? "active-btn" : "disabled-btn"
+          }
         >
           Export CSV
         </button>
@@ -139,8 +178,34 @@ export default function ToolsOrg() {
 
       <section className="tool-section">
         <h2>QR Ticket Validation</h2>
-        <p>Upload a QR code image to validate a ticket.</p>
+        <p>
+          Select an event, upload a QR code image, then click <b>Validate</b>.
+        </p>
+
+        <select
+          onChange={(e) => setValidationEvent(e.target.value)}
+          value={validationEvent}
+        >
+          <option value="">Select an event</option>
+          {events.map((event) => (
+            <option key={event.id} value={event.id}>
+              {event.eventTitle}
+            </option>
+          ))}
+        </select>
+
         <input type="file" accept="image/*" onChange={handleQRUpload} />
+
+        <button
+          onClick={handleValidate}
+          disabled={!validationEvent || !qrFile}
+          className={
+            validationEvent && qrFile ? "active-btn" : "disabled-btn"
+          }
+        >
+          Validate
+        </button>
+
         {qrResult && <p className="qr-result">{qrResult}</p>}
       </section>
     </div>

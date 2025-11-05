@@ -27,6 +27,7 @@ jobs:
           npm install react-router-dom
           npm install react-slick slick-carousel
           npm install qrcode
+          npm install qr-scanner
 
       - name: Build project
         working-directory: ./frontend/src
