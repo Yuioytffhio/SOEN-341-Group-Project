@@ -19,6 +19,10 @@ public class Ticket {
         return code; 
     }
 
+    public String getUniqueCode() {
+    return code;
+    }
+
     public boolean isCheckedIn() { 
         return checkedIn; 
     }
