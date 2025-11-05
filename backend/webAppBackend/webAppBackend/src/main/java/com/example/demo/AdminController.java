@@ -23,11 +23,12 @@ public class AdminController {
     @Autowired
     private Firestore db;
 
+    // Management: assign platform role (user | organizer | admin)
     @PostMapping("/setRole")
-    public ResponseEntity<?> setPlatformRole(@RequestBody Map<String, String> body)
+    public ResponseEntity<?> setRole(@RequestBody Map<String, String> body)
             throws ExecutionException, InterruptedException {
 
-        String uid = body.get("uid");
+        String uid  = body.get("uid");
         String role = body.get("role");
 
         if (uid == null || role == null) {
@@ -37,25 +38,6 @@ public class AdminController {
         WriteResult wr = db.collection("users")
                 .document(uid)
                 .set(Map.of("platformRole", role), SetOptions.merge())
-                .get();
-
-        return ResponseEntity.ok(Map.of("ok", true, "updatedAt", wr.getUpdateTime().toString()));
-    }
-
-    @PostMapping("/moderateEvent")
-    public ResponseEntity<?> moderateEvent(@RequestBody Map<String, String> body)
-            throws ExecutionException, InterruptedException {
-
-        String eventId = body.get("eventId");
-        String status = body.get("status");
-
-        if (eventId == null || status == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "eventId and status are required"));
-        }
-
-        WriteResult wr = db.collection("events")
-                .document(eventId)
-                .update("status", status)
                 .get();
 
         return ResponseEntity.ok(Map.of("ok", true, "updatedAt", wr.getUpdateTime().toString()));
