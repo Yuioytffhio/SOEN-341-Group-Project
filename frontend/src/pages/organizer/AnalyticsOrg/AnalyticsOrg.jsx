@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./AnalyticsOrg.css";
-
 import { auth, db } from "../../../firebaseConfig";
 import {
   collection,
@@ -38,48 +37,45 @@ const EventAnalytics = () => {
   // Load all events and compute ticketsIssued for each created event
   useEffect(() => {
     let mounted = true;
-    const load = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const eventsRef = collection(db, "events");
-        const eventsSnap = await getDocs(eventsRef);
+    setLoading(true);
+    setError(null);
 
-        // For each event, fetch tickets count
-        const eventsData = await Promise.all(
-          eventsSnap.docs.map(async (doc) => {
-            const data = doc.data();
-            const id = doc.id;
-            // fetch tickets for this event
-            const tickets = await fetchTicketsForEvent(id);
-            const ticketsIssued = tickets.length;
-            const eventCapacity =
-              typeof data.eventCapacity === "number"
-                ? data.eventCapacity
-                : Number(data.eventCapacity) || 0;
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (!mounted) return;
 
-            const registrationRate =
-              eventCapacity > 0
-                ? Math.min((ticketsIssued / eventCapacity) * 100, 100)
-                : 0;
+      if (user) {
+        try {
+          const eventsRef = collection(db, "events");
+          const q = query(eventsRef, where("createdBy", "==", user.uid));
+          const eventsSnap = await getDocs(q);
 
-            const remainingCapacity = Math.max(eventCapacity - ticketsIssued, 0);
+          const eventsData = await Promise.all(
+            eventsSnap.docs.map(async (doc) => {
+              const data = doc.data();
+              const id = doc.id;
+              const tickets = await fetchTicketsForEvent(id);
+              const ticketsIssued = tickets.length;
+              const eventCapacity =
+                Number(data.eventCapacity) || 0;
+              const registrationRate =
+                eventCapacity > 0
+                  ? Math.min((ticketsIssued / eventCapacity) * 100, 100)
+                  : 0;
+              const remainingCapacity = Math.max(eventCapacity - ticketsIssued, 0);
 
-            return {
-              id,
-              ...data,
-              ticketsIssued,
-              eventCapacity,
-              registrationRate,
-              remainingCapacity,
-            };
-          })
-        );
+              return {
+                id,
+                ...data,
+                ticketsIssued,
+                eventCapacity,
+                registrationRate,
+                remainingCapacity,
+              };
+            })
+          );
 
-        if (!mounted) return;
-        // sort by soonest eventDate if available, otherwise by id
-        eventsData.sort((a, b) => {
-          if (a.eventDate && b.eventDate) {
+          // Sort by date
+          eventsData.sort((a, b) => {
             const da =
               a.eventDate instanceof Timestamp
                 ? a.eventDate.toDate()
@@ -89,25 +85,31 @@ const EventAnalytics = () => {
                 ? b.eventDate.toDate()
                 : new Date(b.eventDate);
             return da - dbd;
-          }
-          return a.id.localeCompare(b.id);
-        });
+          });
 
-        setEvents(eventsData);
-      } catch (err) {
-        console.error("Failed to load events:", err);
-        setError("Failed to load events.");
-      } finally {
-        if (mounted) setLoading(false);
+          setEvents(eventsData);
+          setError(null);
+        } catch (err) {
+          console.error("Failed to load events:", err);
+          setError("Failed to load events.");
+        } finally {
+          if (mounted) setLoading(false);
+        }
+      } else {
+        // User is definitely not signed in
+        if (mounted) {
+          setEvents([]);
+          setError("User not logged in.");
+          setLoading(false);
+        }
       }
-    };
+    });
 
-    load();
     return () => {
       mounted = false;
+      unsubscribe();
     };
   }, []);
-
   // When user selects an event, fetch detailed tickets
   const openEventDetail = async (eventObj) => {
     setSelectedEvent(eventObj);
