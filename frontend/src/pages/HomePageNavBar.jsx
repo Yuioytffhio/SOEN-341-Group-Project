@@ -1,6 +1,7 @@
+import React, { useState } from "react";
+import { useNavigate , Link} from "react-router-dom";
 import '../styles/HomePageNavBar.css';
 import logo from "../assets/logo1.webp";
-import { Link, useNavigate } from "react-router-dom";
 
 const HomePageNavBar = () => {
   const navigate = useNavigate();
@@ -15,12 +16,14 @@ const HomePageNavBar = () => {
         {/*
         <img src={logo} alt="Logo" className='logo' />
         */}
-        <h2 className='appName'>SOEN 341</h2>
+        <ul className='navbar-title'>
+            <li><Link to='/' className='appName'>SOEN 341</Link></li>
+        </ul>
       </div>
 
       <div className='navbar-div'>
         <ul className='navbar-content'>
-            <li><Link to="/AboutUs" className="nav-link">About Us</Link></li>
+            <li><Link to="/publicaboutus" className="nav-link">About Us</Link></li>
         </ul>
       </div>
     </div>

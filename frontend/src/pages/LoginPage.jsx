@@ -40,7 +40,7 @@ export default function LoginPage() {
     localStorage.setItem("email", userData.email);
     localStorage.setItem("userName", userData.firstName || "");
     localStorage.setItem("role", userData.role || "");
-    localStorage.setItem("customID", userDoc.id); // ✅ e.g., st_000001
+    localStorage.setItem("customID", userDoc.id); 
 
     if (userData.role === "student") navigate("/studentHome");
     else if (userData.role === "organizer") navigate("/orgHome");

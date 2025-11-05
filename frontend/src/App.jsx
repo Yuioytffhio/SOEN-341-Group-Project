@@ -7,6 +7,8 @@ import HomePage from "./pages/HomePage.jsx"; // Landing page
 import LoginPage from "./pages/LoginPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import AboutUs from "./pages/AboutUs";
+import PublicAboutUs from "./pages/PublicAboutUs.jsx";
+// Navbars for different roles
 
 import Navbar from "./components/navbarstudent/NavbarStudent";    
 import NavbarOrg from "./components/navbarorg/NavBarOrg";
@@ -38,8 +40,11 @@ function AppContent() {
   const isPublicPage =
     location.pathname === "/" || location.pathname === "/login" || location.pathname == "/signuppage";
 
+  const isPublicAboutUsPage = location.pathname === "/publicaboutus";
+
   const renderNavbar = () => {
     if (isPublicPage) return <HomePageNavBar />;
+    if(isPublicAboutUsPage) return <HomePageNavBar />;
 
     if (isLoggedIn) {
       switch (role) {
@@ -70,6 +75,7 @@ function AppContent() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signuppage" element={<SignUpPage />} />
+        <Route path="/publicaboutus" element={<PublicAboutUs />} />
 
         {/* Protected (requires login) */}
 
