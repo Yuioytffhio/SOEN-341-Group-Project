@@ -48,6 +48,7 @@ npm install react-slick slick-carousel
 npm install qrcode
 npm install react-calendar
 npm install recharts
+npm install qr-scanner
 ```
 
 ### Start the development server:
