@@ -67,18 +67,17 @@ button:hover {
 }
 
 .active-btn {
-  background-color: #0077ff;
+  background-color: #722e34;
   color: white;
 }
 
 .active-btn:hover {
-  background-color: #005fcc;
+  background-color: #56030a;
 }
 
 .qr-result {
   margin-top: 1rem;
-  color: green;
-  font-weight: bold;
+  color: rgb(116, 15, 15);
 }
 
 .attendee-list {
@@ -105,17 +104,17 @@ button:hover {
   display: block;                
   text-align: left !important;   
   font-size: 0.9rem;            
-  color: #333;
+  color: #333333;
   padding-left: 1rem;            
   margin-bottom: 0.4rem;
   line-height: 1.4;
   list-style: none;
-  border-left: 3px solid #0077ff10; 
+  border-left: 3px solid #ff002210; 
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .attendee-list li:hover {
-  background-color: #f3f4f6;
-  border-left-color: #0077ff;
+  background-color: #f6f3f4;
+  border-left-color: rgba(110, 7, 33, 0.658);
   cursor: pointer;
 }

@@ -70,9 +70,8 @@ function EventDiscovery() {
     fetchEvents();
   }, []);
 
-  // Generate new ticket ID every time
   const getNextTicketId = () => {
-    const now = Date.now(); // current timestamp in ms
+    const now = Date.now(); 
     const uniquePart = (now % 1000000).toString().padStart(6, "0");
     return `tk_${uniquePart}`;
   };
@@ -119,10 +118,10 @@ function EventDiscovery() {
 
       await updateDoc(eventRef, { eventCapacity: increment(-1) });
 
-      const qrText = `Event: ${event.eventTitle}\nStudent: ${studentID}\nDate: ${new Date().toISOString()}`;
-      const qrCodeDataURL = await QRCode.toDataURL(qrText);
+      const newTicketId = getNextTicketId(); 
+      const qrValue = `${newTicketId}_${studentID}_${event.id}`; 
 
-      const newTicketId = await getNextTicketId();
+      const qrCodeImage = await QRCode.toDataURL(qrValue);
 
       await setDoc(doc(db, "tickets", newTicketId), {
         ticketId: newTicketId,
@@ -131,7 +130,8 @@ function EventDiscovery() {
         studentID,
         status: "confirmed",
         ticketDate: new Date(),
-        qrCode: qrCodeDataURL,
+        qrCodeValue: qrValue,  
+        qrCodeImage: qrCodeImage,
       });
 
       setEvents((prev) =>
@@ -171,7 +171,7 @@ function EventDiscovery() {
     <div className="event-discovery p-6">
       <h1 className="event-Title">Event Discovery</h1>
 
-      {/* 🔹 Dynamic Filter Bar */}
+      {/* Dynamic Filter Bar */}
       <div className="filter-bar">
         {/* Category */}
         <select
@@ -208,7 +208,6 @@ function EventDiscovery() {
           onChange={(e) => setFilters({ ...filters, date: e.target.value })}
         />
 
-        {/* Ticket Type */}
         <select
           value={filters.ticketType}
           onChange={(e) =>
@@ -224,7 +223,6 @@ function EventDiscovery() {
         </select>
       </div>
 
-      {/* Events List */}
       <div className="events-row">
         {filteredEvents.length === 0 ? (
           <p>No events available.</p>

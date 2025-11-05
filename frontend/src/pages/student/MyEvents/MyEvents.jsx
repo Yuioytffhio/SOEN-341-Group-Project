@@ -69,7 +69,7 @@ export default function MyEvents() {
               eventDate: eventDate,
               eventLocation: eventData.eventLocation || "",
               eventOrganization: eventData.eventOrganization || "",
-              qrCode: ticketData.qrCode,
+              qrCode: ticketData.qrCodeImage,
             });
           }
         }
