@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ToolsOrg.css";
 import { db, auth } from "../../../firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, updateDoc, doc } from "firebase/firestore";
 import QrScanner from "qr-scanner";
 
 export default function ToolsOrg() {
@@ -135,24 +135,39 @@ export default function ToolsOrg() {
         return;
       }
 
-      const ticket = snapshot.docs[0].data();
-      const eventMatch = events.find((e) => e.id === ticket.eventId);
+      const ticketDoc = snapshot.docs[0];
+      const ticket = ticketDoc.data();
 
+      if (ticket.status === "confirmed") {
+        setQrResult("QR code already validated (ticket confirmed).");
+        return;
+      }
+
+      const eventMatch = events.find((e) => e.id === ticket.eventId);
       if (!eventMatch) {
         setQrResult("You cannot validate tickets for events you did not create.");
         return;
       }
 
-      if (ticket.eventId === validationEvent) {
-        setQrResult(`Valid ticket for ${ticket.eventTitle}`);
-      } else {
-        setQrResult("QR code does not match this event.");
+      if (ticket.eventId !== validationEvent) {
+        setQrResult("QR code does not match the selected event.");
+        return;
       }
+
+      const ticketRef = ticketDoc.ref;
+      await updateDoc(ticketRef, {
+        status: "confirmed",
+        validatedAt: new Date(),
+      });
+
+      setQrResult(`Ticket confirmed successfully for "${ticket.eventTitle}".`);
     } catch (error) {
       console.error("Error validating QR:", error);
       setQrResult("Could not decode or validate QR image.");
     }
   };
+
+
 
   if (loading) return <p>Loading your events...</p>;
 

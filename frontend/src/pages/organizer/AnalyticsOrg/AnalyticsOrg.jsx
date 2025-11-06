@@ -12,7 +12,6 @@ import {
 } from "firebase/firestore";
 
 const EventAnalytics = () => {
-
   // list with metrics
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,17 +23,16 @@ const EventAnalytics = () => {
   const [selectedTickets, setSelectedTickets] = useState([]);
   const [detailLoading, setDetailLoading] = useState(false);
 
-  // Helper to fetch tickets count for a specific eventId
+  // Helper to fetch tickets for a specific eventId
   const fetchTicketsForEvent = async (eventId) => {
     const ticketsRef = collection(db, "tickets");
     const q = query(ticketsRef, where("eventId", "==", eventId));
     const snap = await getDocs(q);
-    // convert docs to objects
     const tickets = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     return tickets;
   };
 
-  // Load all events and compute ticketsIssued for each created event
+  // Load all events and compute attendance rate for each created event
   useEffect(() => {
     let mounted = true;
     setLoading(true);
@@ -55,20 +53,27 @@ const EventAnalytics = () => {
               const id = doc.id;
               const tickets = await fetchTicketsForEvent(id);
               const ticketsIssued = tickets.length;
-              const eventCapacity =
-                Number(data.eventCapacity) || 0;
-              const registrationRate =
-                eventCapacity > 0
-                  ? Math.min((ticketsIssued / eventCapacity) * 100, 100)
+              const eventCapacity = Number(data.eventCapacity) || 0;
+
+              const confirmedTickets = tickets.filter(
+                (t) => t.status === "confirmed"
+              ).length;
+              const attendanceRate =
+                ticketsIssued > 0
+                  ? Math.min((confirmedTickets / ticketsIssued) * 100, 100)
                   : 0;
-              const remainingCapacity = Math.max(eventCapacity - ticketsIssued, 0);
+
+              const remainingCapacity = Math.max(
+                eventCapacity - ticketsIssued,
+                0
+              );
 
               return {
                 id,
                 ...data,
                 ticketsIssued,
                 eventCapacity,
-                registrationRate,
+                attendanceRate,
                 remainingCapacity,
               };
             })
@@ -96,7 +101,7 @@ const EventAnalytics = () => {
           if (mounted) setLoading(false);
         }
       } else {
-        // User is definitely not signed in
+        // User is not signed in
         if (mounted) {
           setEvents([]);
           setError("User not logged in.");
@@ -110,7 +115,7 @@ const EventAnalytics = () => {
       unsubscribe();
     };
   }, []);
-  // When user selects an event, fetch detailed tickets
+
   const openEventDetail = async (eventObj) => {
     setSelectedEvent(eventObj);
     setSelectedTickets([]);
@@ -118,8 +123,16 @@ const EventAnalytics = () => {
     try {
       const tickets = await fetchTicketsForEvent(eventObj.id);
       tickets.sort((a, b) => {
-        const da = a.ticketdate ? new Date(a.ticketdate.seconds ? a.ticketdate.toDate() : a.ticketdate) : 0;
-        const db = b.ticketdate ? new Date(b.ticketdate.seconds ? b.ticketdate.toDate() : b.ticketdate) : 0;
+        const da = a.ticketdate
+          ? new Date(
+              a.ticketdate.seconds ? a.ticketdate.toDate() : a.ticketdate
+            )
+          : 0;
+        const db = b.ticketdate
+          ? new Date(
+              b.ticketdate.seconds ? b.ticketdate.toDate() : b.ticketdate
+            )
+          : 0;
         return db - da;
       });
       setSelectedTickets(tickets);
@@ -158,7 +171,9 @@ const EventAnalytics = () => {
                   tabIndex={0}
                 >
                   <div className="card-header">
-                    <h2 className="card-title">{evt.eventTitle || "Untitled Event"}</h2>
+                    <h2 className="card-title">
+                      {evt.eventTitle || "Untitled Event"}
+                    </h2>
                     <div className="card-sub">
                       {evt.eventOrganization || ""}
                       {evt.eventDate ? (
@@ -179,17 +194,19 @@ const EventAnalytics = () => {
                       </div>
 
                       <div className="metric">
-                        <div className="metric-label">Registration Rate</div>
+                        <div className="metric-label">Attendance Rate</div>
                         <div className="metric-value">
-                          {evt.eventCapacity > 0
-                            ? `${evt.registrationRate.toFixed(1)}%`
+                          {evt.ticketsIssued > 0
+                            ? `${evt.attendanceRate.toFixed(1)}%`
                             : "—"}
                         </div>
                       </div>
 
                       <div className="metric">
                         <div className="metric-label">Remaining</div>
-                        <div className="metric-value">{evt.remainingCapacity}</div>
+                        <div className="metric-value">
+                          {evt.remainingCapacity}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -237,10 +254,10 @@ const EventAnalytics = () => {
                 <div className="value">{selectedEvent.ticketsIssued}</div>
               </div>
               <div className="detail-metric">
-                <div className="label">Registration Rate</div>
+                <div className="label">Attendance Rate</div>
                 <div className="value">
-                  {selectedEvent.eventCapacity > 0
-                    ? `${selectedEvent.registrationRate.toFixed(1)}%`
+                  {selectedEvent.ticketsIssued > 0
+                    ? `${selectedEvent.attendanceRate.toFixed(1)}%`
                     : "—"}
                 </div>
               </div>
@@ -291,7 +308,7 @@ const EventAnalytics = () => {
           </div>
 
           <div className="note muted">
-            Note: "Registration Rate" = tickets issued ÷ capacity.
+            Note: "Attendance Rate" = confirmed tickets ÷ total tickets issued.
           </div>
         </div>
       )}
