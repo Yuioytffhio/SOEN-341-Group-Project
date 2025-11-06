@@ -102,7 +102,38 @@ const Management = () => {
       className="mgmt-input"
       placeholder="Enter organizer’s UID to approve or reject"
       required
+    />{/* Event Policy Compliance Moderation – implements #26 */}
+<section className="mgmt-card">
+  <h2 className="mgmt-card-title">Event Policy Compliance Review</h2>
+  <form className="mgmt-form">
+    <label className="mgmt-label" htmlFor="policyEventId">Event ID</label>
+    <input
+      id="policyEventId"
+      className="mgmt-input"
+      placeholder="Enter Event ID to review"
+      required
     />
+
+    <label className="mgmt-label" htmlFor="policyDecision">Compliance Status</label>
+    <select id="policyDecision" className="mgmt-select">
+      <option value="approved">Approved</option>
+      <option value="needs-review">Needs Review</option>
+      <option value="rejected">Rejected</option>
+    </select>
+
+    <div className="mgmt-actions" style={{ marginTop: "10px" }}>
+      <button type="button" className="btn btn-primary" disabled>
+        Save Decision (coming soon)
+      </button>
+    </div>
+
+    <p className="mgmt-status">
+      Placeholder UI for admins to mark events as compliant or non-compliant (refs #26)
+    </p>
+  </form>
+</section>
+
+    
 
     <div className="mgmt-actions" style={{ display: "flex", gap: "10px" }}>
       <button type="button" className="btn btn-primary" disabled>
