@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./ToolsOrg.css";
-import { db } from "../../../firebaseConfig";
+import { db, auth } from "../../../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import QrScanner from "qr-scanner";
 
 export default function ToolsOrg() {
   const [events, setEvents] = useState([]);
-  const [exportEvent, setExportEvent] = useState(""); 
-  const [validationEvent, setValidationEvent] = useState(""); 
+  const [exportEvent, setExportEvent] = useState("");
+  const [validationEvent, setValidationEvent] = useState("");
   const [attendees, setAttendees] = useState([]);
-  const [qrFile, setQrFile] = useState(null); 
+  const [qrFile, setQrFile] = useState(null);
   const [qrResult, setQrResult] = useState("");
   const [titleVisible, setTitleVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => setTitleVisible(true), 200);
@@ -20,16 +21,30 @@ export default function ToolsOrg() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "events"));
+        const user = auth.currentUser;
+        if (!user) {
+          setEvents([]);
+          setLoading(false);
+          return;
+        }
+
+        const eventsRef = collection(db, "events");
+        const q = query(eventsRef, where("createdBy", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+
         const eventList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
         setEvents(eventList);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching organizer events:", error);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchEvents();
   }, []);
 
@@ -92,7 +107,7 @@ export default function ToolsOrg() {
   const handleQRUpload = (event) => {
     const file = event.target.files[0];
     setQrFile(file);
-    setQrResult(""); 
+    setQrResult("");
   };
 
   const handleValidate = async () => {
@@ -121,6 +136,12 @@ export default function ToolsOrg() {
       }
 
       const ticket = snapshot.docs[0].data();
+      const eventMatch = events.find((e) => e.id === ticket.eventId);
+
+      if (!eventMatch) {
+        setQrResult("You cannot validate tickets for events you did not create.");
+        return;
+      }
 
       if (ticket.eventId === validationEvent) {
         setQrResult(`Valid ticket for ${ticket.eventTitle}`);
@@ -133,6 +154,8 @@ export default function ToolsOrg() {
     }
   };
 
+  if (loading) return <p>Loading your events...</p>;
+
   return (
     <div className="tools-container">
       <h1 className={`page-title ${titleVisible ? "visible" : ""}`}>
@@ -141,10 +164,11 @@ export default function ToolsOrg() {
 
       <section className="tool-section">
         <h2>Export Attendee List</h2>
-        <p>Select an event to export its attendee list in CSV format.</p>
+        <p>Select one of your events to export its attendee list.</p>
 
         <select onChange={handleExportChange} value={exportEvent}>
-          <option value="">Select an event</option>
+          <option value="">Select one of your events</option>
+          {events.length === 0 && <option disabled>No events found.</option>}
           {events.map((event) => (
             <option key={event.id} value={event.id}>
               {event.eventTitle}
@@ -178,15 +202,14 @@ export default function ToolsOrg() {
 
       <section className="tool-section">
         <h2>QR Ticket Validation</h2>
-        <p>
-          Select an event, upload a QR code image, then click <b>Validate</b>.
-        </p>
+        <p>Select one of your events, upload a QR image, then click Validate.</p>
 
         <select
           onChange={(e) => setValidationEvent(e.target.value)}
           value={validationEvent}
         >
-          <option value="">Select an event</option>
+          <option value="">Select one of your events</option>
+          {events.length === 0 && <option disabled>No events found.</option>}
           {events.map((event) => (
             <option key={event.id} value={event.id}>
               {event.eventTitle}
