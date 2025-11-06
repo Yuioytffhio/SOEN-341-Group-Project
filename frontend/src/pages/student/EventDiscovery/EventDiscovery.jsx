@@ -28,7 +28,7 @@ function EventDiscovery() {
   const [organizations, setOrganizations] = useState([]);
   const [ticketTypes, setTicketTypes] = useState([]);
 
-  // 🔹 Fetch events and populate filter lists dynamically
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -128,7 +128,7 @@ function EventDiscovery() {
         eventId: event.id,
         eventTitle: event.eventTitle,
         studentID,
-        status: "confirmed",
+        status: "pending",
         ticketDate: new Date(),
         qrCodeValue: qrValue,  
         qrCodeImage: qrCodeImage,
