@@ -1,0 +1,36 @@
+@startuml use-case-diagram
+left to right direction
+skinparam actorStyle awesome
+
+actor "Student" as Student
+actor "Organizer" as Organizer
+actor "Administrator" as Admin
+
+rectangle "Web Page Event Management System" {
+  (Browse Events) as UC1
+  (Claim Ticket) as UC2
+  (View My Events) as UC3
+  (Create Event) as UC4
+  (View Event Analytics) as UC5
+  (Validate Tickets) as UC6
+  (Approve Organizer) as UC7
+  (Moderate Events) as UC8
+  (View Global Stats) as UC9
+  (Login / Signup) as UC10
+}
+
+Student --> UC1
+Student --> UC2
+Student --> UC3
+Student --> UC10
+
+Organizer --> UC4
+Organizer --> UC5
+Organizer --> UC6
+Organizer --> UC10
+
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+@enduml
