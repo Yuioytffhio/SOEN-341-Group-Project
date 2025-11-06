@@ -1,0 +1,129 @@
+/* Page layout */
+.mgmt-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.mgmt-header {
+  margin-bottom: 16px;
+}
+
+.mgmt-header h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0 0 6px 0;
+}
+
+.mgmt-subtitle {
+  margin: 0;
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+/* Grid */
+.mgmt-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 860px) {
+  .mgmt-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Card */
+.mgmt-card {
+  background: #ffffff;
+  border: 1px solid #e7e7e7;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.mgmt-card-title {
+  font-size: 18px;
+  margin: 0 0 12px 0;
+}
+
+/* Form */
+.mgmt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mgmt-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mgmt-input,
+.mgmt-select {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.mgmt-input:focus,
+.mgmt-select:focus {
+  border-color: #8ab4ff;
+  box-shadow: 0 0 0 3px rgba(138,180,255,0.3);
+}
+
+.mgmt-actions {
+  margin-top: 6px;
+}
+
+/* Buttons */
+.btn {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #2563eb; /* blue-600 */
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1e4fd6;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #111827;
+  border-color: #e5e7eb;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #e9eaee;
+}
+
+/* Status text */
+.mgmt-status {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.mgmt-status.ok {
+  color: #0f766e; /* teal-700 */
+}
+
+.mgmt-status.err {
+  color: #b91c1c; /* red-700 */
+}
