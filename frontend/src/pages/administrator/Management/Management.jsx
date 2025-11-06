@@ -74,7 +74,7 @@ const Management = () => {
             >
               <option value="student">student</option>
               <option value="organizer">organizer</option>
-              <option value="admin">admin</option>
+              <option value="administrator">administrator</option>
             </select>
 
             <div className="mgmt-actions">
