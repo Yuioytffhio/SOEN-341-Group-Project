@@ -5,7 +5,7 @@ import "./Management.css";
 const Management = () => {
   // Assign Role state
   const [uid, setUid] = useState("");
-  const [role, setRoleState] = useState("user");
+  const [role, setRoleState] = useState("student");
   const [roleStatus, setRoleStatus] = useState(null);
 
   // Moderate Event state
@@ -20,7 +20,7 @@ const Management = () => {
       await setRole(uid.trim(), role);
       setRoleStatus("ok");
       setUid("");
-      setRoleState("user");
+      setRoleState("student");
     } catch (err) {
       setRoleStatus(err?.message || "error");
     }
@@ -55,7 +55,7 @@ const Management = () => {
         <section className="mgmt-card">
           <h2 className="mgmt-card-title">Assign Platform Role</h2>
           <form onSubmit={onAssign} className="mgmt-form">
-            <label className="mgmt-label" htmlFor="uid">User UID</label>
+            <label className="mgmt-label" htmlFor="uid">Student UID</label>
             <input
               id="uid"
               className="mgmt-input"
@@ -72,7 +72,7 @@ const Management = () => {
               value={role}
               onChange={(e) => setRoleState(e.target.value)}
             >
-              <option value="user">user</option>
+              <option value="student">student</option>
               <option value="organizer">organizer</option>
               <option value="admin">admin</option>
             </select>
