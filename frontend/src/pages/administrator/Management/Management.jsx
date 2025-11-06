@@ -92,6 +92,33 @@ const Management = () => {
         </section>
 
         {/* Moderate Event */}
+        {/* Organizer Approval Panel — implements #20 */}
+<section className="mgmt-card">
+  <h2 className="mgmt-card-title">Organizer Account Approvals</h2>
+  <form className="mgmt-form">
+    <label className="mgmt-label" htmlFor="orgUid">Organizer UID</label>
+    <input
+      id="orgUid"
+      className="mgmt-input"
+      placeholder="Enter organizer’s UID to approve or reject"
+      required
+    />
+
+    <div className="mgmt-actions" style={{ display: "flex", gap: "10px" }}>
+      <button type="button" className="btn btn-primary" disabled>
+        Approve (coming soon)
+      </button>
+      <button type="button" className="btn btn-secondary" disabled>
+        Reject (coming soon)
+      </button>
+    </div>
+
+    <p className="mgmt-status">
+      Placeholder UI for admin to approve/reject organizer accounts (refs #20)
+    </p>
+  </form>
+</section>
+
         <section className="mgmt-card">
           <h2 className="mgmt-card-title">Moderate Event</h2>
           <form onSubmit={onModerate} className="mgmt-form">
