@@ -1,0 +1,16 @@
+@startuml seq-diagram
+actor Student
+participant "Frontend (React App)" as Frontend
+participant "Firebase Auth" as Auth
+participant "Firestore DB" as DB
+
+Student -> Frontend: Open Event Page
+Frontend -> Auth: Verify Student Login
+Auth --> Frontend: Authenticated
+
+Student -> Frontend: Click "Claim Ticket"
+Frontend -> DB: Create new Ticket (eventId, studentId, timestamp)
+DB --> Frontend: Ticket Created (ticketId)
+
+Frontend -> Student: Display QR Code / Confirmation
+@enduml

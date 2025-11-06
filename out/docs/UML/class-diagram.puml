@@ -1,0 +1,42 @@
+@startuml class-diagram
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam classFontSize 14
+skinparam classAttributeFontSize 12
+skinparam padding 10
+skinparam shadowing false
+skinparam roundcorner 10
+
+class User {
+  +uid: string
+  +firstName: string
+  +lastName: string
+  +phoneNumber: string
+  +email: string
+  +role: string
+}
+
+class Event {
+  +eventTitle: string
+  +eventLocation: string
+  +eventDescription: string
+  +eventOrganization: string
+  +eventCategory: string
+  +eventDate: timestamp
+  +eventCapacity: number
+  +createdAt: timestamp
+  +createdBy: string
+  +ticketType: string
+}
+
+class Ticket {
+  +eventId: string
+  +eventTitle: string
+  +studentId: string
+  +status: string
+  +ticketDate: timestamp
+}
+
+User "1" --> "*" Ticket : claims
+Event "1" --> "*" Ticket : issues
+@enduml
