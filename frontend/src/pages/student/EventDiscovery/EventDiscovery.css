@@ -127,3 +127,18 @@
   color: #d9534f;
   font-weight: bold;
 }
+
+.paid-btn {
+  background-color: #ffc107;
+  color: #000;
+  font-weight: bold;
+}
+
+.paid-btn:hover {
+  background-color: #ffb300;
+}
+
+.event-card-ticketType[data-type="paid"] {
+  color: #b36b00;
+  font-weight: bold;
+}
