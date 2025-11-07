@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import MockPayment from "../../../components/mockPayment/mockPayment";
 import "./EventDiscovery.css";
 import GetTogether from "../../../assets/getTogether.jpg";
 import { auth, db } from "../../../firebaseConfig";
@@ -27,6 +28,7 @@ function EventDiscovery() {
   const [categories, setCategories] = useState([]);
   const [organizations, setOrganizations] = useState([]);
   const [ticketTypes, setTicketTypes] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
 
   useEffect(() => {
@@ -116,36 +118,43 @@ function EventDiscovery() {
         return;
       }
 
-      await updateDoc(eventRef, { eventCapacity: increment(-1) });
+      // Check if user already has a ticket for this event
+    const ticketsRef = collection(db, "tickets");
+    const ticketQuery = query( ticketsRef, where("eventId", "==", event.id),
+      where("studentID", "==", studentID));
+    const existingTicketSnap = await getDocs(ticketQuery);
+    
+    if (!existingTicketSnap.empty) {
+      alert("You already have a ticket for this event!");
+      return;
+    }
 
-      const newTicketId = getNextTicketId(); 
-      const qrValue = `${newTicketId}_${studentID}_${event.id}`; 
+    // Otherwise, proceed to create one
+    await updateDoc(eventRef, { eventCapacity: increment(-1) });
 
-      const qrCodeImage = await QRCode.toDataURL(qrValue);
+    const newTicketId = getNextTicketId(); 
+    const qrValue = `${newTicketId}_${studentID}_${event.id}`; 
+    const qrCodeImage = await QRCode.toDataURL(qrValue);
 
-      await setDoc(doc(db, "tickets", newTicketId), {
-        ticketId: newTicketId,
-        eventId: event.id,
-        eventTitle: event.eventTitle,
-        studentID,
-        status: "pending",
-        ticketDate: new Date(),
-        qrCodeValue: qrValue,  
-        qrCodeImage: qrCodeImage,
-      });
+    await setDoc(doc(db, "tickets", newTicketId), {
+      ticketId: newTicketId,
+      eventId: event.id,
+      eventTitle: event.eventTitle,
+      studentID,
+      status: "pending",
+      ticketDate: new Date(),
+      qrCodeValue: qrValue,  
+      qrCodeImage: qrCodeImage,
+  });
 
-      setEvents((prev) =>
-        prev.map((e) =>
-          e.id === event.id
-            ? { ...e, eventCapacity: e.eventCapacity - 1 }
-            : e
-        )
-      );
+  setEvents((prev) =>
+    prev.map((e) => e.id === event.id ? { ...e, eventCapacity: e.eventCapacity - 1 }: e )
+  );
 
-      alert(`New ticket created successfully: ${newTicketId}`);
+  alert(`New ticket created successfully: ${newTicketId}`);
     } catch (error) {
-      console.error("Error creating ticket:", error);
-      alert(`Error: ${error.message}`);
+        console.error("Error creating ticket:", error);
+        alert(`Error: ${error.message}`);
     }
   };
 
@@ -244,15 +253,10 @@ function EventDiscovery() {
                   <p className="event-card-desc">{event.eventDescription}</p>
                   <p className="event-card-date">{formattedDate}</p>
                   <p className="event-card-location">{event.eventLocation}</p>
-                  <p
-                    className="event-card-ticketType"
-                    data-type={event.ticketType?.toLowerCase() || "free"}
-                  >
-                    {event.ticketType
-                      ? event.ticketType.charAt(0).toUpperCase() +
-                        event.ticketType.slice(1)
-                      : "Free"}
+                  <p className="event-card-ticketType" data-type={event.ticketType?.toLowerCase() || "free"} >
+                    {event.ticketType === "paid" ? `$${event.price || 0}` : "Free"}
                   </p>
+
                   <p
                     className={`event-capacity ${
                       event.eventCapacity <= 0 ? "sold-out" : ""
@@ -264,16 +268,13 @@ function EventDiscovery() {
                   </p>
                 </div>
 
-                {event.eventCapacity > 0 ? (
-                  <button
-                    className="save-btn"
-                    onClick={() => handleBook(event)}
-                  >
-                    Save Event
-                  </button>
-                ) : (
-                  <button className="save-btn soldout-btn" disabled>
-                    Sold Out
+                {event.eventCapacity > 0 ? ( event.ticketType === "paid" ? 
+                ( <button className="save-btn paid-btn" onClick={() => setSelectedEvent(event)} >
+                  Buy Ticket
+                  </button> ) : ( <button className="save-btn" onClick={() => handleBook(event)} >
+                  Save Event
+                  </button> ) ) : ( <button className="save-btn soldout-btn" disabled>
+                  Sold Out
                   </button>
                 )}
               </div>
@@ -281,6 +282,16 @@ function EventDiscovery() {
           })
         )}
       </div>
+
+      {selectedEvent && (
+        <MockPayment event={selectedEvent} onSuccess={(event) => {
+        handleBook(event);
+        setSelectedEvent(null);
+          }
+        }
+        onCancel={() => setSelectedEvent(null)} />
+      )
+      }
     </div>
   );
 }
