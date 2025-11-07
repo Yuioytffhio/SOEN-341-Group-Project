@@ -30,3 +30,29 @@ export async function moderateEvent(eventId, status) {
   if (!eventId) throw new Error("eventId required");
   return status === "approved" ? approveEvent(eventId) : rejectEvent(eventId);
 }
+/** Update event compliance status (for policy review) */
+export async function setEventCompliance(eventId, status) {
+  if (!eventId || !status) throw new Error("Event ID and status are required");
+  const ref = doc(db, "events", eventId);
+  await updateDoc(ref, { complianceStatus: status });
+}
+/** Approve organizer account */
+export async function approveOrganizer(uid) {
+  if (!uid) throw new Error("UID required");
+  const ref = doc(db, "users", uid);
+  await updateDoc(ref, {
+    platformRole: "organizer",
+    approvalStatus: "approved"
+  });
+}
+
+/** Reject organizer account */
+export async function rejectOrganizer(uid) {
+  if (!uid) throw new Error("UID required");
+  const ref = doc(db, "users", uid);
+  await updateDoc(ref, {
+    platformRole: "student",
+    approvalStatus: "rejected"
+  });
+}
+
