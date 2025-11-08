@@ -23,6 +23,7 @@ function EventDiscovery() {
     organization: "",
     date: "",
     ticketType: "",
+    title: "",
   });
 
   const [categories, setCategories] = useState([]);
@@ -172,15 +173,31 @@ function EventDiscovery() {
       !filters.ticketType ||
       (event.ticketType &&
         event.ticketType.toLowerCase() === filters.ticketType.toLowerCase());
+    const matchSearch =
+       !filters.title ||
+       (event.eventTitle &&
+         event.eventTitle.toLowerCase().includes(filters.title.toLowerCase()));
 
-    return matchCategory && matchOrg && matchDate && matchTicket;
+
+      return matchCategory && matchOrg && matchDate && matchTicket && matchSearch;
   });
 
   return (
     <div className="event-discovery p-6">
       <h1 className="event-Title">Event Discovery</h1>
 
-      {/* Dynamic Filter Bar */}
+      {/* Search Bar */}
+        <div className="search-bar">
+            <input
+                type="text"
+                placeholder="Title"
+                value={filters.title}
+                onChange={(e) => setFilters({ ...filters, title: e.target.value })}
+            />
+        </div>
+
+
+        {/* Dynamic Filter Bar */}
       <div className="filter-bar">
         {/* Category */}
         <select
