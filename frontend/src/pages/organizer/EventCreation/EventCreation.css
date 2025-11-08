@@ -80,6 +80,21 @@
   transform: translateY(-1px);
 }
 
+/* Price input field styling */
+.price-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-input input {
+  margin-top: 0.3rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+
 /* EVENT LIST */
 h2 {
   margin-top: 2.5rem;
