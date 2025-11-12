@@ -17,7 +17,7 @@ import {
 } from "firebase/firestore";
 import QRCode from "qrcode";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Icon, divIcon, point } from "leaflet";
+import { Icon, DivIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 const pin_icon = new Icon({
@@ -27,7 +27,7 @@ const pin_icon = new Icon({
 });
 
 const cluster_icon = function (cluster) {
-    return new divIcon({
+    return new DivIcon({
         html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
         className: "custom-marker-cluster",
         iconSize: point(33, 33, true)
