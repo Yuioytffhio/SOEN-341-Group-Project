@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MockPayment from "../../../components/mockPayment/mockPayment";
 import "./EventDiscovery.css";
+import "leaflet/dist/leaflet.css";
 import GetTogether from "../../../assets/getTogether.jpg";
 import { auth, db } from "../../../firebaseConfig";
 import {
@@ -15,6 +16,23 @@ import {
   where,
 } from "firebase/firestore";
 import QRCode from "qrcode";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon, divIcon, point } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+
+const pin_icon = new Icon({
+    // iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
+    iconUrl: require("../../../assets/map_pin.png"),
+    iconSize: [38, 38] // size of the icon
+});
+
+const cluster_icon = function (cluster) {
+    return new divIcon({
+        html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+        className: "custom-marker-cluster",
+        iconSize: point(33, 33, true)
+    });
+};
 
 function EventDiscovery() {
   const [events, setEvents] = useState([]);
@@ -309,6 +327,29 @@ function EventDiscovery() {
         onCancel={() => setSelectedEvent(null)} />
       )
       }
+      {/* Map */}
+        <MapContainer center={[45.4958, -73.5787]} zoom={18} scrollWheelZoom={false}>
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
+            <Marker position={[45.4958, -73.5787]} icon={pin_icon}>
+                <Popup>
+                    <div
+                        style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
+                        onClick={() =>
+                            window.open("https://maps.app.goo.gl/tSxHvuAcJRUofspV7")
+                        }
+                    >
+                        Concordia University
+                    </div>
+                </Popup>
+            </Marker>
+            </MarkerClusterGroup>
+        </MapContainer>
+
+
     </div>
   );
 }

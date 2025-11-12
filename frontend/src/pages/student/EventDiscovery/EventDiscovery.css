@@ -159,3 +159,12 @@
   color: #b36b00;
   font-weight: bold;
 }
+
+.leaflet-container {
+    height: 90vh;
+    width: 50%;
+    display: block;
+    max-width: 1200px;
+    margin: 5vh auto;
+    border-radius: 2rem;
+}
