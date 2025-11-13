@@ -64,6 +64,8 @@ function EventDiscovery() {
               : data.eventDate
               ? new Date(data.eventDate)
               : null,
+            eventLatitude: data.eventLatitude,
+            eventLongitude: data.eventLongitude,
           };
         });
 
@@ -204,6 +206,33 @@ function EventDiscovery() {
     <div className="st-event-discovery p-6">
       <h1 className="st-event-Title">Event Discovery</h1>
 
+        {/* Map */}
+        <MapContainer center={[45.4950726763264, -73.577855699083]} zoom={18} scrollWheelZoom={false}>
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
+                {/* Markers */}
+                {events.map((event) =>
+                    !isNaN(event.eventLatitude) &&
+                    !isNaN(event.eventLongitude) ? (
+                        <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
+                            <Popup>
+                                <div
+                                    style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
+                                    onClick={() =>
+                                        window.open(`https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`)
+                                    }
+                                >
+                                    {event.eventLocation}
+                                </div>
+                            </Popup>
+                        </Marker>
+                    ) : null)}
+            </MarkerClusterGroup>
+      </MapContainer>
+
       {/* Search Bar */}
         <div className="st-search-bar">
             <input
@@ -327,30 +356,8 @@ function EventDiscovery() {
         onCancel={() => setSelectedEvent(null)} />
       )
       }
-      {/* Map */}
-        <MapContainer center={[45.4958, -73.5787]} zoom={18} scrollWheelZoom={false}>
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
-            <Marker position={[45.4958, -73.5787]} icon={pin_icon}>
-                <Popup>
-                    <div
-                        style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
-                        onClick={() =>
-                            window.open("https://maps.app.goo.gl/tSxHvuAcJRUofspV7")
-                        }
-                    >
-                        Concordia University
-                    </div>
-                </Popup>
-            </Marker>
-            </MarkerClusterGroup>
-        </MapContainer>
 
-
-    </div>
+     </div>
   );
 }
 
