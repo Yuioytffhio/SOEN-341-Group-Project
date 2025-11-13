@@ -25,6 +25,7 @@ const EventCreation = () => {
     eventCategory: "",
     eventOrganization: "",
     ticketType: "free",
+    price: "",
   });
 
   const [userEvents, setUserEvents] = useState([]);
@@ -65,6 +66,7 @@ const EventCreation = () => {
       eventCategory: event.eventCategory,
       eventOrganization: event.eventOrganization,
       ticketType: event.ticketType,
+      price: event.price || "",
     });
     setEditEventId(event.id);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -138,6 +140,7 @@ const EventCreation = () => {
         eventCategory: "",
         eventOrganization: "",
         ticketType: "free",
+        price: "",
       });
       fetchUserEvents();
     } catch (error) {
@@ -234,6 +237,22 @@ const EventCreation = () => {
 
         <button type="submit">{editEventId ? "Update Event" : "Create Event"}</button>
       </form>
+
+      {formData.ticketType === "paid" && (
+        <div className="price-input">
+          <label htmlFor="price">Ticket Price (CAD$):</label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            min="0"
+            step="5.00"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+        </div>
+      )}
 
       <h2>Your Events</h2>
       <div className="user-events">
