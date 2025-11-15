@@ -20,6 +20,7 @@
 
 .greetings {
   color: rgb(36, 0, 0);
+  text-align: left;
   font-size: 55px;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(100, 4, 4, 0.7);
