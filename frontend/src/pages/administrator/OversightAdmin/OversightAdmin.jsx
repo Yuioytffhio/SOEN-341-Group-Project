@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "../Management/Management.css";
+import "./OversightAdmin.css";
+import oversight_background from "../../../assets/admin_oversight_background.jpg";
 import { setEventCompliance } from "../../../lib/adminApi";
 
 const OversightAdmin = () => {
@@ -26,61 +27,69 @@ const OversightAdmin = () => {
   };
 
   return (
-    <div className="mgmt-page">
-      <div className="mgmt-header">
-        <h1>Oversight</h1>
-        <p className="mgmt-subtitle">
-          Admin oversight tools for organizer approvals and policy compliance
-        </p>
-      </div>
+    <div className="oversight-page" style={{ background: `url(${oversight_background}) no-repeat center center / cover` }}>
 
-      <div className="mgmt-grid">
+      <form className="form-oversight-container">
+        <div className="oversight-header">
+          <h1 className="oversight-title">Oversight</h1>
+          <p className="oversight-subtitle">
+            Admin oversight tools for organizer approvals and policy compliance
+          </p>
+        </div>
+
+        <form className="inner-form"> 
+          <div className="oversight-grid">
         
-        {/* Event Policy Compliance Moderation */}
-        <section className="mgmt-card">
-          <h2 className="mgmt-card-title">Event Policy Compliance Review</h2>
-          <form className="mgmt-form" onSubmit={handleSaveCompliance}>
-            <label className="mgmt-label" htmlFor="policyEventId">Event ID</label>
-            <input
-              id="policyEventId"
-              className="mgmt-input"
-              placeholder="Enter Event ID to review"
-              value={eventId}
-              onChange={(e) => setEventId(e.target.value)}
-              required
-            />
+            {/* Event Policy Compliance Moderation */}
+            <section className="oversight-card">
+              <h2 className="oversight-card-title">Event Policy Compliance Review</h2>
+                <form className="oversight-form" onSubmit={handleSaveCompliance}>
+                  <label className="oversight-label" htmlFor="policyEventId">Event ID</label>
+                  <input
+                    id="policyEventId"
+                    className="oversight-input"
+                    placeholder="Enter Event ID to review"
+                    value={eventId}
+                    onChange={(e) => setEventId(e.target.value)}
+                    required
+                  />
 
-            <label className="mgmt-label" htmlFor="policyDecision">Compliance Status</label>
-            <select
-              id="policyDecision"
-              className="mgmt-select"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="approved">Approved</option>
-              <option value="needs-review">Needs Review</option>
-              <option value="rejected">Rejected</option>
-            </select>
+                  <label className="oversight-label" htmlFor="policyDecision">Compliance Status</label>
+                  <select
+                    id="policyDecision"
+                    className="oversight-select"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value="approved">Approved</option>
+                    <option value="needs-review">Needs Review</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
 
-            <div className="mgmt-actions" style={{ marginTop: "10px" }}>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={saving || !eventId}
-              >
-                {saving ? "Saving…" : "Save Decision"}
-              </button>
-            </div>
+                  <div className="oversight-actions" style={{ marginTop: "10px" }}>
+                    <button
+                      type="submit"
+                      className="btn"
+                      disabled={saving || !eventId}
+                    >
+                      {saving ? "Saving…" : "Save Decision"}
+                    </button>
+                  </div>
 
-            {result === "success" && (
-              <p className="mgmt-status ok">Compliance status updated successfully.</p>
-            )}
-            {result === "error" && (
-              <p className="mgmt-status err">Failed to update compliance status.</p>
-            )}
-          </form>
-        </section>
-      </div>
+                    {result === "success" && (
+                      <p className="oversight-status ok">Compliance status updated successfully.</p>
+                    )}
+                    {result === "error" && (
+                      <p className="oversight-status err">Failed to update compliance status.</p>
+                    )}
+                </form>
+              </section>
+          </div>
+        </form>
+        
+
+      
+      </form>
     </div>
   );
 };

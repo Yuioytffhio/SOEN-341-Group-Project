@@ -66,7 +66,7 @@ const Analytics = () => {
     <div className="analytics-page">
 
       <header className="analytics-header">
-        <h2 className="greetings">Global Statistics</h2>
+        <h2 className="analytics-title">Global Statistics</h2>
       </header>
 
       <div className="analytics-cards">
