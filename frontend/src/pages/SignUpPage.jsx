@@ -20,7 +20,8 @@ export default function SignUpPage() {
   const generateNextID = async (rolePrefix) => {
     try {
       const usersRef = collection(db, "users");
-      const roleName = rolePrefix === "st" ? "student" : rolePrefix === "ad" ? "administrator" : "organizer";
+      //const roleName = rolePrefix === "st" ? "student" : rolePrefix === "ad" ? "administrator" : "organizer";
+      const roleName = rolePrefix === "st" ? "administrator" : "organizer";
       const q = query(usersRef, where("role", "==", roleName), orderBy("__name__", "desc"), limit(1));
       const snapshot = await getDocs(q);
 
@@ -48,7 +49,8 @@ export default function SignUpPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
 
-      const prefix = role === "student" ? "st" : role === "organizer" ? "og" : "ad";
+      //const prefix = role === "student" ? "st" : role === "organizer" ? "og" : "ad";
+      const prefix = role === "organizer" ? "og" : "st";
       const newID = await generateNextID(prefix);
 
       await setDoc(doc(db, "users", newID), {
@@ -67,9 +69,9 @@ export default function SignUpPage() {
       localStorage.setItem("role", role);
       localStorage.setItem("customID", newID);
 
-      if (role === "student") navigate("/studentHome");
+      if (role === "administrator") navigate("/adminHome");
       else if (role === "organizer") navigate("/orgHome");
-      else navigate("/adminHome");
+      else navigate("/studentHome");
 
     } catch (err) {
       console.error("Signup failed:", err.message);
@@ -147,7 +149,9 @@ export default function SignUpPage() {
               <select value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value="student">Student</option>
                 <option value="organizer">Organizer</option>
+                {/*
                 <option value="administrator">Administrator</option>
+                */}
               </select>
             </div>
 
