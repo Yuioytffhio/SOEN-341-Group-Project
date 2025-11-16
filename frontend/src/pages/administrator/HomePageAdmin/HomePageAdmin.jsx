@@ -45,7 +45,7 @@ export default function StudentHomePage() {
         </Slider>
 
         <div className="overlay">
-          <p>You can managing your events right away.</p>
+          <p>You can start managing events right away.</p>
           <button
             className="oversight-btn"
             onClick={() => navigate("/oversightAdmin")}
