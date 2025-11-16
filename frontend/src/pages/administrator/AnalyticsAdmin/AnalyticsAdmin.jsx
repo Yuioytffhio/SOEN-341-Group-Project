@@ -64,42 +64,50 @@ const Analytics = () => {
 
   return (
     <div className="analytics-page">
+      <div className="left-space">
+        <header className="analytics-header">
+          <h2 className="analytics-title">Global Statistics</h2>
+        </header>
 
-      <header className="analytics-header">
-        <h2 className="analytics-title">Global Statistics</h2>
-      </header>
-
-      <div className="analytics-cards">
-        <div className="analytics-card">
-          <h3>Total Events</h3>
-          <p>{eventCount}</p>
+        <div className="analytics-cards">
+          <div className="analytics-card">
+            <h3>Total Events</h3>
+            <p>{eventCount}</p>
+          </div>
+          <div className="analytics-card">
+            <h3>Tickets Issued</h3>
+            <p>{ticketCount}</p>
+          </div>
         </div>
-        <div className="analytics-card">
-          <h3>Tickets Issued</h3>
-          <p>{ticketCount}</p>
+
+      </div>
+      <div className="right-space">
+        
+        <div className="analytics-chart">
+          <h3>Participation Trends</h3>
+          <ResponsiveContainer width="100%" height={500}>
+            <BarChart data={trendData} margin={{ top: 50, right: 30, left: 50, bottom: 50 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="name"
+                interval={0}
+                angle={-30}
+                textAnchor="end"
+                height={60}
+                tickFormatter={(value) =>
+                  value.length > 20 ? value.slice(0, 20) + "..." : value
+                }
+              />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="participants" fill="#640606ff" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="analytics-chart">
-        <h3>Participation Trends</h3>
-        <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={trendData} margin={{ top: 20, right: 30, left: 70, bottom: 50 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="name"
-              interval={0}
-              angle={-20}
-              textAnchor="end"
-              height={60}
-            />
 
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="participants" fill="#df6c6cff" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
     </div>
   );
 };

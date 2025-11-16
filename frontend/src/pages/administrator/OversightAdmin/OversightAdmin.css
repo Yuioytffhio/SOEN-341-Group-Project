@@ -88,14 +88,19 @@
   margin: 0 auto;
   */
 
-  background: rgba(255, 248, 248, 0.916);
+  background: rgba(243, 229, 229, 0.55);
   padding-bottom: 60px;
   padding-top: 20px;
   width: 50%;
   max-height: 90%;
   border-radius: 16px;
   text-align: center;
+  /*
   box-shadow: 0 6px 20px rgba(29, 3, 1, 0.7);
+  */
+  border: 2px solid #5c0202;
+  box-shadow: inset 0 0 20px rgba(69, 2, 2, 0.134),
+    0 0px 0px rgba(101, 9, 2, 0.239);
 }
 
 /* in the form */
