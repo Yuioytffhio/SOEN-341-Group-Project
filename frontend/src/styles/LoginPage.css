@@ -85,7 +85,7 @@
 .btn {
   width: 100%;
   padding: 12px;
-  background: #630303;
+  background: #5b0303 !important;
   border: none;
   border-radius: 10px;
   color: white;
@@ -95,7 +95,7 @@
 }
 
 .btn:hover {
-  background: #4e0101;
+  background: #4e0101 !important;
 }
 
 /* Extra links */
