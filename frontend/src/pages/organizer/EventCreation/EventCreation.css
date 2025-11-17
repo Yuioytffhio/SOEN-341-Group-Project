@@ -1,173 +1,217 @@
-/* Container */
-.eventcreation-page {
-  max-width: 600px;
-  margin: 2rem auto;
+/* IMPORT FONT */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* GLOBAL RESET */
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* MAIN TWO-COLUMN LAYOUT */
+.eventcreation-fullpage {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
   padding: 2rem;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
 }
 
-/* Heading */
-.eventcreation-page h1 {
-  text-align: center;
-  color: #222;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-}
-
-/* Form layout */
-.eventcreation-form {
+/* LEFT COLUMN */
+.eventcreation-left {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  align-items: flex-start;
+  height: auto;
 }
 
-/* Label + inputs */
-.eventcreation-form label {
+/* RIGHT COLUMN */
+.eventcreation-right {
+  flex: 1;
+}
+
+/* FORM CARD */
+.event-form-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(198, 33, 33, 0.08);
+  width: 100%;
+  max-width: 650px;
+  height: auto !important;
+}
+
+/* FORM GROUP */
+.form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1.2rem;
+  position: relative;  /* Needed for dropdown */
+}
+
+.form-group label {
   font-weight: 600;
-  color: #333;
+  margin-bottom: 0.4rem;
+  color: rgb(40, 9, 9);
 }
 
-/* Inputs, textarea, and select elements */
-.eventcreation-form input,
-.eventcreation-form textarea,
-.eventcreation-form select {
-  margin-top: 0.3rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.9rem;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  color: #515355;
 }
 
-/* Focus effect for inputs */
-.eventcreation-form input:focus,
-.eventcreation-form textarea:focus,
-.eventcreation-form select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
-  outline: none;
+/* ROW OF FIELDS */
+.form-row {
+  display: flex;
+  gap: 1rem;
 }
 
-/* Textarea styling */
-.eventcreation-form textarea {
-  resize: vertical;
-  min-height: 100px;
-  line-height: 1.4;
+.form-row .form-group {
+  flex: 1;
 }
 
-/* Button styling */
-.eventcreation-form button {
-  margin-top: 0.5rem;
-  padding: 0.8rem;
-  background-color: #007bff;
+/* SUBMIT BUTTON */
+.submit-button {
+  width: 100%;
+  padding: 1rem;
+  background: #643f42;
   color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect */
-.eventcreation-form button:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px);
+.submit-button:hover {
+  background: #702d2d;
 }
-
-/* Price input field styling */
-.price-input {
-  display: flex;
-  flex-direction: column;
-}
-
-.price-input input {
-  margin-top: 0.3rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
 
 /* EVENT LIST */
-h2 {
-  margin-top: 2.5rem;
-  color: #222;
-  font-size: 1.5rem;
-  text-align: center;
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.user-events {
-  margin-top: 1.5rem;
-}
-
+/* EVENT CARD */
 .event-card {
   background: #fff;
+  padding: 1.2rem;
+  border-radius: 12px;
   border: 1px solid #ddd;
-  padding: 1rem;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .eventcreation-fullpage {
+    flex-direction: column;
+  }
+}
+
+/* DROPDOWN */
+.dropdown-location {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  margin-bottom: 1rem;
-  transition: box-shadow 0.2s ease;
+  z-index: 9999;
+  margin-top: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.event-card:hover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.dropdown-item {
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
 }
 
-.event-card h3 {
-  margin-top: 0;
-  color: #007bff;
+.dropdown-item:hover {
+  background: #f0f0f0;
 }
 
+/* TEXTAREA COUNTER */
+.textarea-container {
+  position: relative;
+}
+
+.textarea-container textarea {
+  width: 100%;
+  padding-bottom: 28px;
+  box-sizing: border-box;
+}
+
+.char-counter-inside {
+  position: absolute;
+  bottom: 6px;
+  right: 12px;
+  font-size: 0.75rem;
+  color: #777;
+  pointer-events: none;
+}
+
+/* ERROR STATES */
+.input-error {
+  border: 2px solid #ff3b3b !important;
+  background: #ffecec !important;
+}
+
+.error-text {
+  color: #ff3b3b;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+/* BUTTON ROW */
 .event-buttons {
+  display: flex;
+  gap: 0.8rem;   /* space between edit/delete */
   margin-top: 1rem;
 }
 
-.event-buttons button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.95rem;
-  border-radius: 4px;
+/* EDIT BUTTON STYLE */
+.edit-btn {
+  padding: 0.6rem 1rem;
+  background: #ebeaea;       /* light blue background */
+  color: #3e4551;            /* blue text */
+  border: 1px solid #a8b6cf;
+  border-radius: 8px;
   cursor: pointer;
-  border: none;
-  color: white;
-  transition: opacity 0.2s ease;
+  font-weight: 600;
 }
 
-.event-buttons button:hover {
-  opacity: 0.9;
+.edit-btn:hover {
+  background: #e3e3e4;
 }
 
-.event-buttons button:first-child {
-  background-color: #007bff;
+/* DELETE BUTTON STYLE */
+.delete-btn {
+  padding: 0.6rem 1rem;
+  background: #ffe8e8;       /* light red background */
+  color: #d60000;            /* strong red text */
+  border: 1px solid #ffbcbc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.event-buttons .delete-btn {
-  background-color: #dc3545;
-}
-
-@media (max-width: 600px) {
-  .eventcreation-page {
-    padding: 1.5rem;
-  }
-
-  .eventcreation-page h1 {
-    font-size: 1.5rem;
-  }
-
-  .eventcreation-form input,
-  .eventcreation-form textarea,
-  .eventcreation-form select {
-    font-size: 0.95rem;
-  }
-
-  .eventcreation-form button {
-    font-size: 0.95rem;
-  }
+.delete-btn:hover {
+  background: #ffd0d0;
 }
