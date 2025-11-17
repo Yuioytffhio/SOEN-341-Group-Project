@@ -206,33 +206,6 @@ function EventDiscovery() {
     <div className="st-event-discovery p-6">
       <h1 className="st-event-Title">Event Discovery</h1>
 
-        {/* Map */}
-        <MapContainer center={[45.4950726763264, -73.577855699083]} zoom={18} scrollWheelZoom={false}>
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
-                {/* Markers */}
-                {events.map((event) =>
-                    !isNaN(event.eventLatitude) &&
-                    !isNaN(event.eventLongitude) ? (
-                        <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
-                            <Popup>
-                                <div
-                                    style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
-                                    onClick={() =>
-                                        window.open(`https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`)
-                                    }
-                                >
-                                    {event.eventLocation}
-                                </div>
-                            </Popup>
-                        </Marker>
-                    ) : null)}
-            </MarkerClusterGroup>
-      </MapContainer>
-
       {/* Search Bar */}
         <div className="st-search-bar">
             <input
@@ -295,6 +268,15 @@ function EventDiscovery() {
           ))}
         </select>
       </div>
+      <div className="map_event_container">
+          <div className="st-events-row">
+            {filteredEvents.length === 0 ? (
+              <p>No events available.</p>
+            ) : (
+              filteredEvents.map((event) => {
+                const formattedDate = event.eventDate
+                  ? event.eventDate.toISOString().slice(0, 10)
+                  : "Date TBD";
 
       <div className="st-events-row">
         {filteredEvents.length === 0 ? (

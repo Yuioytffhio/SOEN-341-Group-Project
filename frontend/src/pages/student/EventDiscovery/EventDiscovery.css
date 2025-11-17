@@ -11,6 +11,21 @@
   color: #222;
 }
 
+.map_event_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    position: relative;
+}
+
+.map-row {
+    min-width: 300px;
+}
+
+.events-row {
 .st-events-row {
   display: flex;
   flex-wrap: wrap;
@@ -38,6 +53,7 @@
   flex: 1 1 calc(33.333% - 25px);
   box-sizing: border-box;
   min-width: 280px;
+  max-height: 650px;
 }
 
 .st-event-card:hover {
@@ -161,11 +177,11 @@
 }
 
 .leaflet-container {
-    height: 90vh;
-    width: 50%;
+    height: 95vh;
+    width: 90%;
     display: block;
     max-width: 1200px;
-    margin: 5vh auto;
+    margin: 1vh auto;
     border-radius: 2rem;
 }
 
