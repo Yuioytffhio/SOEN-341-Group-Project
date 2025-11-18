@@ -334,80 +334,80 @@ const EventCreation = () => {
   // RETURN UI
   // ========================================
   return (
-    <div className="eventcreation-fullpage">
-      <div className="event-form-card">
+    <div className="ec-eventcreation-fullpage">
+      <div className="ec-event-form-card">
         <h1>Create Event</h1>
 
         {/* EVENT TITLE */}
-        <div className="form-group">
+        <div className="ec-form-group">
           <label>Event Name</label>
           <input
             type="text"
             name="eventTitle"
             value={formData.eventTitle}
             onChange={handleChange}
-            className={errors.eventTitle ? "input-error" : ""}
+            className={errors.eventTitle ? "ec-input-error" : ""}
           />
           {errors.eventTitle && (
-            <div className="error-text">{errors.eventTitle}</div>
+            <div className="ec-error-text">{errors.eventTitle}</div>
           )}
         </div>
 
         {/* DESCRIPTION */}
-        <div className="form-group textarea-wrapper">
+        <div className="ec-form-group textarea-wrapper">
           <label>Description</label>
-          <div className="textarea-container">
+          <div className="ec-textarea-container">
             <textarea
               name="eventDescription"
               value={formData.eventDescription}
               onChange={handleChange}
               maxLength={250}
-              className={errors.eventDescription ? "input-error" : ""}
+              className={errors.eventDescription ? "ec-input-error" : ""}
             />
-            <span className="char-counter-inside">
+            <span className="ec-char-counter-inside">
               {formData.eventDescription.length}/250
             </span>
           </div>
           {errors.eventDescription && (
-            <div className="error-text">{errors.eventDescription}</div>
+            <div className="ec-error-text">{errors.eventDescription}</div>
           )}
         </div>
 
         {/* DATE / TIME / DURATION */}
-        <div className="form-row">
+        <div className="ec-form-row">
           {/* DATE */}
-          <div className="form-group">
+          <div className="ec-form-group">
             <label>Date</label>
             <input
               type="date"
               name="eventDate"
               value={formData.eventDate}
               onChange={handleChange}
-              className={errors.eventDate ? "input-error" : ""}
+              className={errors.eventDate ? "ec-input-error" : ""}
               min={new Date().toISOString().split("T")[0]}   // <— THIS LINE
             />
             {errors.eventDate && (
-              <div className="error-text">{errors.eventDate}</div>
+              <div className="ec-error-text">{errors.eventDate}</div>
             )}
           </div>
 
           {/* TIME */}
-          <div className="form-group">
+          <div className="ec-form-group">
             <label>Time</label>
             <input
               type="time"
               name="eventTime"
               value={formData.eventTime}
               onChange={handleChange}
-              className={errors.eventTime ? "input-error" : ""}
+              className={errors.eventTime ? "ec-input-error" : ""}
             />
             {errors.eventTime && (
-              <div className="error-text">{errors.eventTime}</div>
+              <div className="ec-error-text">{errors.eventTime}</div>
             )}
           </div>
 
           {/* DURATION */}
-          <div className="form-group">
+          <div className="ec-form-group">
             <label>Duration (hours)</label>
             <input
               type="number"
@@ -416,34 +416,34 @@ const EventCreation = () => {
               name="eventDuration"
               value={formData.eventDuration}
               onChange={handleChange}
-              className={errors.eventDuration ? "input-error" : ""}
+              className={errors.eventDuration ? "ec-input-error" : ""}
             />
             {errors.eventDuration && (
-              <div className="error-text">{errors.eventDuration}</div>
+              <div className="ec-error-text">{errors.eventDuration}</div>
             )}
           </div>
         </div>
 
         {/* LOCATION */}
-        <div className="form-group">
+        <div className="ec-form-group">
           <label>Location</label>
           <input
             type="text"
             value={locationQuery}
             onChange={handleLocationChange}
-            className={errors.eventLocation ? "input-error" : ""}
+            className={errors.eventLocation ? "ec-input-error" : ""}
             autoComplete="off"
           />
           {errors.eventLocation && (
-            <div className="error-text">{errors.eventLocation}</div>
+            <div className="ec-error-text">{errors.eventLocation}</div>
           )}
 
           {locationResults.length > 0 && (
-            <div ref={dropdownRef} className="dropdown-location">
+            <div ref={dropdownRef} className="ec-dropdown-location">
               {locationResults.map((loc) => (
                 <div
                   key={loc.place_id}
-                  className="dropdown-item"
+                  className="ec-dropdown-item"
                   onClick={() => selectLocation(loc)}
                 >
                   {loc.display_name}
@@ -454,37 +454,37 @@ const EventCreation = () => {
         </div>
 
         {/* CATEGORY */}
-        <div className="form-group">
+        <div className="ec-form-group">
           <label>Category</label>
           <input
             type="text"
             name="eventCategory"
             value={formData.eventCategory}
             onChange={handleChange}
-            className={errors.eventCategory ? "input-error" : ""}
+            className={errors.eventCategory ? "ec-input-error" : ""}
           />
           {errors.eventCategory && (
-            <div className="error-text">{errors.eventCategory}</div>
+            <div className="ec-error-text">{errors.eventCategory}</div>
           )}
         </div>
 
         {/* ORGANIZATION */}
-        <div className="form-group">
+        <div className="ec-form-group">
           <label>Organization</label>
           <input
             type="text"
             name="eventOrganization"
             value={formData.eventOrganization}
             onChange={handleChange}
-            className={errors.eventOrganization ? "input-error" : ""}
+            className={errors.eventOrganization ? "ec-input-error" : ""}
           />
           {errors.eventOrganization && (
-            <div className="error-text">{errors.eventOrganization}</div>
+            <div className="ec-error-text">{errors.eventOrganization}</div>
           )}
         </div>
 
         {/* CAPACITY */}
-        <div className="form-group">
+        <div className="ec-form-group">
           <label>Capacity</label>
           <input
             type="number"
@@ -492,33 +492,33 @@ const EventCreation = () => {
             name="eventCapacity"
             value={formData.eventCapacity}
             onChange={handleChange}
-            className={errors.eventCapacity ? "input-error" : ""}
+            className={errors.eventCapacity ? "ec-input-error" : ""}
           />
           {errors.eventCapacity && (
-            <div className="error-text">{errors.eventCapacity}</div>
+            <div className="ec-error-text">{errors.eventCapacity}</div>
           )}
         </div>
 
         {/* TICKET TYPE */}
-        <div className="form-group">
+        <div className="ec-form-group">
           <label>Ticket Type</label>
           <select
             name="ticketType"
             value={formData.ticketType}
             onChange={handleChange}
-            className={errors.ticketType ? "input-error" : ""}
+            className={errors.ticketType ? "ec-input-error" : ""}
           >
             <option value="free">Free</option>
             <option value="paid">Paid</option>
           </select>
           {errors.ticketType && (
-            <div className="error-text">{errors.ticketType}</div>
+            <div className="ec-error-text">{errors.ticketType}</div>
           )}
         </div>
 
         {/* PRICE (PAID ONLY) */}
         {formData.ticketType === "paid" && (
-          <div className="form-group">
+          <div className="ec-form-group">
             <label>Ticket Price (CAD)</label>
             <input
               type="number"
@@ -527,25 +527,25 @@ const EventCreation = () => {
               name="price"
               value={formData.price}
               onChange={handleChange}
-              className={errors.price ? "input-error" : ""}
+              className={errors.price ? "ec-input-error" : ""}
             />
             {errors.price && (
-              <div className="error-text">{errors.price}</div>
+              <div className="ec-error-text">{errors.price}</div>
             )}
           </div>
         )}
 
         {/* BUTTON */}
-        <button className="submit-button" onClick={handleSubmit}>
+        <button className="ec-submit-button" onClick={handleSubmit}>
           {editEventId ? "Update Event" : "Create Event"}
         </button>
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="eventcreation-right">
+      <div className="ec-eventcreation-right">
         <h2>Your Events</h2>
 
-        <div className="event-list">
+        <div className="ec-event-list">
           {userEvents.length === 0 ? (
             <p>No events created yet.</p>
           ) : (
@@ -553,7 +553,7 @@ const EventCreation = () => {
               const date = new Date(event.eventDate.seconds * 1000);
 
               return (
-                <div key={event.id} className="event-card">
+                <div key={event.id} className="ec-event-card">
                   <h3>{event.eventTitle}</h3>
                   <p>{event.eventDescription}</p>
                   <p>
@@ -563,11 +563,11 @@ const EventCreation = () => {
                     <strong>Location:</strong> {event.eventLocation}
                   </p>
 
-                  <div className="event-buttons">
-                    <button className="edit-btn" onClick={() => handleEdit(event)}>
+                  <div className="ec-event-buttons">
+                    <button className="ec-edit-btn" onClick={() => handleEdit(event)}>
                       Edit
                     </button>
-                    <button className="delete-btn" onClick={() => handleDelete(event.id)}>
+                    <button className="ec-delete-btn" onClick={() => handleDelete(event.id)}>
                       Delete
                     </button>
                   </div>
