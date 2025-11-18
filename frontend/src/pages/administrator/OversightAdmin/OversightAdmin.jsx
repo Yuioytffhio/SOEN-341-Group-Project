@@ -15,6 +15,7 @@ const OversightAdmin = () => {
   const [status, setStatus] = useState("approved");
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleSaveCompliance = async (e) => {
     e.preventDefault();
@@ -49,6 +50,8 @@ const OversightAdmin = () => {
         ...doc.data(),
       }));
       setAllEvents(events);
+      
+      setLoading(false);
     };
   
     useEffect(() => {
@@ -56,6 +59,8 @@ const OversightAdmin = () => {
     }, []);
   
 
+  
+  if (loading) return <p className="analytics-loading">Loading oversight...</p>;
 
   return (
     <div className="oversight-page" style={{ background: `url(${oversight_background}) no-repeat center center / cover` }}>
