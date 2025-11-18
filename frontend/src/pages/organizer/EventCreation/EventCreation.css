@@ -1,173 +1,204 @@
-/* Container */
-.eventcreation-page {
-  max-width: 600px;
-  margin: 2rem auto;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.ec-eventcreation-fullpage,
+.ec-eventcreation-fullpage * {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+
+.ec-eventcreation-fullpage {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
   padding: 2rem;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
 }
 
-/* Heading */
-.eventcreation-page h1 {
-  text-align: center;
-  color: #222;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-}
-
-/* Form layout */
-.eventcreation-form {
+.ec-eventcreation-left {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  align-items: flex-start;
+  height: auto;
 }
 
-/* Label + inputs */
-.eventcreation-form label {
+.ec-eventcreation-right {
+  flex: 1;
+}
+
+.ec-event-form-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(198, 33, 33, 0.08);
+  width: 100%;
+  max-width: 650px;
+  height: auto !important;
+}
+
+.ec-form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1.2rem;
+  position: relative;  
+}
+
+.ec-form-group label {
   font-weight: 600;
-  color: #333;
+  margin-bottom: 0.4rem;
+  color: rgb(40, 9, 9);
 }
 
-/* Inputs, textarea, and select elements */
-.eventcreation-form input,
-.eventcreation-form textarea,
-.eventcreation-form select {
-  margin-top: 0.3rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.ec-form-group input,
+.ec-form-group textarea,
+.ec-form-group select {
+  padding: 0.9rem;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  color: #515355;
 }
 
-/* Focus effect for inputs */
-.eventcreation-form input:focus,
-.eventcreation-form textarea:focus,
-.eventcreation-form select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
-  outline: none;
+/* ROW OF FIELDS */
+.ec-form-row {
+  display: flex;
+  gap: 1rem;
 }
 
-/* Textarea styling */
-.eventcreation-form textarea {
-  resize: vertical;
-  min-height: 100px;
-  line-height: 1.4;
+.ec-form-row .ec-form-group {
+  flex: 1;
 }
 
-/* Button styling */
-.eventcreation-form button {
-  margin-top: 0.5rem;
-  padding: 0.8rem;
-  background-color: #007bff;
+/* SUBMIT BUTTON */
+.ec-submit-button {
+  width: 100%;
+  padding: 1rem;
+  background: #643f42;
   color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect */
-.eventcreation-form button:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px);
+.ec-submit-button:hover {
+  background: #702d2d;
 }
-
-/* Price input field styling */
-.price-input {
-  display: flex;
-  flex-direction: column;
-}
-
-.price-input input {
-  margin-top: 0.3rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
 
 /* EVENT LIST */
-h2 {
-  margin-top: 2.5rem;
-  color: #222;
-  font-size: 1.5rem;
-  text-align: center;
+.ec-event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.user-events {
-  margin-top: 1.5rem;
-}
-
-.event-card {
+/* EVENT CARD */
+.ec-event-card {
   background: #fff;
+  padding: 1.2rem;
+  border-radius: 12px;
   border: 1px solid #ddd;
-  padding: 1rem;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .ec-eventcreation-fullpage {
+    flex-direction: column;
+  }
+}
+
+/* DROPDOWN */
+.ec-dropdown-location {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  margin-bottom: 1rem;
-  transition: box-shadow 0.2s ease;
+  z-index: 9999;
+  margin-top: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.event-card:hover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.ec-dropdown-item {
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
 }
 
-.event-card h3 {
-  margin-top: 0;
-  color: #007bff;
+.ec-dropdown-item:hover {
+  background: #f0f0f0;
 }
 
-.event-buttons {
+/* TEXTAREA COUNTER */
+.ec-textarea-container {
+  position: relative;
+}
+
+.ec-textarea-container textarea {
+  width: 100%;
+  padding-bottom: 28px;
+  box-sizing: border-box;
+}
+
+.ec-char-counter-inside {
+  position: absolute;
+  bottom: 6px;
+  right: 12px;
+  font-size: 0.75rem;
+  color: #777;
+  pointer-events: none;
+}
+
+/* ERROR STATES */
+.ec-input-error {
+  border: 2px solid #ff3b3b !important;
+  background: #ffecec !important;
+}
+
+.ec-error-text {
+  color: #ff3b3b;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+.ec-event-buttons {
+  display: flex;
+  gap: 0.8rem;   
   margin-top: 1rem;
 }
 
-.event-buttons button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.95rem;
-  border-radius: 4px;
+.ec-edit-btn {
+  padding: 0.6rem 1rem;
+  background: #ebeaea;      
+  color: #3e4551;           
+  border: 1px solid #a5a7ac;
+  border-radius: 8px;
   cursor: pointer;
-  border: none;
-  color: white;
-  transition: opacity 0.2s ease;
+  font-weight: 600;
 }
 
-.event-buttons button:hover {
-  opacity: 0.9;
+.ec-edit-btn:hover {
+  background: #cfcfd2;
 }
 
-.event-buttons button:first-child {
-  background-color: #007bff;
+.ec-delete-btn {
+  padding: 0.6rem 1rem;
+  background: #ffe8e8;      
+  color: #d60000;            
+  border: 1px solid #ffbcbc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.event-buttons .delete-btn {
-  background-color: #dc3545;
-}
-
-@media (max-width: 600px) {
-  .eventcreation-page {
-    padding: 1.5rem;
-  }
-
-  .eventcreation-page h1 {
-    font-size: 1.5rem;
-  }
-
-  .eventcreation-form input,
-  .eventcreation-form textarea,
-  .eventcreation-form select {
-    font-size: 0.95rem;
-  }
-
-  .eventcreation-form button {
-    font-size: 0.95rem;
-  }
+.ec-delete-btn:hover {
+  background: #ffd0d0;
 }
