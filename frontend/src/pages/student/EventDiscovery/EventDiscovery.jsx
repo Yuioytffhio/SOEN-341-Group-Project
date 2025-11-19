@@ -64,8 +64,8 @@ function EventDiscovery() {
               : data.eventDate
               ? new Date(data.eventDate)
               : null,
-            eventLatitude: data.eventLatitude,
-            eventLongitude: data.eventLongitude,
+            eventLatitude: data.locationLat,
+            eventLongitude: data.locationLng,
           };
         });
 
