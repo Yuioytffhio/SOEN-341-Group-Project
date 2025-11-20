@@ -314,7 +314,7 @@ function EventDiscovery() {
                   </p>
                 </div>
 
-                {event.eventCapacity > 0 ? ( event.ticketType === "paid" ? 
+                {event.eventCapacity > 0 ? ( event.ticketType === "paid" ?
                 ( <button className="st-save-btn st-paid-btn" onClick={() => setSelectedEvent(event)} >
                   Buy Ticket
                   </button> ) : ( <button className="st-save-btn" onClick={() => handleBook(event)} >
@@ -327,6 +327,49 @@ function EventDiscovery() {
             );
           })
         )}
+                    {event.eventCapacity > 0 ? ( event.ticketType === "paid" ?
+                    ( <button className="save-btn paid-btn" onClick={() => setSelectedEvent(event)} >
+                      Buy Ticket
+                      </button> ) : ( <button className="save-btn" onClick={() => handleBook(event)} >
+                      Save Event
+                      </button> ) ) : ( <button className="save-btn soldout-btn" disabled>
+                      Sold Out
+                      </button>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          <div className={"map-row"}>
+              {/* Map */}
+              <MapContainer center={[45.49496332993856, -73.57873781484274]} zoom={17} scrollWheelZoom={false}>
+                  <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
+                      {/* Markers */}
+                      {events.map((event) =>
+                          !isNaN(event.eventLatitude) &&
+                          !isNaN(event.eventLongitude) ? (
+                              <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
+                                  <Popup>
+                                      <div
+                                          style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
+                                          onClick={() =>
+                                              window.open(`https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`)
+                                          }
+                                      >
+                                          {event.eventTitle}
+                                      </div>
+                                  </Popup>
+                              </Marker>
+                          ) : null)}
+                  </MarkerClusterGroup>
+              </MapContainer>
+          </div>
       </div>
 
       {selectedEvent && (
