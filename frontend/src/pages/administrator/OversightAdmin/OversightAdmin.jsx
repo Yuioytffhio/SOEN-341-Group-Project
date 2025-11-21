@@ -4,12 +4,14 @@ import oversight_background from "../../../assets/admin_oversight_background.jpg
 
 import { setEventCompliance } from "../../../lib/adminApi";
 import { db } from "../../../lib/firebase";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 
-import { auth, db } from "../../../firebaseConfig";
+//import { auth, db } from "../../../firebaseConfig";
+import { auth } from "../../../firebaseConfig";
+
 import {
   collection,
   getDocs,
+  updateDoc, doc,
   query,
 } from "firebase/firestore";
 
@@ -69,8 +71,7 @@ const OversightAdmin = () => {
     }
   };
 
-  // Display all events 
-  
+  // Display approved and pending events 
     const [allEvents, setAllEvents] = useState([]);
   
     // Fetch all events 
@@ -95,7 +96,7 @@ const OversightAdmin = () => {
   
 
   
-  if (loading) return <p className="analytics-loading">Loading oversight...</p>;
+  if (loading) return <p className="o-analytics-loading">Loading oversight...</p>;
 
   return (
     <div className="oversight-page" style={{ background: `url(${oversight_background}) no-repeat center center / cover` }}>
@@ -108,7 +109,7 @@ const OversightAdmin = () => {
           </p>
         </div>
 
-        <div className="content-container">
+        <div className="o-content-container">
           <div className="oversight-grid">
             {/* Event Policy Compliance Moderation */}
             <section className="oversight-card">
@@ -138,7 +139,7 @@ const OversightAdmin = () => {
                 <div className="oversight-actions" style={{ marginTop: "10px" }}>
                   <button
                     type="submit"
-                    className="btn"
+                    className="o-btn"
                     disabled={saving || !eventId}
                   >
                    {saving ? "Saving…" : "Save Decision"}
@@ -146,24 +147,26 @@ const OversightAdmin = () => {
                 </div>
 
                   {result === "success" && (
-                    <p className="oversight-status ok">Compliance status updated successfully.</p>
+                    <p className="oversight-status-ok">Compliance status updated successfully.</p>
                   )}
                   {result === "error" && (
-                    <p className="oversight-status err">Failed to update compliance status.</p>
+                    <p className="oversight-status-err">Failed to update compliance status.</p>
                   )}
               </form>
             </section>
           </div>
 
-          <div className="events-section">
-            <h2 className="display-events-title">All Events</h2>
-            <div className="display-events">
-            
-              {allEvents.length === 0 ? (
-               <p>No events created yet.</p>
+          <div className="o-events-section">
+            {/* Pending Events */}
+            <h2 className="o-pending-events-title">Pending Events</h2>
+            <div className="o-pending-events">
+              {pendingEvents.length === 0 ? (
+               <p>No pending events yet.</p>
                  ) : (
-                 allEvents.map((event) => (
-                <div key={event.id} className="event-card">
+                  pendingEvents.map((event) => (
+
+                  //allEvents.map((event) => (
+                <div key={event.id} className="o-event-pending-card">
                   <h3>{event.eventTitle}</h3>
                   <p>{event.eventDescription}</p>
                   <p>
@@ -176,57 +179,32 @@ const OversightAdmin = () => {
                 </div>
                 ))
               )}
-            </div>
 
-        {/* Pending Events */}
-        <section className="mgmt-card">
-          <h2 className="mgmt-card-title">Pending Events</h2>
-          {pendingEvents.length === 0 ? (
-            <p>No pending events.</p>
-          ) : (
-            <ul>
-              {pendingEvents.map((ev) => (
-                <li key={ev.id}>{ev.eventTitle || ev.id}</li>
-              ))}
-            </ul>
-          )}
-        </section>
 
-        {/* Approved Events */}
-        <section className="mgmt-card">
-          <h2 className="mgmt-card-title">Approved Events</h2>
-          {approvedEvents.length === 0 ? (
-            <p>No approved events.</p>
-          ) : (
-            <ul>
-              {approvedEvents.map((ev) => (
-                <li key={ev.id}>{ev.eventTitle || ev.id}</li>
-              ))}
-            </ul>
-          )}
-        </section>
+              </div>
 
-        {/* Compliance Review */}
-        <section className="mgmt-card" style={{ gridColumn: "1 / -1" }}>
-          <h2 className="mgmt-card-title">Event Policy Compliance Review</h2>
-          <form className="mgmt-form" onSubmit={handleSaveCompliance}>
-            <label>Event ID</label>
-            <input
-              value={eventId}
-              onChange={(e) => setEventId(e.target.value)}
-              placeholder="Enter Event ID"
-              required
-            />
-
-            <label>Compliance Status</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="approved">Approved</option>
-              <option value="pending">Pending</option>
-              <option value="rejected">Rejected</option>
-            </select>
-            </form>
+            {/* Approved Events */}
+            <h2 className="o-approved-events-title">Approved Events</h2>
+            <section className="o-approved-events">
+              {approvedEvents.length === 0 ? (
+               <p>No events created yet.</p>
+                 ) : (
+                  approvedEvents.map((event) => (
+                 //allEvents.map((event) => (
+                <div key={event.id} className="o-event-approved-card">
+                  <h3>{event.eventTitle}</h3>
+                  <p>{event.eventDescription}</p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(event.eventDate.seconds * 1000).toLocaleString()}
+                  </p>
+                  <p>
+                  <strong>Location:</strong> {event.eventLocation}
+                  </p>
+                </div>
+                ))
+              )}
             </section>
-
 
           </div>
           

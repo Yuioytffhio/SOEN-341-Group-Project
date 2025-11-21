@@ -8,14 +8,14 @@
 }
 
 /* Container for logo + project name + form */
-.form-container-wrapper {
+.login-form-container-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;  /* center children horizontally */
 }
 
 /* Logo and Project Name side by side */
-.logo-container {
+.login-logo-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -23,19 +23,19 @@
   gap: 15px;
 }
 
-.logo-container .logo {
+.login-logo-container .login-logo {
   height: 80px; 
   width: auto;
 }
 
-.logo-container .appName {
+.login-logo-container .login-appName {
   font-size: 1.8rem;
   color: #ebdada; 
   font-weight: bold;
 }
 
 /* Form styling (keep your existing styles) */
-.form-container {
+.login-form-container {
   background: rgba(52, 2, 2, 0.9);
   padding: 40px;
   width: 350px;
@@ -45,29 +45,29 @@
 }
 
 /* Ensures the input boxes and the login box have the same length*/
-.form-container * {
+.login-form-container * {
   box-sizing: border-box;
 }
 
-.form-container h1 {
+.login-form-container h1 {
   margin-bottom: 20px;
   color: #ebdada;
 }
 
 /* Form fields */
-.form-group {
+.login-form-group {
   margin-bottom: 15px;
   text-align: left;
 }
 
-.form-group label {
+.login-form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: 600;
   color: #e3c9c6;
 }
 
-.form-group input {
+.login-form-group input {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
@@ -77,12 +77,12 @@
   color: #f8f4f4; 
 }
 
-.form-group input:focus {
+.login-form-group input:focus {
   border-color: #e0aeaa;
 }
 
 /* Button */
-.btn {
+.login-btn {
   width: 100%;
   padding: 12px;
   background: #5b0303 !important;
@@ -94,22 +94,22 @@
   transition: background 0.3s;
 }
 
-.btn:hover {
+.login-btn:hover {
   background: #4e0101 !important;
 }
 
 /* Extra links */
-.extra-links {
+.login-extra-links {
   margin-top: 15px;
   font-size: 0.9rem;
   color: #e99797;
 }
 
-.extra-links span {
+.login-extra-links span {
   color: #eeb956;
   text-decoration: none;
 }
 
-.extra-links span:hover {
+.login-extra-links span:hover {
   text-decoration: underline;
 }

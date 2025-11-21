@@ -150,34 +150,34 @@ const EventAnalytics = () => {
   };
 
   return (
-    <div className="analytics-page">
+    <div className="org-analytics-page">
       <h1>Event Analytics</h1>
 
-      {loading && <div className="info">Loading events...</div>}
-      {error && <div className="error">{error}</div>}
+      {loading && <div className="org-analytics-info">Loading events...</div>}
+      {error && <div className="org-analytics-error">{error}</div>}
 
       {!loading && !selectedEvent && (
         <>
           {events.length === 0 ? (
-            <div className="info">No events found.</div>
+            <div className="org-analytics-info">No events found.</div>
           ) : (
-            <div className="events-grid">
+            <div className="org-analytics-events-grid">
               {events.map((evt) => (
                 <div
-                  className="event-card"
+                  className="org-analytics-event-card"
                   key={evt.id}
                   onClick={() => openEventDetail(evt)}
                   role="button"
                   tabIndex={0}
                 >
-                  <div className="card-header">
-                    <h2 className="card-title">
+                  <div className="org-analytics-card-header">
+                    <h2 className="org-analytics-card-title">
                       {evt.eventTitle || "Untitled Event"}
                     </h2>
-                    <div className="card-sub">
+                    <div className="org-analytics-card-sub">
                       {evt.eventOrganization || ""}
                       {evt.eventDate ? (
-                        <div className="event-date">
+                        <div className="org-analytics-event-date">
                           {evt.eventDate instanceof Timestamp
                             ? evt.eventDate.toDate().toLocaleString()
                             : new Date(evt.eventDate).toLocaleString()}
@@ -186,32 +186,32 @@ const EventAnalytics = () => {
                     </div>
                   </div>
 
-                  <div className="card-body">
-                    <div className="metric-row">
-                      <div className="metric">
-                        <div className="metric-label">Tickets Issued</div>
-                        <div className="metric-value">{evt.ticketsIssued}</div>
+                  <div className="org-analytics-card-body">
+                    <div className="org-analytics-metric-row">
+                      <div className="org-analytics-metric">
+                        <div className="org-analytics-metric-label">Tickets Issued</div>
+                        <div className="org-analytics-metric-value">{evt.ticketsIssued}</div>
                       </div>
 
-                      <div className="metric">
-                        <div className="metric-label">Attendance Rate</div>
-                        <div className="metric-value">
+                      <div className="org-analytics-metric">
+                        <div className="org-analytics-metric-label">Attendance Rate</div>
+                        <div className="org-analytics-metric-value">
                           {evt.ticketsIssued > 0
                             ? `${evt.attendanceRate.toFixed(1)}%`
                             : "—"}
                         </div>
                       </div>
 
-                      <div className="metric">
-                        <div className="metric-label">Remaining</div>
-                        <div className="metric-value">
+                      <div className="org-analytics-metric">
+                        <div className="org-analytics-metric-label">Remaining</div>
+                        <div className="org-analytics-metric-value">
                           {evt.remainingCapacity}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="card-footer">
+                  <div className="org-analytics-card-footer">
                     <small>Click for details</small>
                   </div>
                 </div>
@@ -223,20 +223,20 @@ const EventAnalytics = () => {
 
       {/* Detail view */}
       {selectedEvent && (
-        <div className="event-detail">
-          <button className="back-button" onClick={closeDetail}>
+        <div className="org-analytics-event-detail">
+          <button className="org-analytics-back-button" onClick={closeDetail}>
             ← Back to events
           </button>
 
-          <div className="event-detail-header">
+          <div className="org-analytics-event-detail-header">
             <div>
               <h2>{selectedEvent.eventTitle || "Untitled Event"}</h2>
-              <p className="muted">
+              <p className="org-analytics-muted">
                 {selectedEvent.eventOrganization || ""} •{" "}
                 {selectedEvent.eventLocation || ""}
               </p>
               {selectedEvent.eventDate ? (
-                <p className="muted">
+                <p className="org-analytics-muted">
                   {selectedEvent.eventDate instanceof Timestamp
                     ? selectedEvent.eventDate.toDate().toLocaleString()
                     : new Date(selectedEvent.eventDate).toLocaleString()}
@@ -244,40 +244,40 @@ const EventAnalytics = () => {
               ) : null}
             </div>
 
-            <div className="detail-metrics">
-              <div className="detail-metric">
-                <div className="label">Capacity</div>
-                <div className="value">{selectedEvent.eventCapacity}</div>
+            <div className="org-analytics-detail-metrics">
+              <div className="org-analytics-detail-metric">
+                <div className="org-analytics-label">Capacity</div>
+                <div className="org-analytics-value">{selectedEvent.eventCapacity}</div>
               </div>
-              <div className="detail-metric">
-                <div className="label">Tickets Issued</div>
-                <div className="value">{selectedEvent.ticketsIssued}</div>
+              <div className="org-analytics-detail-metric">
+                <div className="org-analytics-label">Tickets Issued</div>
+                <div className="org-analytics-value">{selectedEvent.ticketsIssued}</div>
               </div>
-              <div className="detail-metric">
-                <div className="label">Attendance Rate</div>
-                <div className="value">
+              <div className="org-analytics-detail-metric">
+                <div className="org-analytics-label">Attendance Rate</div>
+                <div className="org-analytics-value">
                   {selectedEvent.ticketsIssued > 0
                     ? `${selectedEvent.attendanceRate.toFixed(1)}%`
                     : "—"}
                 </div>
               </div>
-              <div className="detail-metric">
-                <div className="label">Remaining</div>
-                <div className="value">{selectedEvent.remainingCapacity}</div>
+              <div className="org-analytics-detail-metric">
+                <div className="org-analytics-label">Remaining</div>
+                <div className="org-analytics-value">{selectedEvent.remainingCapacity}</div>
               </div>
             </div>
           </div>
 
-          <div className="tickets-section">
+          <div className="org-analytics-tickets-section">
             <h3>Tickets ({selectedTickets.length})</h3>
 
             {detailLoading ? (
-              <div className="info">Loading tickets...</div>
+              <div className="org-analytics-info">Loading tickets...</div>
             ) : selectedTickets.length === 0 ? (
-              <div className="info">No tickets found for this event.</div>
+              <div className="org-analytics-info">No tickets found for this event.</div>
             ) : (
-              <div className="tickets-table-wrap">
-                <table className="tickets-table">
+              <div className="org-analytics-tickets-table-wrap">
+                <table className="org-analytics-tickets-table">
                   <thead>
                     <tr>
                       <th>Ticket ID</th>
@@ -307,7 +307,7 @@ const EventAnalytics = () => {
             )}
           </div>
 
-          <div className="note muted">
+          <div className="org-analytics-note muted">
             Note: "Attendance Rate" = confirmed tickets ÷ total tickets issued.
           </div>
         </div>

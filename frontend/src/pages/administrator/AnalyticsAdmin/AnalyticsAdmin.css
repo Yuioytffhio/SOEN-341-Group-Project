@@ -7,7 +7,7 @@ body {
 }
 
 
-.analytics-page {
+.admin-analytics-page {
   padding: 2rem;
   display: flex;
   background: linear-gradient(180deg, #ffffff, #ede2e2);
@@ -29,7 +29,7 @@ body {
 }
 
 /* left container */
-.left-space {
+.admin-analytics-left-space {
   align-items: left;
   background: rgba(63, 0, 0, 0.949);
   width: 90%;
@@ -42,7 +42,7 @@ body {
 
 }
 
-.analytics-header {
+.admin-analytics-header {
   text-align: center;
   padding-left: 1rem;
   font-size: 1.5rem;
@@ -50,7 +50,7 @@ body {
   backdrop-filter: blur(6px);
 }
 
-.analytics-title {
+.admin-analytics-title {
   color: rgb(245, 233, 233);
   font-size: 55px;
   font-weight: bold;
@@ -70,7 +70,7 @@ body {
 }
 
 
-.analytics-cards {
+.admin-analytics-cards {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,7 +78,7 @@ body {
   margin-bottom: 3rem;
 }
 
-.analytics-card {
+.admin-analytics-card {
   background: #fff0f0;
   border-radius: 1rem;
   padding: 1.5rem 2rem;
@@ -91,13 +91,13 @@ body {
   width: 250px;
 }
 
-.analytics-card h3 {
+.admin-analytics-card h3 {
   color: #270202;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-.analytics-card p {
+.admin-analytics-card p {
   font-size: 2rem;
   font-weight: bold;
   color: #510a0a;
@@ -105,7 +105,7 @@ body {
 
 
 /* right  container */
-.right-space {
+.admin-analytics-right-space {
   width: 70%;
   text-align: center;
   margin-top: 60px;
@@ -113,11 +113,11 @@ body {
   border-radius: 1rem;
 }
 
-.analytics-chart {
+.admin-analytics-chart {
   margin-top: 3rem;
 }
 
-.analytics-chart h3 {
+.admin-analytics-chart h3 {
   color: #3c0101;
   font-size: 1.6rem;
   font-weight: 600;
@@ -127,7 +127,7 @@ body {
 }
 
 
-.analytics-loading {
+.admin-analytics-loading {
   text-align: center;
   margin-top: 5rem;
   font-size: 1.5rem;

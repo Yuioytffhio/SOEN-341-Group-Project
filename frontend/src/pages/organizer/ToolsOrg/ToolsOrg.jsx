@@ -172,12 +172,12 @@ export default function ToolsOrg() {
   if (loading) return <p>Loading your events...</p>;
 
   return (
-    <div className="tools-container">
-      <h1 className={`page-title ${titleVisible ? "visible" : ""}`}>
+    <div className="org-tools-container">
+      <h1 className={`org-tools-page-title ${titleVisible ? "visible" : ""}`}>
         Organizer Tools
       </h1>
 
-      <section className="tool-section">
+      <section className="org-tools-section">
         <h2>Export Attendee List</h2>
         <p>Select one of your events to export its attendee list.</p>
 
@@ -195,14 +195,14 @@ export default function ToolsOrg() {
           onClick={handleExportCSV}
           disabled={!exportEvent || attendees.length === 0}
           className={
-            exportEvent && attendees.length > 0 ? "active-btn" : "disabled-btn"
+            exportEvent && attendees.length > 0 ? "org-tools-active-btn" : "org-tools-disabled-btn"
           }
         >
           Export CSV
         </button>
 
         {attendees.length > 0 && (
-          <div className="attendee-list">
+          <div className="org-tools-attendee-list">
             <h3>Attendees</h3>
             <ul>
               {attendees.map((a, index) => (
@@ -215,7 +215,7 @@ export default function ToolsOrg() {
         )}
       </section>
 
-      <section className="tool-section">
+      <section className="org-tools-tool-section">
         <h2>QR Ticket Validation</h2>
         <p>Select one of your events, upload a QR image, then click Validate.</p>
 
@@ -238,13 +238,13 @@ export default function ToolsOrg() {
           onClick={handleValidate}
           disabled={!validationEvent || !qrFile}
           className={
-            validationEvent && qrFile ? "active-btn" : "disabled-btn"
+            validationEvent && qrFile ? "org-tools-active-btn" : "org-tools-disabled-btn"
           }
         >
           Validate
         </button>
 
-        {qrResult && <p className="qr-result">{qrResult}</p>}
+        {qrResult && <p className="org-tools-qr-result">{qrResult}</p>}
       </section>
     </div>
   );

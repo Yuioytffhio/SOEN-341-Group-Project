@@ -81,7 +81,7 @@
 }
 
 /* Buttons */
-.btn {
+.mgmt-btn {
   height: 36px;
   padding: 0 14px;
   border: 1px solid transparent;
@@ -90,27 +90,27 @@
   cursor: pointer;
 }
 
-.btn:disabled {
+.mgmt-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-primary {
+.mgmt-btn-primary {
   background: #2563eb; /* blue-600 */
   color: #fff;
 }
 
-.btn-primary:hover:not(:disabled) {
+.mgmt-btn-primary:hover:not(:disabled) {
   background: #1e4fd6;
 }
 
-.btn-secondary {
+.mgmt-btn-secondary {
   background: #f3f4f6;
   color: #111827;
   border-color: #e5e7eb;
 }
 
-.btn-secondary:hover:not(:disabled) {
+.mgmt-btn-secondary:hover:not(:disabled) {
   background: #e9eaee;
 }
 

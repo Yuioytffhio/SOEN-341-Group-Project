@@ -1,5 +1,5 @@
 /* Container */
-.analytics-page {
+.org-analytics-page {
   max-width: 960px;
   margin: 2rem auto;
   padding: 1.75rem;
@@ -9,7 +9,7 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.analytics-page h1 {
+.org-analytics-page h1 {
   margin: 0 0 1.25rem 0;
   font-size: 1.8rem;
   color: #222;
@@ -17,7 +17,7 @@
 }
 
 /* Info and error */
-.info {
+.org-analytics-info {
   padding: 0.8rem;
   background: #f0f8ff;
   border-radius: 8px;
@@ -25,7 +25,7 @@
   margin-bottom: 1rem;
 }
 
-.error {
+.org-analytics-error {
   padding: 0.8rem;
   background: #fff0f0;
   border-radius: 8px;
@@ -34,14 +34,14 @@
 }
 
 /* Events grid */
-.events-grid {
+.org-analytics-events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
 }
 
 /* Event card */
-.event-card {
+.org-analytics-event-card {
   background: #fff;
   border-radius: 10px;
   padding: 0.9rem 1rem;
@@ -53,47 +53,47 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.event-card:hover {
+.org-analytics-event-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 18px rgba(18, 38, 63, 0.06);
 }
 
-.card-header {
+.org-analytics-card-header {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.card-title {
+.org-analytics-card-title {
   margin: 0;
   font-size: 1.05rem;
   color: #111;
 }
 
-.card-sub {
+.org-analytics-card-sub {
   font-size: 0.85rem;
   color: #666;
 }
 
-.event-date {
+.org-analytics-event-date {
   margin-top: 0.25rem;
   font-size: 0.8rem;
   color: #888;
 }
 
 /* Card body - metrics */
-.card-body {
+.org-analytics-card-body {
   margin-top: 0.7rem;
   flex: 1;
 }
 
-.metric-row {
+.org-analytics-metric-row {
   display: flex;
   gap: 0.6rem;
   justify-content: space-between;
 }
 
-.metric {
+.org-analytics-metric {
   background: #fbfbff;
   border: 1px solid #efefff;
   padding: 0.5rem;
@@ -103,21 +103,21 @@
   text-align: left;
 }
 
-.metric-label {
+.org-analytics-metric-label {
   font-size: 0.75rem;
   color: #666;
   margin-bottom: 0.3rem;
   font-weight: 600;
 }
 
-.metric-value {
+.org-analytics-metric-value {
   font-size: 1.05rem;
   color: #111;
   font-weight: 700;
 }
 
 /* Card footer */
-.card-footer {
+.org-analytics-card-footer {
   margin-top: 0.6rem;
   text-align: right;
   color: #6b6b6b;
@@ -125,7 +125,7 @@
 }
 
 /* Detail view */
-.event-detail {
+.org-analytics-event-detail {
   margin-top: 1rem;
   background: #fff;
   padding: 1rem;
@@ -133,7 +133,7 @@
   border: 1px solid #e9e9e9;
 }
 
-.back-button {
+.org-analytics-back-button {
   background: transparent;
   border: none;
   color: #007bff;
@@ -143,7 +143,7 @@
   padding: 0;
 }
 
-.event-detail-header {
+.org-analytics-event-detail-header {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -153,25 +153,25 @@
   margin-bottom: 1rem;
 }
 
-.event-detail-header h2 {
+.org-analytics-event-detail-header h2 {
   margin: 0;
   font-size: 1.3rem;
 }
 
-.muted {
+.org-analytics-muted {
   color: #666;
   font-size: 0.9rem;
 }
 
 /* Detail metrics block */
-.detail-metrics {
+.org-analytics-detail-metrics {
   display: flex;
   gap: 0.8rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.detail-metric {
+.org-analytics-detail-metric {
   background: #fbfbff;
   border: 1px solid #efefff;
   padding: 0.6rem 0.8rem;
@@ -180,68 +180,68 @@
   text-align: center;
 }
 
-.detail-metric .label {
+.org-analytics-detail-metric .org-analytics-label {
   font-size: 0.75rem;
   color: #666;
   margin-bottom: 0.25rem;
   font-weight: 600;
 }
 
-.detail-metric .value {
+.org-analytics-detail-metric .org-analytics-value {
   font-size: 1.05rem;
   color: #111;
   font-weight: 700;
 }
 
 /* Tickets table */
-.tickets-section {
+.org-analytics-tickets-section {
   margin-top: 1rem;
 }
 
-.tickets-table-wrap {
+.org-analytics-tickets-table-wrap {
   overflow-x: auto;
   margin-top: 0.6rem;
   border-radius: 6px;
   border: 1px solid #f0f0f0;
 }
 
-.tickets-table {
+.org-analytics-tickets-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 650px;
 }
 
-.tickets-table thead {
+.org-analytics-tickets-table thead {
   background: #fafafa;
 }
 
-.tickets-table th,
-.tickets-table td {
+.org-analytics-tickets-table th,
+.org-analytics-tickets-table td {
   padding: 0.55rem 0.7rem;
   border-bottom: 1px solid #f2f2f2;
   text-align: left;
   font-size: 0.95rem;
 }
 
-.tickets-table tbody tr:hover {
+.org-analytics-tickets-table tbody tr:hover {
   background: #fbfcff;
 }
 
 /* Small screens */
 @media (max-width: 720px) {
-  .analytics-page {
+  .org-analytics-analytics-page {
     padding: 1rem;
   }
 
-  .metric-row {
+  .org-analytics-metric-row {
     flex-direction: column;
   }
 
-  .detail-metrics {
+  .org-analytics-detail-metrics {
     flex-direction: column;
   }
 
-  .tickets-table {
+  .org-analytics-tickets-table {
     min-width: 600px;
   }
 }

@@ -30,24 +30,24 @@ export default function StudentHomePage() {
   };
 
   return (
-    <div className="student-home-container">
-      <header className="student-header">
-        <h2 className="greetings">Welcome back, {userName}!</h2>
+    <div className="st-home-container">
+      <header className="st-header">
+        <h2 className="st-greetings">Welcome back, {userName}!</h2>
       </header>
 
-      <div className="carousel-section">
+      <div className="st-carousel-section">
         <Slider {...settings}>
           {eventImages.map((src, index) => (
-            <div key={index} className="carousel-slide">
+            <div key={index} className="st-carousel-slide">
               <img src={src} alt={`Event ${index + 1}`} />
             </div>
           ))}
         </Slider>
 
-        <div className="overlay">
+        <div className="st-overlay">
           <p>You can start browsing exciting campus events right away.</p>
           <button
-            className="discover-btn"
+            className="st-discover-btn"
             onClick={() => navigate("/discovery")}
           >
             Discover Events

@@ -6,7 +6,7 @@ const AboutUs = () => {
   return (
     <div className="aboutus-page">
       <header className="aboutus-header">
-        <h2 className="greetings">About us</h2>
+        <h2 className="aboutus-greetings">About us</h2>
       </header>
 
        <div className="aboutus-content">
@@ -29,11 +29,11 @@ const AboutUs = () => {
         <h3>Technologies Used</h3>
         <p>React, Firebase, Node.js.</p>
 
-        <div className="team-section">
+        <div className="aboutus-team-section">
           
         </div>
 
-        <div className="tech-section">
+        <div className="aboutus-tech-section">
           
         </div>
       </div>

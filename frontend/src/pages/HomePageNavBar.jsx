@@ -11,19 +11,19 @@ const HomePageNavBar = () => {
   };
 
   return (
-    <div className='homepagenavbar'>
-      <div className='left-section'>
+    <div className='homepage-navbar'>
+      <div className='homepage-navbar-left-section'>
         {/*
         <img src={logo} alt="Logo" className='logo' />
         */}
-        <ul className='navbar-title'>
-            <li><Link to='/' className='appName'>SOEN 341</Link></li>
+        <ul className='homepage-navbar-title'>
+            <li><Link to='/' className='homepage-navbar-appName'>SOEN 341</Link></li>
         </ul>
       </div>
 
-      <div className='navbar-div'>
-        <ul className='navbar-content'>
-            <li><Link to="/publicaboutus" className="nav-link">About Us</Link></li>
+      <div className='homepage-navbar-div'>
+        <ul className='homepage-navbar-content'>
+            <li><Link to="/publicaboutus" className="public-aboutus-nav-link">About Us</Link></li>
         </ul>
       </div>
     </div>

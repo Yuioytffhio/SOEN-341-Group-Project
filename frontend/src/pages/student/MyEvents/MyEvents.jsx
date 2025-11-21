@@ -109,17 +109,17 @@ export default function MyEvents() {
     link.click();
   };
 
-  if (loading) return <p className="loading">Loading your events...</p>;
-  if (error) return <p className="error">{error}</p>;
+  if (loading) return <p className="st-loading">Loading your events...</p>;
+  if (error) return <p className="st-error">{error}</p>;
 
   return (
-    <div className="my-events-container">
-      <div className="header-image">
+    <div className="st-my-events-container">
+      <div className="st-header-image">
         <h1>My Events</h1>
       </div>
 
-      <div className="events-calendar-container">
-        <div className="calendar-view">
+      <div className="st-events-calendar-container">
+        <div className="st-calendar-view">
           <h2>Calendar</h2>
           <Calendar
             onChange={setSelectedDate}
@@ -132,40 +132,40 @@ export default function MyEvents() {
           />
         </div>
 
-        <div className="events-list-section">
+        <div className="st-events-list-section">
           {eventsForSelectedDate.length === 0 ? (
-            <p className="no-events">
+            <p className="st-no-events">
               {selectedDate
                 ? "No events for this date."
                 : "You haven't purchased any tickets yet."}
             </p>
           ) : (
-            <div className="event-list">
+            <div className="st-event-list">
               {eventsForSelectedDate.map((event) => (
-                <div key={event.id} className="event-item">
-                  <div className="event-details">
+                <div key={event.id} className="st-event-item">
+                  <div className="st-event-details">
                     <h3>{event.eventTitle}</h3>
-                    <p className="event-description">
+                    <p className="st-event-description">
                       {event.eventDescription}
                     </p>
-                    <p className="event-date">
+                    <p className="st-event-date">
                       {event.eventDate?.toLocaleString() || "Date TBD"}
                     </p>
-                    <p className="event-location">{event.eventLocation}</p>
-                    <p className="event-organization">
+                    <p className="st-event-location">{event.eventLocation}</p>
+                    <p className="st-event-organization">
                       {event.eventOrganization}
                     </p>
                   </div>
 
                   <button
-                    className="download-ticket-btn"
+                    className="st-download-ticket-btn"
                     onClick={() => handleDownloadQR(event)}
                   >
                     Download QR
                     <img
                       src={DownloadIcon}
                       alt="Download"
-                      className="download-icon"
+                      className="st-download-icon"
                     />
                   </button>
                 </div>

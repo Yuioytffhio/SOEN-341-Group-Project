@@ -60,30 +60,30 @@ const Analytics = () => {
     fetchAnalytics();
   }, []);
 
-  if (loading) return <p className="analytics-loading">Loading analytics...</p>;
+  if (loading) return <p className="admin-analytics-loading">Loading analytics...</p>;
 
   return (
-    <div className="analytics-page">
-      <div className="left-space">
-        <header className="analytics-header">
-          <h2 className="analytics-title">Global Statistics</h2>
+    <div className="admin-analytics-page">
+      <div className="admin-analytics-left-space">
+        <header className="admin-analytics-header">
+          <h2 className="admin-analytics-title">Global Statistics</h2>
         </header>
 
-        <div className="analytics-cards">
-          <div className="analytics-card">
+        <div className="admin-analytics-cards">
+          <div className="admin-analytics-card">
             <h3>Total Events</h3>
             <p>{eventCount}</p>
           </div>
-          <div className="analytics-card">
+          <div className="admin-analytics-card">
             <h3>Tickets Issued</h3>
             <p>{ticketCount}</p>
           </div>
         </div>
 
       </div>
-      <div className="right-space">
+      <div className="admin-analytics-right-space">
         
-        <div className="analytics-chart">
+        <div className="admin-analytics-chart">
           <h3>Participation Trends</h3>
           <ResponsiveContainer width="100%" height={500}>
             <BarChart data={trendData} margin={{ top: 50, right: 30, left: 50, bottom: 50 }}>

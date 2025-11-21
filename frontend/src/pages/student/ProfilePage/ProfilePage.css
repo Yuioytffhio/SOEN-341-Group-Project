@@ -41,21 +41,21 @@
   border: 1px solid #ccc;
 }
 
-.name-row {
+.profile-name-row {
   display: flex;
   gap: 20px;
 }
 
-.name-row label {
+.profile-name-row label {
   flex: 1; 
 }
-.button-container {
+.profile-button-container {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-.save-btn {
+.profile-save-btn {
   background-color: #4caf50;
   color: white;
   border: none;
@@ -66,11 +66,11 @@
   transition: 0.3s;
 }
 
-.save-btn:hover {
+.profile-save-btn:hover {
   background-color: #45a049;
 }
 
-.edit-btn {
+.profile-edit-btn {
   background-color: #2196f3;
   color: white;
   border: none;
@@ -82,10 +82,10 @@
   margin-left: auto;
 }
 
-.edit-btn:hover {
+.profile-edit-btn:hover {
   background-color: #0b7dda;
 }
-.disabled-input {
+.profile-disabled-input {
   background-color: #f5f5f5;
   color: #666;
   cursor: not-allowed;

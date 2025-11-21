@@ -1,9 +1,9 @@
-.events-page {
+.st-events-page {
   padding: 30px;
   background-color: #fafafa;
 }
 
-.events-title {
+.st-events-title {
   font-size: 42px;
   font-weight: bold;
   margin-bottom: 25px;
@@ -11,7 +11,7 @@
   color: #222;
 }
 
-.events-row {
+.st-events-row {
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
@@ -19,15 +19,16 @@
   scroll-behavior: smooth;
 }
 
-.events-row::-webkit-scrollbar {
+.st-events-row::-webkit-scrollbar {
   height: 10px;
 }
 
-.events-row::-webkit-scrollbar-thumb {
+.st-events-row::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 10px;
 }
-.event-card {
+
+.st-event-card {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -39,48 +40,48 @@
   min-width: 280px;
 }
 
-.event-card:hover {
+.st-event-card:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-.event-card-image {
+.st-event-card-image {
   width: 100%;
   height: 180px;
   object-fit: cover;
 }
 
-.event-card-info {
+.st-event-card-info {
   padding: 15px;
   display: flex;
   flex-direction: column;
 }
 
-.event-card-info h2 {
+.st-event-card-info h2 {
   font-size: 22px;
   font-weight: bold;
   margin: 0 0 8px 0;
   color: #222;
 }
 
-.event-card-desc {
+.st-event-card-desc {
   color: #555;
   font-size: 15px;
   margin-bottom: 10px;
 }
 
-.event-card-date {
+.st-event-card-date {
   font-weight: bold;
   color: #cc1515;
   font-size: 14px;
 }
 
-.event-card-location {
+.st-event-card-location {
   color: #777;
   font-size: 14px;
 }
 
-.event-card-ticketType {
+.st-event-card-ticketType {
   display: inline-block;
   margin-top: 8px;
   padding: 4px 8px;
@@ -91,23 +92,23 @@
   align-self: flex-start;
 }
 
-.event-card-ticketType[data-type="free"] {
+.st-event-card-ticketType[data-type="free"] {
   background-color: #d1fae5; /* light green */
   color: #065f46; /* dark green text */
 }
 
-.event-card-ticketType[data-type="paid"] {
+.st-event-card-ticketType[data-type="paid"] {
   background-color: #fef3c7; /* light yellow */
   color: #92400e; /* brown text */
 }
 
-.filter-bar {
+.st-filter-bar {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.search-input {
+.st-search-input {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #000;
@@ -118,12 +119,12 @@
     text-align: center;
 }
 
-.search-input:focus {
+.st-search-input:focus {
     outline: none;
     border-color: #00ff00;
 }
 
-.soldout-btn {
+.st-soldout-btn {
   background-color: #d9534f;
   color: white;
   font-weight: bold;
@@ -131,7 +132,7 @@
   opacity: 0.9;
 }
 
-.event-capacity {
+.st-event-capacity {
   font-size: 0.9rem;
   color: #555;
   margin-top: 4px;
@@ -139,22 +140,22 @@
   transition: color 0.3s ease, font-weight 0.3s ease;
 }
 
-.event-capacity.sold-out {
+.st-event-capacity.sold-out {
   color: #d9534f;
   font-weight: bold;
 }
 
-.paid-btn {
+.st-paid-btn {
   background-color: #ffc107;
   color: #000;
   font-weight: bold;
 }
 
-.paid-btn:hover {
+.st-paid-btn:hover {
   background-color: #ffb300;
 }
 
-.event-card-ticketType[data-type="paid"] {
+.st-event-card-ticketType[data-type="paid"] {
   color: #b36b00;
   font-weight: bold;
 }

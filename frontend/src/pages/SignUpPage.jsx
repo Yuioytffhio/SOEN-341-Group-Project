@@ -86,11 +86,11 @@ export default function SignUpPage() {
       className="signup-page"
       style={{ background: `url(${login_background}) no-repeat center center / cover` }}
     >
-      <div className="form-container-wrapper">
-        <div className="form-container">
+      <div className="signup-form-container-wrapper">
+        <div className="signup-form-container">
           <h1>Sign Up</h1>
           <form onSubmit={handleSignUp}>
-            <div className="form-group">
+            <div className="signup-form-group">
               <label>First Name</label>
               <input
                 type="text"
@@ -101,7 +101,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="signup-form-group">
               <label>Last Name</label>
               <input
                 type="text"
@@ -112,7 +112,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="signup-form-group">
               <label>Email</label>
               <input
                 type="email"
@@ -123,7 +123,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="signup-form-group">
               <label>Password</label>
               <input
                 type="password"
@@ -134,7 +134,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="signup-form-group">
               <label>Phone Number</label>
               <input
                 type="text"
@@ -144,7 +144,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="signup-form-group">
               <label>Role</label>
               <select value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value="student">Student</option>
@@ -157,11 +157,11 @@ export default function SignUpPage() {
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            <button type="submit" className="btn" disabled={loading}>
+            <button type="submit" className="signup-btn" disabled={loading}>
               {loading ? "Signing up..." : "Sign Up"}
             </button>
           </form>
-          <p className="extra-links">
+          <p className="signup-extra-links">
             Already have an account? <span onClick={() => navigate("/login")}>Login</span>
           </p>
         </div>
