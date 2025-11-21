@@ -127,3 +127,15 @@
 .mgmt-status.err {
   color: #b91c1c; /* red-700 */
 }
+/* Event list item block */
+.mgmt-list-item {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: #fafafa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
