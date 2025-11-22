@@ -10,6 +10,7 @@ import {
   limit,
   Timestamp,
 } from "firebase/firestore";
+import EventMap from "../../../components/Map/EventMap";
 
 const EventAnalytics = () => {
   // list with metrics
@@ -155,6 +156,14 @@ const EventAnalytics = () => {
 
       {loading && <div className="org-analytics-info">Loading events...</div>}
       {error && <div className="org-analytics-error">{error}</div>}
+
+      {/* Organizer Event Map */}
+      {!loading && !selectedEvent && events.length > 0 && (
+        <div style={{ marginBottom: "25px" }}>
+          <h2>Your Event Locations</h2>
+          <EventMap events={events} />
+        </div>
+    )}
 
       {!loading && !selectedEvent && (
         <>

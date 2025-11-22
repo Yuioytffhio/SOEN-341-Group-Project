@@ -175,12 +175,23 @@ const EventCreation = () => {
   // DELETE EVENT
   // ========================================
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      await deleteDoc(doc(db, "events", id));
-      alert("Event deleted!");
-      fetchUserEvents();
-    }
-  };
+  if (!window.confirm("Are you sure you want to delete this event?")) return;
+
+  //Delete tickets for this event
+  const ticketsRef = collection(db, "tickets");
+  const q = query(ticketsRef, where("eventId", "==", id));
+  const snap = await getDocs(q);
+
+  for (const ticket of snap.docs) {
+    await deleteDoc(ticket.ref);
+  }
+
+  //Delete event
+  await deleteDoc(doc(db, "events", id));
+
+  alert("Event and associated tickets deleted!");
+  fetchUserEvents();
+};
 
   // ========================================
   // SUBMIT EVENT
