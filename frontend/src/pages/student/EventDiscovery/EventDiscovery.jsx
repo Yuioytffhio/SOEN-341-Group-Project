@@ -183,11 +183,11 @@ function EventDiscovery() {
   });
 
   return (
-    <div className="event-discovery p-6">
-      <h1 className="event-Title">Event Discovery</h1>
+    <div className="st-event-discovery p-6">
+      <h1 className="st-event-Title">Event Discovery</h1>
 
       {/* Search Bar */}
-        <div className="search-bar">
+        <div className="st-search-bar">
             <input
                 type="text"
                 placeholder="Title"
@@ -198,7 +198,7 @@ function EventDiscovery() {
 
 
         {/* Dynamic Filter Bar */}
-      <div className="filter-bar">
+      <div className="st-filter-bar">
         {/* Category */}
         <select
           value={filters.category}
@@ -249,7 +249,7 @@ function EventDiscovery() {
         </select>
       </div>
 
-      <div className="events-row">
+      <div className="st-events-row">
         {filteredEvents.length === 0 ? (
           <p>No events available.</p>
         ) : (
@@ -259,23 +259,23 @@ function EventDiscovery() {
               : "Date TBD";
 
             return (
-              <div key={event.id} className="event-card">
+              <div key={event.id} className="st-event-card">
                 <img
                   src={event.imageUrl || GetTogether}
                   alt={event.eventTitle}
-                  className="event-card-image"
+                  className="st-event-card-image"
                 />
-                <div className="event-card-info">
+                <div className="st-event-card-info">
                   <h2>{event.eventTitle}</h2>
-                  <p className="event-card-desc">{event.eventDescription}</p>
-                  <p className="event-card-date">{formattedDate}</p>
-                  <p className="event-card-location">{event.eventLocation}</p>
-                  <p className="event-card-ticketType" data-type={event.ticketType?.toLowerCase() || "free"} >
+                  <p className="st-event-card-desc">{event.eventDescription}</p>
+                  <p className="st-event-card-date">{formattedDate}</p>
+                  <p className="st-event-card-location">{event.eventLocation}</p>
+                  <p className="st-event-card-ticketType" data-type={event.ticketType?.toLowerCase() || "free"} >
                     {event.ticketType === "paid" ? `$${event.price || 0}` : "Free"}
                   </p>
 
                   <p
-                    className={`event-capacity ${
+                    className={`st-event-capacity ${
                       event.eventCapacity <= 0 ? "sold-out" : ""
                     }`}
                   >
@@ -286,11 +286,11 @@ function EventDiscovery() {
                 </div>
 
                 {event.eventCapacity > 0 ? ( event.ticketType === "paid" ? 
-                ( <button className="save-btn paid-btn" onClick={() => setSelectedEvent(event)} >
+                ( <button className="st-save-btn st-paid-btn" onClick={() => setSelectedEvent(event)} >
                   Buy Ticket
-                  </button> ) : ( <button className="save-btn" onClick={() => handleBook(event)} >
+                  </button> ) : ( <button className="st-save-btn" onClick={() => handleBook(event)} >
                   Save Event
-                  </button> ) ) : ( <button className="save-btn soldout-btn" disabled>
+                  </button> ) ) : ( <button className="st-save-btn st-soldout-btn" disabled>
                   Sold Out
                   </button>
                 )}

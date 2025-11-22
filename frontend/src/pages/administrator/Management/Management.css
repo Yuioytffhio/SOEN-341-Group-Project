@@ -10,22 +10,45 @@
 }
 
 .mgmt-header h1 {
-  font-size: 28px;
-  line-height: 1.2;
-  margin: 0 0 6px 0;
+  color: rgb(63, 4, 4) !important;
+  font-size: 55px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(150, 44, 44, 0.793);
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .mgmt-subtitle {
-  margin: 0;
-  opacity: 0.75;
-  font-size: 14px;
+  color: rgb(59, 0, 0);
+  font-weight: 400;
 }
 
 /* Grid */
 .mgmt-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  /*
+  margin: 0 auto;
+  */
+  padding-bottom: 60px;
+  padding-top: 20px;
+  width: 100%;
+  max-height: 90%;
+  border-radius: 16px;
+  text-align: center
 }
 
 @media (min-width: 860px) {
@@ -40,12 +63,15 @@
   border: 1px solid #e7e7e7;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 2px rgba(62, 0, 0, 0.405);
+  width: 90%;
+  margin-bottom: 40px;
+  background-color: rgba(249, 241, 241, 0.089);
 }
 
 .mgmt-card-title {
-  font-size: 18px;
-  margin: 0 0 12px 0;
+    color: rgb(57, 7, 7);
+    font-weight: 600;
 }
 
 /* Form */
@@ -56,15 +82,15 @@
 }
 
 .mgmt-label {
-  font-size: 13px;
-  font-weight: 600;
+  color: rgb(57, 7, 7);
+  font-weight: 400;
 }
 
 .mgmt-input,
 .mgmt-select {
   height: 36px;
   padding: 0 10px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #2b0000;
   border-radius: 8px;
   outline: none;
   font-size: 14px;
@@ -72,8 +98,8 @@
 
 .mgmt-input:focus,
 .mgmt-select:focus {
-  border-color: #8ab4ff;
-  box-shadow: 0 0 0 3px rgba(138,180,255,0.3);
+  border-color: #620000;
+  box-shadow: 0 0 0 1px rgba(112, 1, 1, 0.785);
 }
 
 .mgmt-actions {
@@ -81,7 +107,7 @@
 }
 
 /* Buttons */
-.btn {
+.mgmt-btn {
   height: 36px;
   padding: 0 14px;
   border: 1px solid transparent;
@@ -90,28 +116,33 @@
   cursor: pointer;
 }
 
-.btn:disabled {
+.mgmt-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background: #2563eb; /* blue-600 */
+.mgmt-btn-primary {
+  background: #87373a !important; 
   color: #fff;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: #1e4fd6;
+.mgmt-btn-primary:hover:not(:disabled) {
+  background: #a50008 !important;
 }
 
-.btn-secondary {
-  background: #f3f4f6;
-  color: #111827;
-  border-color: #e5e7eb;
+.mgmt-btn-secondary {
+  background: #979cd6 !important;
+  color: #fefefe !important;
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background: #e9eaee;
+.mgmt-btn-secondary:disabled {
+  background: #a2a3b3 !important;
+  color: #271111;
+}
+
+.mgmt-btn-secondary:hover:not(:disabled) {
+  background: #4f6de2 !important;
+  color:rgb(233, 234, 248);
 }
 
 /* Status text */
@@ -121,11 +152,11 @@
 }
 
 .mgmt-status.ok {
-  color: #0f766e; /* teal-700 */
+  color: #004118 !important; 
 }
 
 .mgmt-status.err {
-  color: #b91c1c; /* red-700 */
+  color: #620000; /* red-700 */
 }
 /* Event list item block */
 .mgmt-list-item {

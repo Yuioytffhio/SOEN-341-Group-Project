@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
-import "../Management/Management.css";
+import "./OversightAdmin.css";
+import oversight_background from "../../../assets/admin_oversight_background.jpg";
+
+import { setEventCompliance } from "../../../lib/adminApi";
 import { db } from "../../../lib/firebase";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+
+//import { auth, db } from "../../../firebaseConfig";
+import { auth } from "../../../firebaseConfig";
+
+import {
+  collection,
+  getDocs,
+  updateDoc, doc,
+  query,
+} from "firebase/firestore";
 
 const OversightAdmin = () => {
   const [pendingEvents, setPendingEvents] = useState([]);
@@ -11,6 +23,7 @@ const OversightAdmin = () => {
   const [status, setStatus] = useState("approved");
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Load events categorized by complianceStatus
   useEffect(() => {
@@ -58,78 +71,146 @@ const OversightAdmin = () => {
     }
   };
 
+  // Display approved and pending events 
+    const [allEvents, setAllEvents] = useState([]);
+  
+    // Fetch all events 
+    const fetchAllEvents = async () => {
+      if (!auth.currentUser) return;
+  
+      const q = query(collection(db, "events"));
+      const querySnapshot = await getDocs(q);
+  
+      const events = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAllEvents(events);
+      
+      setLoading(false);
+    };
+  
+    useEffect(() => {
+      fetchAllEvents();
+    }, []);
+  
+
+  
+  if (loading) return <p className="o-analytics-loading">Loading oversight...</p>;
+
   return (
-    <div className="mgmt-page">
-      <div className="mgmt-header">
-        <h1>Oversight</h1>
-        <p className="mgmt-subtitle">Admin oversight tools for events</p>
-      </div>
+    <div className="oversight-page" style={{ background: `url(${oversight_background}) no-repeat center center / cover` }}>
 
-      <div className="mgmt-grid">
+      <div className="form-oversight-container">
+        <div className="oversight-header">
+          <h1 className="oversight-title">Oversight</h1>
+          <p className="oversight-subtitle">
+            Admin oversight tools for organizer approvals and policy compliance
+          </p>
+        </div>
 
-        {/* Pending Events */}
-        <section className="mgmt-card">
-          <h2 className="mgmt-card-title">Pending Events</h2>
-          {pendingEvents.length === 0 ? (
-            <p>No pending events.</p>
-          ) : (
-            <ul>
-              {pendingEvents.map((ev) => (
-                <li key={ev.id}>{ev.eventTitle || ev.id}</li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <div className="o-content-container">
+          <div className="oversight-grid">
+            {/* Event Policy Compliance Moderation */}
+            <section className="oversight-card">
+              <h2 className="oversight-card-title">Event Policy Compliance Review</h2>
+              <form className="oversight-form" onSubmit={handleSaveCompliance}>
+                <label className="oversight-label" htmlFor="policyEventId">Event ID</label>
+                <input
+                  id="policyEventId"
+                  className="oversight-input"
+                  placeholder="Enter Event ID to review"
+                  value={eventId}
+                  onChange={(e) => setEventId(e.target.value)}
+                  required
+                />
 
-        {/* Approved Events */}
-        <section className="mgmt-card">
-          <h2 className="mgmt-card-title">Approved Events</h2>
-          {approvedEvents.length === 0 ? (
-            <p>No approved events.</p>
-          ) : (
-            <ul>
-              {approvedEvents.map((ev) => (
-                <li key={ev.id}>{ev.eventTitle || ev.id}</li>
-              ))}
-            </ul>
-          )}
-        </section>
+                <label className="oversight-label" htmlFor="policyDecision">Compliance Status</label>
+                <select
+                  id="policyDecision"
+                  className="oversight-select"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="approved">Approved</option>
+                  <option value="needs-review">Needs Review</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+                <div className="oversight-actions" style={{ marginTop: "10px" }}>
+                  <button
+                    type="submit"
+                    className="o-btn"
+                    disabled={saving || !eventId}
+                  >
+                   {saving ? "Saving…" : "Save Decision"}
+                  </button>
+                </div>
 
-        {/* Compliance Review */}
-        <section className="mgmt-card" style={{ gridColumn: "1 / -1" }}>
-          <h2 className="mgmt-card-title">Event Policy Compliance Review</h2>
-          <form className="mgmt-form" onSubmit={handleSaveCompliance}>
-            <label>Event ID</label>
-            <input
-              value={eventId}
-              onChange={(e) => setEventId(e.target.value)}
-              placeholder="Enter Event ID"
-              required
-            />
+                  {result === "success" && (
+                    <p className="oversight-status-ok">Compliance status updated successfully.</p>
+                  )}
+                  {result === "error" && (
+                    <p className="oversight-status-err">Failed to update compliance status.</p>
+                  )}
+              </form>
+            </section>
+          </div>
 
-            <label>Compliance Status</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="approved">Approved</option>
-              <option value="pending">Pending</option>
-              <option value="rejected">Rejected</option>
-            </select>
+          <div className="o-events-section">
+            {/* Pending Events */}
+            <h2 className="o-pending-events-title">Pending Events</h2>
+            <div className="o-pending-events">
+              {pendingEvents.length === 0 ? (
+               <p>No pending events yet.</p>
+                 ) : (
+                  pendingEvents.map((event) => (
 
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={saving || !eventId.trim()}
-            >
-              {saving ? "Saving…" : "Save Decision"}
-            </button>
+                  //allEvents.map((event) => (
+                <div key={event.id} className="o-event-pending-card">
+                  <h3>{event.eventTitle}</h3>
+                  <p>{event.eventDescription}</p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(event.eventDate.seconds * 1000).toLocaleString()}
+                  </p>
+                  <p>
+                  <strong>Location:</strong> {event.eventLocation}
+                  </p>
+                </div>
+                ))
+              )}
 
-            {result === "success" && (
-              <p className="mgmt-status ok">Compliance updated!</p>
-            )}
-            {result === "error" && (
-              <p className="mgmt-status err">Error saving update.</p>
-            )}
-          </form>
-        </section>
+
+              </div>
+
+            {/* Approved Events */}
+            <h2 className="o-approved-events-title">Approved Events</h2>
+            <section className="o-approved-events">
+              {approvedEvents.length === 0 ? (
+               <p>No events created yet.</p>
+                 ) : (
+                  approvedEvents.map((event) => (
+                 //allEvents.map((event) => (
+                <div key={event.id} className="o-event-approved-card">
+                  <h3>{event.eventTitle}</h3>
+                  <p>{event.eventDescription}</p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(event.eventDate.seconds * 1000).toLocaleString()}
+                  </p>
+                  <p>
+                  <strong>Location:</strong> {event.eventLocation}
+                  </p>
+                </div>
+                ))
+              )}
+            </section>
+
+          </div>
+          
+        </div>
+          
+        
       </div>
     </div>
   );

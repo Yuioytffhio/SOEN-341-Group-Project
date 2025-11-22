@@ -31,23 +31,23 @@ export default function StudentHomePage() {
 
   return (
     <div className="admin-home-container">
-      <header className="admin-header">
-        <h2 className="greetings">Welcome back, {userName}!</h2>
+      <header className="admin-home-header">
+        <h2 className="admin-home-greetings">Welcome back, {userName}!</h2>
       </header>
 
-      <div className="carousel-section">
+      <div className="admin-home-carousel-section">
         <Slider {...settings}>
           {eventImages.map((src, index) => (
-            <div key={index} className="carousel-slide">
+            <div key={index} className="admin-home-carousel-slide">
               <img src={src} alt={`Event ${index + 1}`} />
             </div>
           ))}
         </Slider>
 
-        <div className="overlay">
-          <p>You can managing your events right away.</p>
+        <div className="admin-home-overlay">
+          <p>You can start managing events right away.</p>
           <button
-            className="oversight-btn"
+            className="admin-home-oversight-btn"
             onClick={() => navigate("/oversightAdmin")}
           >
             See Events

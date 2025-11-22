@@ -1,4 +1,4 @@
-.homepagenavbar {
+.homepage-navbar {
     position: absolute;        /* sits on top of the background */
     top: 0;
     left: 0;
@@ -13,31 +13,31 @@
 }
 
 /* Add this to align logo + title horizontally */
-.left-section {
+.homepage-navbar-left-section {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.appName {
+.homepage-navbar-appName {
     font-size: 22px;
     font-weight: bold;
     color: #fff;
     font-weight: 200;
 }
 
-.logo{
+.homepage-navbar-logo{
     cursor: pointer;
 }
 
-.navbar-content {
+.homepage-navbar-content {
     display: flex;
     gap: 30px;
     list-style: none;
     align-content: right;
 }
 
-.navbar-div {
+.homepage-navbar-div {
     align-content: right;
 }
 

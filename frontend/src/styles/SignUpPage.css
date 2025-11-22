@@ -11,14 +11,14 @@
 }
 
 /* Container for logo + project name + form */
-.form-container-wrapper {
+.signup-form-container-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;  /* center children horizontally */
 }
 
 /* Logo and Project Name side by side */
-.logo-container {
+.signup-logo-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -26,21 +26,24 @@
   gap: 15px;
 }
 
-.logo-container .logo {
+.signup-logo-container .signup-logo {
   height: 80px; 
   width: auto;
 }
 
-.logo-container .appName {
+.signup-logo-container .signup-appName {
   font-size: 1.8rem;
   color: #ebdada; 
   font-weight: bold;
 }
 
 /* Form styling (keep your existing styles) */
-.form-container {
+.signup-form-container {
   background: rgba(52, 2, 2, 0.9);
-  padding: 40px;
+  padding-right: 60px;
+  padding-left: 40px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   width: 350px;
   border-radius: 16px;
   text-align: center;
@@ -48,29 +51,29 @@
 }
 
 /* Ensures the input boxes and the login box have the same length*/
-.form-container * {
+.signup-signup-form-container * {
   box-sizing: border-box;
 }
 
-.form-container h1 {
+.signup-form-container h1 {
   margin-bottom: 20px;
   color: #ebdada;
 }
 
 /* Form fields */
-.form-group {
+.signup-form-group {
   margin-bottom: 15px;
   text-align: left;
 }
 
-.form-group label {
+.signup-form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: 600;
   color: #e3c9c6;
 }
 
-.form-group input {
+.signup-form-group input {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
@@ -80,13 +83,13 @@
   color: #f8f4f4; 
 }
 
-.form-group input:focus {
+.signup-form-group input:focus {
   border-color: #e0aeaa;
 }
 
 /* Style the select dropdown */
-.form-group select {
-  width: 100%;
+.signup-form-group select {
+  width: 105%;
   padding: 10px 15px;
   border: 1px solid #693535;
   border-radius: 8px;
@@ -101,20 +104,20 @@
 }
 
 /* Add a hover effect */
-.form-group select:hover {
+.signup-form-group select:hover {
   border-color: #cf8b8b;
   box-shadow: 0 0 5px rgba(44, 1, 1, 0.5);
 }
 
 /* Add a focus effect */
-.form-group select:focus {
+.signup-form-group select:focus {
   border-color: #f3bdbd;
   box-shadow: 0 0 5px rgba(133, 78, 78, 0.5);
   outline: none;
 }
 
 /*  add arrow */
-.form-group select {
+.signup-form-group select {
   background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 20,0 10,10'/></svg>");
   background-repeat: no-repeat;
   background-position: right 10px center;
@@ -122,7 +125,7 @@
 }
 
 /* Button */
-.btn {
+.signup-btn {
   width: 100%;
   padding: 12px;
   background: #630303 !important;
@@ -135,22 +138,22 @@
 }
 
 
-.btn:hover {
+.signup-btn:hover {
   background: #4e0101 !important;
 }
 
 /* Extra links */
-.extra-links {
+.signup-extra-links {
   margin-top: 15px;
   font-size: 0.9rem;
   color: #e99797;
 }
 
-.extra-links span {
+.signup-extra-links span {
   color: #eeb956;
   text-decoration: none;
 }
 
-.extra-links span:hover {
+.signup-extra-links span:hover {
   text-decoration: underline;
 }

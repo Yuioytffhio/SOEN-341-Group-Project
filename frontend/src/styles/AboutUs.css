@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(180deg, #ffffff, #eaeeff);
+  background: linear-gradient(180deg, #ffffff, #f2f3f8);
   color: #270202;
   overflow: hidden;
 }
@@ -16,7 +16,7 @@
   backdrop-filter: blur(6px);
 }
 
-.greetings {
+.aboutus-greetings {
   color: rgb(36, 0, 0);
   font-size: 55px;
   font-weight: bold;
@@ -43,11 +43,11 @@
     font-size: 1.3rem;
 }
 
-.team-section, .tech-section {
+.aboutus-team-section, .aboutus-tech-section {
     margin-top: 2rem;
 }
 
-.team-section h3, .tech-section h3 {
+.aboutus-team-section h3, .aboutus-tech-section h3 {
     color: #222;
     margin-bottom: 0.5rem;
 }

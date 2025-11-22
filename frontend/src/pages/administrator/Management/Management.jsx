@@ -128,7 +128,7 @@ const Management = () => {
             <div className="mgmt-actions">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="mgmt-btn mgmt-btn-primary"
                 disabled={!uid || roleStatus === "working"}
               >
                 {roleStatus === "working" ? "Saving…" : "Set Role"}
@@ -168,7 +168,7 @@ const Management = () => {
             <div className="mgmt-actions" style={{ display: "flex", gap: "10px" }}>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="mgmt-btn mgmt-btn-primary"
                 onClick={handleApproveOrg}
                 disabled={!orgUid || orgWorking}
               >
@@ -176,7 +176,7 @@ const Management = () => {
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="mgmt-btn mgmt-btn-secondary"
                 onClick={handleRejectOrg}
                 disabled={!orgUid || orgWorking}
               >
@@ -234,7 +234,7 @@ const Management = () => {
             <div className="mgmt-actions">
               <button
                 type="submit"
-                className="btn btn-secondary"
+                className="mgmt-btn mgmt-btn-secondary"
                 disabled={!eventId || modStatus === "working"}
               >
                 {modStatus === "working" ? "Saving…" : "Update Status"}

@@ -4,12 +4,12 @@ import "../styles/PublicAboutUs.css";
 
 const AboutUs = () => {
   return (
-    <div className="aboutus-page">
-      <header className="aboutus-header">
-        <h2 className="greetings">About us</h2>
+    <div className="public-aboutus-page">
+      <header className="public-aboutus-header">
+        <h2 className="public-aboutus-greetings">About us</h2>
       </header>
 
-       <div className="aboutus-content">
+       <div className="public-aboutus-content">
         <p>
           Welcome to our campus ticketing event platform, designed by Concordia University software and computer engineering students.
         </p>
@@ -29,11 +29,11 @@ const AboutUs = () => {
         <h3>Technologies Used</h3>
         <p>React, Firebase, Node.js.</p>
 
-        <div className="team-section">
+        <div className="public-aboutus-team-section">
           
         </div>
 
-        <div className="tech-section">
+        <div className="public-aboutus-tech-section">
           
         </div>
       </div>

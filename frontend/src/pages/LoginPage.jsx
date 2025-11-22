@@ -59,11 +59,11 @@ export default function LoginPage() {
       className="login-page"
       style={{ background: `url(${login_background}) no-repeat center center / cover` }}
     >
-      <div className="form-container-wrapper">
-        <div className="form-container">
+      <div className="login-form-container-wrapper">
+        <div className="login-form-container">
           <h1>Login</h1>
           <form onSubmit={handleLogin}>
-            <div className="form-group">
+            <div className="login-form-group">
               <label>Email</label>
               <input
                 type="email"
@@ -73,7 +73,7 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="login-form-group">
               <label>Password</label>
               <input
                 type="password"
@@ -83,11 +83,11 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <button type="submit" className="btn" disabled={loading}>
+            <button type="submit" className="login-btn" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
-          <p className="extra-links">
+          <p className="login-extra-links">
             Don't have an account?{" "}
             <span onClick={() => navigate("/signuppage")}>Sign up</span>
           </p>

@@ -98,11 +98,11 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-      <div className="information-section">
+      <div className="profile-information-section">
         <h2>Information</h2>
 
         <form className="profile-form" onSubmit={handleSave}>
-          <div className="name-row">
+          <div className="profile-name-row">
             <label>
               First Name:
               <input
@@ -130,7 +130,7 @@ export default function ProfilePage() {
               type="email"
               value={email}
               disabled
-              className="disabled-input"
+              className="profile-disabled-input"
             />
           </label>
 
@@ -145,10 +145,10 @@ export default function ProfilePage() {
           </label>
 
           {editing && phoneError && (
-            <p className="warning-text">{phoneError}</p>
+            <p className="profile-warning-text">{phoneError}</p>
           )}
 
-          <div className="button-container">
+          <div className="profile-button-container">
             {!editing && (
               <button
                 type="button"
@@ -162,7 +162,7 @@ export default function ProfilePage() {
             {editing && (
               <button
                 type="submit"
-                className="save-btn"
+                className="profile-save-btn"
                 disabled={loading || phoneError}
               >
                 {loading ? "Saving..." : "Save"}
