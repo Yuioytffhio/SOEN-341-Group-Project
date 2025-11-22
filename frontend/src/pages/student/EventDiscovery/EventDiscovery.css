@@ -11,7 +11,7 @@
   color: #222;
 }
 
-.map_event_container {
+.st-map_event_container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -21,11 +21,10 @@
     position: relative;
 }
 
-.map-row {
+.st-map-row {
     min-width: 300px;
 }
 
-.events-row {
 .st-events-row {
   display: flex;
   flex-wrap: wrap;
