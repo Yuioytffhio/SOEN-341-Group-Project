@@ -49,6 +49,9 @@ npm install qrcode
 npm install react-calendar
 npm install recharts
 npm install qr-scanner
+npm install leaflet
+npm install react-leaflet@4.x
+npm install react-leaflet-cluster
 ```
 
 ### Start the development server:
