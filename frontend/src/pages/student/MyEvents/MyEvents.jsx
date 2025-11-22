@@ -87,8 +87,8 @@ export default function MyEvents() {
               eventLocation: eventData.eventLocation || "",
               eventOrganization: eventData.eventOrganization || "",
               qrCode: ticketData.qrCodeImage,
-              eventLatitude: eventData.latitude,
-              eventLongitude: eventData.longitude,
+              eventLatitude: eventData.locationLat,
+              eventLongitude: eventData.locationLng,
             });
           }
         }
@@ -159,7 +159,7 @@ export default function MyEvents() {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
-                        {events.map((event) =>
+                        {eventsForSelectedDate.map((event) =>
                             !isNaN(event.eventLatitude) &&
                             !isNaN(event.eventLongitude) ? (
                                 <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
