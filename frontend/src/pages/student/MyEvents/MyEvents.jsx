@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./MyEvents.css";
+import "leaflet/dist/leaflet.css";
 import DownloadIcon from "../../../assets/download_button.png";
 import { db, auth } from "../../../firebaseConfig";
 import {
@@ -12,6 +13,22 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon, DivIcon, point } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+
+const pin_icon = new Icon({
+    iconUrl: require("../../../assets/map_pin.png"),
+    iconSize: [38, 38]
+});
+
+const cluster_icon = function (cluster) {
+    return new DivIcon({
+        html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+        className: "custom-marker-cluster",
+        iconSize: point(33, 33, true)
+    });
+};
 
 export default function MyEvents() {
   const [events, setEvents] = useState([]);
@@ -70,6 +87,8 @@ export default function MyEvents() {
               eventLocation: eventData.eventLocation || "",
               eventOrganization: eventData.eventOrganization || "",
               qrCode: ticketData.qrCodeImage,
+              eventLatitude: eventData.latitude,
+              eventLongitude: eventData.longitude,
             });
           }
         }
@@ -119,17 +138,46 @@ export default function MyEvents() {
       </div>
 
       <div className="st-events-calendar-container">
-        <div className="st-calendar-view">
-          <h2>Calendar</h2>
-          <Calendar
-            onChange={setSelectedDate}
-            value={selectedDate}
-            tileClassName={({ date }) =>
-              events.some((e) => e.eventDate && isSameDay(e.eventDate, date))
-                ? "highlighted-date"
-                : null
-            }
-          />
+        <div className="st-vertical-container">
+            <div className="st-calendar-view">
+              <h2>Calendar</h2>
+              <Calendar
+                onChange={setSelectedDate}
+                value={selectedDate}
+                tileClassName={({ date }) =>
+                  events.some((e) => e.eventDate && isSameDay(e.eventDate, date))
+                    ? "highlighted-date"
+                    : null
+                }
+              />
+            </div>
+
+            <div className="st-map-view">
+                <MapContainer center={[45.49496332993856, -73.57873781484274]} zoom={12} scrollWheelZoom={false}>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
+                        {events.map((event) =>
+                            !isNaN(event.eventLatitude) &&
+                            !isNaN(event.eventLongitude) ? (
+                                <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
+                                    <Popup>
+                                        <div
+                                            style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
+                                            onClick={() =>
+                                                window.open(`https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`)
+                                            }
+                                        >
+                                            {event.eventTitle}
+                                        </div>
+                                    </Popup>
+                                </Marker>
+                            ) : null)}
+                    </MarkerClusterGroup>
+                </MapContainer>
+            </div>
         </div>
 
         <div className="st-events-list-section">
