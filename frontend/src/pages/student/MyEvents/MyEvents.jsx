@@ -145,8 +145,8 @@ export default function MyEvents() {
                 onChange={setSelectedDate}
                 value={selectedDate}
                 tileClassName={({ date }) =>
-                  events.some((e) => e.eventDate && isSameDay(e.eventDate, date))
-                    ? "highlighted-date"
+                  eventsForSelectedDate.some((e) => e.eventDate && isSameDay(e.eventDate, date))
+                    ? "st-highlighted-date"
                     : null
                 }
               />
