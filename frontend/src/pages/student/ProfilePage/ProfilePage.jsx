@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ProfilePage.css";
 import { db } from "../../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import profile_background from "../../../assets/admin_oversight_background.jpg";
 
 export default function ProfilePage() {
   const [firstName, setFirstName] = useState("");
@@ -97,7 +98,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="profile-page">
+    <div className="profile-page" style={{ background: `url(${profile_background}) no-repeat center center / cover` }}>
       <div className="profile-information-section">
         <h2>Information</h2>
 
@@ -152,7 +153,7 @@ export default function ProfilePage() {
             {!editing && (
               <button
                 type="button"
-                className="edit-btn"
+                className="prfile-edit-btn"
                 onClick={() => setEditing(true)}
               >
                 Edit

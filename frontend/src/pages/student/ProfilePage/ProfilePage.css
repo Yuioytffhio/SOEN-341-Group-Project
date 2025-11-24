@@ -1,93 +1,195 @@
+
+/* Page container */
+/*
 .profile-page {
-  padding: 20px;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(180deg, #f9f9f9, #eceff4);
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
-.profile-header {
+  */
+/* Background image with blur */
+/*
+.profile-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(12px) brightness(0.6); 
+  z-index: -1;
+}
+*/
+/* Page container */
+.profile-page {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 20px;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(180deg, #f9f9f9, #eceff4);
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Define a CSS variable for blur overlay color */
+  --blur-color: rgba(255, 0, 0, 0.345); /* default: soft white */
 }
 
-.profile-pic {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #420000;
+/* Background image with blur and tint */
+.profile-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit; /* uses the inline background image */
+  background-size: cover;
+  background-position: center;
+  filter: blur(12px) brightness(0.6); /* blur + darken */
+  z-index: 0;
+
+  /* Add a color overlay using the variable */
+  box-shadow: inset 0 0 0 1000px var(--blur-color);
 }
 
-.information-section {
-  background: #f9f9f9;
-  padding: 60px;
-  border-radius: 8px;
-  margin-left: 50px;
-  margin-right: 50px;
+
+
+
+/* Card container */
+.profile-information-section {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 40px 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
+  transition: 0.3s ease;
+  padding: 40px 50px 40px 30px;  /* top right bottom left */
 }
 
+.profile-information-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.15);
+  padding: 40px 50px 40px 30px;  /* top right bottom left */
+}
+
+/* Header */
+.profile-information-section h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #420000;
+  text-shadow: 1px 1px 3px rgba(66, 0, 0, 0.3);
+}
+
+/* Form layout */
 .profile-form label {
   display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #2c0d0d;
 }
 
 .profile-form input {
   width: 100%;
-  padding: 8px;
+  padding: 12px 14px;
   margin-top: 5px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
 }
 
+.profile-form input:focus {
+  border-color: #9a1510;
+  box-shadow: 0 0 6px rgba(217, 83, 79, 0.3);
+  outline: none;
+  background-color: #fffaf7;
+}
+
+/* Nome Row */
 .profile-name-row {
   display: flex;
-  gap: 20px;
+  gap: 50px;          /* a bit more space between fields */
+  flex-wrap: wrap;     /* allow wrapping on smaller screens */
 }
 
 .profile-name-row label {
-  flex: 1; 
+  flex: 1;             /* take equal space */
+  min-width: 200px;    /* prevents being too narrow */
+  margin-bottom: 15px; /* vertical spacing */
 }
+
+
+/* Buttons */
 .profile-button-container {
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.profile-save-btn,
+.profile-edit-btn {
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .profile-save-btn {
-  background-color: #4caf50;
+  background: linear-gradient(45deg, #4caf50, #45a049);
   color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
 }
 
 .profile-save-btn:hover {
-  background-color: #45a049;
+  background: linear-gradient(45deg, #45a049, #3e8e41);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .profile-edit-btn {
-  background-color: #2196f3;
+  background: linear-gradient(45deg, #2196f3, #0b7dda);
   color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-  margin-left: auto;
 }
 
 .profile-edit-btn:hover {
-  background-color: #0b7dda;
+  background: linear-gradient(45deg, #0b7dda, #0965b0);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
+
+/* Disabled input */
 .profile-disabled-input {
   background-color: #f5f5f5;
   color: #666;
   cursor: not-allowed;
 }
 
+/* Warning text */
+.profile-warning-text {
+  color: #d9534f;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-name-row {
+    flex-direction: column;
+  }
+
+  .profile-button-container {
+    justify-content: center;
+  }
+}

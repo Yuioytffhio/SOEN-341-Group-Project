@@ -1,69 +1,69 @@
 .public-aboutus-page {
+  margin-top: 70px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-  margin-top: 60px;
-  background: linear-gradient(180deg, #ffffff, #fafbff);
+  min-height: 100vh;
   color: #270202;
-  overflow: hidden;
+  overflow-y: auto;       /* scroll if content overflows */
+  position: relative;     /* for overlay positioning */
 }
 
+.public-aboutus-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.361); /* semi-transparent white overlay */
+  backdrop-filter: blur(10px);          /* strong blur */
+  z-index: 0;
+}
+
+.public-aboutus-header,
+.public-aboutus-content {
+  position: relative;     /* above the overlay */
+  z-index: 1;
+}
+
+/* keep previous styles for content and headers */
 .public-aboutus-header {
   text-align: left;
-  padding-left: 3rem;
+  padding: 2rem 3rem;
   font-size: 1.5rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(6px);
+  border-radius: 1rem;
+  margin: 1rem 3rem 2rem 3rem;
 }
 
 .public-aboutus-greetings {
   color: rgb(36, 0, 0);
-  text-align: left;
   font-size: 55px;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(100, 4, 4, 0.7);
   animation: slideInFromLeft 0.8s ease-out;
-}
-
-@keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  margin: 0;
 }
 
 .public-aboutus-content {
-    line-height: 1.6;
-    color: #3a0000;
-    margin-bottom: 1rem;
-    margin-left: 3.0rem;
-    font-size: 1.3rem;
+  line-height: 1.6;
+  color: #3a0000;
+  margin: 0 3rem;
+  font-size: 1.3rem;
 }
 
+/* team & tech section styling stays the same */
 .public-aboutus-team-section, .public-aboutus-tech-section {
-    margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1rem;
 }
 
-.public-aboutus-team-section h3, .public-aboutus-tech-section h3 {
-    color: #222;
-    margin-bottom: 0.5rem;
-}
-
-.public-aboutus-content ul {
-    padding-left: 2rem;
-    display: block; 
-}
-
-.public-aboutus-content ul li {
-    align-self: left;
-    margin-bottom: 0.5rem;
-    color: #3a0000;
-    font-size: 1.2rem;
-    line-height: 1.6;
+.public-aboutus-team-section p, .public-aboutus-tech-section p {
+  background: rgba(81, 3, 3, 0.718);
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  color: #ffe9e9;
 }
