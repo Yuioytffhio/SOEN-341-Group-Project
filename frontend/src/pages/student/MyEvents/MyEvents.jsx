@@ -13,7 +13,7 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import { Icon, DivIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
@@ -163,6 +163,11 @@ export default function MyEvents() {
                             !isNaN(event.eventLatitude) &&
                             !isNaN(event.eventLongitude) ? (
                                 <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
+                                    <Tooltip className="st-description-box" direction="top" offset={[0, -10]} opacity={1}>
+                                        <div style={{ fontWeight: "bold" }}>{event.eventTitle}</div>
+                                        <div>{event.eventDate?.toISOString().slice(0, 10) ?? "Date TBD"}</div>
+                                        <div>{"Press marker to Open Google Maps"}</div>
+                                    </Tooltip>
                                     <Popup>
                                         <div
                                             style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
@@ -170,7 +175,7 @@ export default function MyEvents() {
                                                 window.open(`https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`)
                                             }
                                         >
-                                            {event.eventTitle}
+                                            {"Head to: " + event.eventTitle}
                                         </div>
                                     </Popup>
                                 </Marker>
