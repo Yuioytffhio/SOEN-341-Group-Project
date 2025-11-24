@@ -1,6 +1,10 @@
 .st-events-page {
-  padding: 30px;
-  background-color: #fafafa;
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  justify-content: center;  /* center horizontally */
+  align-items: center;      /* center vertically */
+  flex-direction: column;
 }
 
 .st-events-title {
@@ -11,20 +15,169 @@
   color: #222;
 }
 
-.st-map_event_container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+
+.st-layout-two-cols {
+  display: flex;
+  height: auto;
+  
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.st-left-space {
+  background: linear-gradient(135deg, #f7ecec, #e9d1d1, #ffe1e1);
+  padding-left: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  padding-right: 10px;
+  backdrop-filter: blur(4px);
+}
+
+/* RIGHT PANEL — map */
+.st-right-space {
+  min-width: 30%;
+  background: #f1f3ff; 
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  min-height: 100%;
+  padding-top: 30px;
+  
+}
+
+/* Center the title above events only */
+.st-events-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+
+.st-events-header {
+  text-align: center;
+  padding-left: 3rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+
+.st-event-title{
+  color: rgb(74, 6, 6) !important;
+  font-size: 55px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(150, 44, 44, 0.793);
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+
+/* Map Section */
+
+.st-map {
+  text-align: center;   /* centers the inline-block child */
+  width: 100%;
+}
+
+.st-map-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffe8e8;
+  text-shadow: 2px 2px 4px rgba(190, 29, 29, 0.793);
+
+  display: inline-block;      /* shrink width to text */
+  text-align: center;
+  border-bottom: 2px solid #ffe8e8;
+  padding-bottom: 5px;
+  margin: 0 auto 20px auto;   /* center + spacing */
+}
+
+
+/* Filter Section */
+
+.st-search-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.st-search-bar input {
+  width: 90%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 0.95rem;
+  transition: 0.2s ease-in-out;
+}
+
+.st-search-bar input:focus {
+  border-color: #d9534f;
+  box-shadow: 0 0 4px rgba(217, 83, 79, 0.4);
+}
+
+
+/* filter bar */
+
+.st-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.st-filter-bar select,
+.st-filter-bar input[type="date"] {
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  min-width: 150px;
+  outline: none;
+  transition: 0.2s ease-in-out;
+}
+
+.st-filter-bar select:focus,
+.st-filter-bar input[type="date"]:focus {
+  border-color: #d9534f;
+  box-shadow: 0 0 4px rgba(217, 83, 79, 0.4);
+}
+
+.st-filter-bar select {
+  cursor: pointer;
+}
+
+
+
+@media (max-width: 900px) {
+  .st-filter-bar {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .st-filter-bar select,
+  .st-filter-bar input {
     width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    position: relative;
+  }
+
+  .st-search-bar input {
+    width: 100%;
+  }
 }
 
-.st-map-row {
-    min-width: 300px;
-}
 
+/* Event Cards Section */
 .st-events-row {
   display: flex;
   flex-wrap: wrap;
@@ -42,48 +195,74 @@
   border-radius: 10px;
 }
 
-.st-event-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
 
-  flex: 1 1 calc(33.333% - 25px);
-  box-sizing: border-box;
+.st-event-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* keeps button at bottom */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 200, 200, 0.35);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex: 1 1 calc(33.333% - 20px);
   min-width: 280px;
-  max-height: 650px;
+  max-height: 650px; /* uniform height */
+  padding-bottom: 30px;
 }
+
 
 .st-event-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 25px rgba(255, 120, 120, 0.3);
+  border-color: rgba(193, 31, 31, 0.6);
 }
+
 
 .st-event-card-image {
   width: 100%;
-  height: 180px;
+  height: 190px;
   object-fit: cover;
+  border-bottom: 1px solid rgba(255,180,180,0.4);
 }
-
+  
 .st-event-card-info {
-  padding: 15px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  flex-grow: 1; 
 }
+.st-event-card-info::-webkit-scrollbar {
+  width: 6px;
+}
+
+.st-event-card-info::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 50, 50, 0.5);
+  border-radius: 10px;
+}
+
 
 .st-event-card-info h2 {
   font-size: 22px;
-  font-weight: bold;
-  margin: 0 0 8px 0;
-  color: #222;
+  font-weight: 700;
+  margin: 0;
+  color: #3b0000;
+  text-shadow: 1px 1px 3px rgba(58, 3, 3, 0.25);
 }
 
 .st-event-card-desc {
-  color: #555;
   font-size: 15px;
-  margin-bottom: 10px;
+  color: #444;
+  line-height: 1.4;
+  max-height: 70px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
+
+
 
 .st-event-card-date {
   font-weight: bold;
@@ -117,27 +296,17 @@
   color: #92400e; /* brown text */
 }
 
-.st-filter-bar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+.st-save-btn,
+.st-paid-btn,
+.st-soldout-btn {
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+  align-self: center;
+  max-width: 50%;
 }
 
-.st-search-input {
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #000;
-    font-size: 14px;
-    background-color: #fff;
-    width: 200px;
-    max-width: 100%;
-    text-align: center;
-}
 
-.st-search-input:focus {
-    outline: none;
-    border-color: #00ff00;
-}
 
 .st-soldout-btn {
   background-color: #d9534f;
@@ -196,3 +365,12 @@
     font-size: 1.2rem;
     box-shadow: 0 0 0px 5px #fff;
 }
+
+.st-description-box {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+}
+

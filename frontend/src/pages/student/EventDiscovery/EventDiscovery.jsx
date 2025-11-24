@@ -16,9 +16,10 @@ import {
     where,
 } from "firebase/firestore";
 import QRCode from "qrcode";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import { Icon, DivIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
+import st_map_background from "../../../assets/admin_oversight_background.jpg";
 
 const pin_icon = new Icon({
     // iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
@@ -203,72 +204,75 @@ function EventDiscovery() {
     });
 
     return (
-        <div className="st-event-discovery p-6">
-            <h1 className="st-event-Title">Event Discovery</h1>
+        <div className="st-events-page">
+            <div className="st-layout-two-cols">
+            <div className="st-left-space">
+                <div className="st-events-header">
+                    <h1 className="st-event-title">Event Discovery</h1>
+                </div>
 
-            {/* Search Bar */}
-            <div className="st-search-bar">
-                <input
-                    type="text"
-                    placeholder="Title"
-                    value={filters.title}
-                    onChange={(e) => setFilters({ ...filters, title: e.target.value })}
-                />
-            </div>
+                {/* Search Bar */}
+                <div className="st-search-bar">
+                    <input
+                        type="text"
+                        placeholder="Title"
+                        value={filters.title}
+                        onChange={(e) => setFilters({ ...filters, title: e.target.value })}
+                    />
+                </div>
 
 
-            {/* Dynamic Filter Bar */}
-            <div className="st-filter-bar">
-                {/* Category */}
-                <select
-                    value={filters.category}
-                    onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                >
-                    <option value="">All Categories</option>
-                    {categories.map((cat) => (
-                        <option key={cat} value={cat}>
-                            {cat}
-                        </option>
-                    ))}
-                </select>
+                {/* Dynamic Filter Bar */}
+                <div className="st-filter-bar">
+                    {/* Category */}
+                    <select
+                        value={filters.category}
+                        onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map((cat) => (
+                            <option key={cat} value={cat}>
+                                {cat}
+                            </option>
+                        ))}
+                    </select>
 
-                {/* Organization */}
-                <select
-                    value={filters.organization}
-                    onChange={(e) =>
-                        setFilters({ ...filters, organization: e.target.value })
-                    }
-                >
-                    <option value="">All Organizations</option>
-                    {organizations.map((org) => (
-                        <option key={org} value={org}>
-                            {org}
-                        </option>
-                    ))}
-                </select>
+                    {/* Organization */}
+                    <select
+                        value={filters.organization}
+                        onChange={(e) =>
+                            setFilters({ ...filters, organization: e.target.value })
+                        }
+                    >
+                        <option value="">All Organizations</option>
+                        {organizations.map((org) => (
+                            <option key={org} value={org}>
+                                {org}
+                            </option>
+                        ))}
+                    </select>
 
-                {/* Date */}
-                <input
-                    type="date"
-                    value={filters.date}
-                    onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-                />
+                    {/* Date */}
+                    <input
+                        type="date"
+                        value={filters.date}
+                        onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+                    />
 
-                <select
-                    value={filters.ticketType}
-                    onChange={(e) =>
-                        setFilters({ ...filters, ticketType: e.target.value })
-                    }
-                >
-                    <option value="">All Ticket Types</option>
-                    {ticketTypes.map((type) => (
-                        <option key={type} value={type.toLowerCase()}>
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div className="st-map_event_container">
+                    <select
+                        value={filters.ticketType}
+                        onChange={(e) =>
+                            setFilters({ ...filters, ticketType: e.target.value })
+                        }
+                    >
+                        <option value="">All Ticket Types</option>
+                        {ticketTypes.map((type) => (
+                            <option key={type} value={type.toLowerCase()}>
+                                {type.charAt(0).toUpperCase() + type.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <div className="st-events-row">
                     {filteredEvents.length === 0 ? (
                         <p>No events available.</p>
@@ -320,35 +324,59 @@ function EventDiscovery() {
                     )}
                 </div>
 
-                <div className={"st-map-row"}>
+
+            </div>
+
+            
+            <div className="st-right-space" style={{ background: `url(${st_map_background}) no-repeat center center / cover` }}>
+                <div className={"st-map"}>
+                    <h2 className="st-map-title">Event Map</h2>
                     {/* Map */}
                     <MapContainer center={[45.49496332993856, -73.57873781484274]} zoom={17} scrollWheelZoom={false}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                        <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
-                            {/* Markers */}
-                            {events.map((event) =>
-                                !isNaN(event.eventLatitude) &&
-                                !isNaN(event.eventLongitude) ? (
-                                    <Marker position={[event.eventLatitude, event.eventLongitude]} icon={pin_icon}>
+                            <MarkerClusterGroup chunkedLoading iconCreateFunction={cluster_icon}>
+                                {events.map((event) =>
+                                    !isNaN(event.eventLatitude) && !isNaN(event.eventLongitude) ? (
+                                    <Marker
+                                        key={event.id}
+                                        position={[event.eventLatitude, event.eventLongitude]}
+                                        icon={pin_icon}
+                                    >
+                                        <Tooltip className="st-description-box" direction="top" offset={[0, -10]} opacity={1}>
+                                            <div style={{ fontWeight: "bold" }}>{event.eventTitle}</div>
+                                            <div>{event.eventDate?.toISOString().slice(0, 10) ?? "Date TBD"}</div>
+                                            <div>{"Press marker to Open Google Maps"}</div>
+                                        </Tooltip>
+
                                         <Popup>
                                             <div
-                                                style={{ cursor: "pointer", color: "#1a73e8", fontWeight: "bold" }}
+                                                style={{
+                                                cursor: "pointer",
+                                                color: "#1a73e8",
+                                                fontWeight: "bold"
+                                                }}
                                                 onClick={() =>
-                                                    window.open(`https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`)
+                                                window.open(
+                                                    `https://www.google.com/maps?q=${event.eventLatitude},${event.eventLongitude}`
+                                                )
                                                 }
                                             >
-                                                {event.eventTitle}
+                                                {"Head to: " + event.eventTitle}
                                             </div>
                                         </Popup>
                                     </Marker>
-                                ) : null)}
-                        </MarkerClusterGroup>
+                                ) : null
+                                )}
+                            </MarkerClusterGroup>
+
                     </MapContainer>
                 </div>
             </div>
+            </div>
+            
             {selectedEvent && (
                 <MockPayment event={selectedEvent} onSuccess={(event) => {
                     handleBook(event);
