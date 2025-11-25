@@ -16,6 +16,7 @@ import {
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import { Icon, DivIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
+import st_map_background from "../../../assets/admin_oversight_background.jpg";
 
 const pin_icon = new Icon({
     iconUrl: require("../../../assets/map_pin.png"),
@@ -138,7 +139,7 @@ export default function MyEvents() {
       </div>
 
       <div className="st-events-calendar-container">
-        <div className="st-vertical-container">
+        <div className="st-vertical-container" style={{ background: `url(${st_map_background}) no-repeat center center / cover` }}>
             <div className="st-calendar-view">
               <h2>Calendar</h2>
               <Calendar
