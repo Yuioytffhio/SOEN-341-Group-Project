@@ -180,7 +180,9 @@ function EventDiscovery() {
         }
     };
 
-    const filteredEvents = events.filter((event) => {
+    const filteredEvents = 
+    events.filter((event) => event.status !== "rejected") 
+    events.filter((event) => {
         const matchCategory =
             !filters.category || event.eventCategory === filters.category;
         const matchOrg =

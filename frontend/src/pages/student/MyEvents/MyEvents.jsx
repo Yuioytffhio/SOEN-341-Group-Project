@@ -138,6 +138,7 @@ export default function MyEvents() {
         <h1>My Events</h1>
       </div>
 
+      <div className="st-events-calendar-map-container">
       <div className="st-events-calendar-container">
         <div className="st-vertical-container" style={{ background: `url(${st_map_background}) no-repeat center center / cover` }}>
             <div className="st-calendar-view">
@@ -227,6 +228,7 @@ export default function MyEvents() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
